@@ -1,0 +1,313 @@
+{% if section.settings.home_page_only == false or template.name == 'index' %}
+{% if section.settings.header_use_top_bar %}
+<div class="labertopbar">
+  <div class="container full-width">
+    <div class="row">
+      
+        {%- for block in section.blocks -%}
+        {%- case block.type -%}
+        	{%- when 'message' -%} 
+      				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-{{block.settings.col_left}}">
+      				<div class="announcement-bar">
+                	<div class="wrapper-bar-message">
+                      <p class="announcement-bar__message">
+                        {{ block.settings.message_text }}
+                        <a href="{{ block.settings.message_link }}" style="color:{{block.settings.color_link}}" class="shop_now"> {{ 'general.top_header.shop_now' | t }}</a>
+                      </p>
+                    </div>
+        			</div>
+                    </div>  
+        	{%- when 'cur_lang' -%} 
+      		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-{{block.settings.col_left}}">
+            <ul class="menu-language parent-list">
+              {%if block.settings.header_use_currency%}
+              <li class="language item-list" >
+                {% include 'currency-picker' %}
+                <a href="javascript:void(0);" class="toggle-submenu">                
+                  <span class="lang-currency">USD</span><span class="icon"><i class="icon-chevron-down"></i></span>
+                </a>  
+                <ul class="{{shop.currency}} list-currencies currency-lists child-list">         
+                  {% assign codes = 'USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,ILS,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK' | split: ',' %}
+                  {% assign supported_codes = settings.supported_currencies | split: ' ' %}  
+                  {% assign currency_default = shop.currency %}
+                  {% for code in supported_codes %}
+                  {% if codes contains code %}
+                  {% case code %} 
+                  {% when 'USD' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%} ><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'EUR' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'GBP'  %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'CAD' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'VND' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'JPY' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'AUD' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% when 'CNY' %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% else %}
+                  <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                  {% endcase %} 
+                  {% endif %}
+                  {% endfor %} 
+                </ul>      
+              </li>
+              {% endif %}
+              {%if block.settings.header_use_language%}
+              <li class="item-list language-shop">
+                <a href="javascript:void(0);" class="toggle-submenu">     
+                  <span>English</span>    
+                  <span class="icon"><i class="icon-chevron-down"></i></span>
+                </a>
+              </li>
+              {% endif %}
+             
+            </ul>
+      		</div>  
+        	{%- when 'social' -%} 
+      		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-{{block.settings.col_left}}">
+        	{% assign type_social = block.settings.type_social | plus: 0 %}
+            {%- if type_social == 1 -%}
+              {% include 'social_link' %}
+              {%- else -%}
+              {% include 'social-sharing' %}
+            {%- endif -%}
+            </div>
+        
+        {%- endcase -%}
+        {%- endfor -%}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% style%}
+	{% liquid
+      assign bg_top_header = section.settings.bg_top_header
+      assign cl_text = section.settings.cl_text
+    %}
+	.cms-top-bar .labertopbar{
+		background-color:{{bg_top_header}};
+	}
+
+	.cms-top-bar .wrapper-bar-message .announcement-bar__message{
+		color:{{cl_text}}
+	}
+
+    @media (min-width: 1025px) {
+      .cms-top-bar .labertopbar{
+        padding-left:{{section.settings.pd_left}}px;
+        padding-right:{{section.settings.pd_right}}px;
+      }
+    }
+
+{% endstyle%}
+{% schema %}
+  {
+    "name": "Top Bar",
+    "class":"cms-top-bar",
+    "settings": [
+		{
+          "type": "header",
+          "content": "General settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "header_use_top_bar",
+          "label": "Show top Bar",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "home_page_only",
+          "label": "Home page only",
+          "default": false
+        },
+		{
+          "type": "header",
+          "content": "Design"
+        },
+        {
+          "type": "color",
+          "id": "bg_top_header",
+          "label": "Background color",
+          "default": "#1a73e8"
+        },
+		{
+          "type": "color",
+          "id": "cl_text",
+          "label": "Color text",
+          "default": "#fff"
+        },
+        {
+        "type": "range",
+        "id": "pd_left",
+        "label": "Padding left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+        },
+        {
+        "type": "range",
+        "id": "pd_right",
+        "label": "Padding right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+        }
+	],
+	"blocks": [
+		{
+          "type": "message",
+          "name": "Announcement bar",
+          "limit": 1,
+          "settings": [
+              {
+                "type": "text",
+                "id": "message_text",
+                "label": "Announcement text",
+                "default": "Free Delivery over £40 to most of UK*"
+              },
+              {
+                "type": "url",
+                "id": "message_link",
+                "label": "Announcement link",
+                "info": "Optional"
+              },
+              {
+              "type": "color",
+              "id": "color_link",
+              "label": "Link color",
+              "default": "#e60023"
+              },
+              {
+              "type": "select",
+              "id": "col_left",
+              "default": "4",
+              "options": [
+                {
+                "value": "3",
+                "label": "3/12 (25%)"
+                },
+                {
+                "value": "4",
+                "label": "4/12 (33.333333%)"
+                },
+                {
+                "value": "6",
+                "label": "6/12 (50%)"
+                }
+              
+              ],
+              "label": "Width col:"
+              }
+          ]
+        },
+		{
+          "type": "cur_lang",
+          "name": "currency and language",
+          "limit": 1,
+            "settings": [
+            {
+            "type": "checkbox",
+            "id": "header_use_currency",
+            "label": "Display currency on top bar",
+            "default": true
+            },
+            {
+            "type": "checkbox",
+            "id": "header_use_language",
+            "label": "Display language on top bar",
+            "default": true
+            },
+              {
+              "type": "select",
+              "id": "col_left",
+              "default": "4",
+              "options": [
+                {
+                "value": "3",
+                "label": "3/12 (25%)"
+                },
+                {
+                "value": "4",
+                "label": "4/12 (33.333333%)"
+                },
+                {
+                "value": "6",
+                "label": "6/12 (50%)"
+                }
+              
+              ],
+              "label": "Width col:"
+              }
+            ]
+        },
+        {
+        "type": "social",
+        "name": "Show social",
+        "limit": 1,
+		"settings": [
+			{
+            "type": "header",
+            "content": "Social settings",
+			"info":"Note: you can edit social at 'Theme settings' -> 'Social media'"
+            },
+            {
+            "type": "select",
+            "id": "type_social",
+            "label": "Show sharing Or link:",
+            "options": [
+            {
+            "value": "1",
+            "label": "Social link"
+            },
+            {
+            "value": "2",
+            "label": "Social sharing"
+            }
+            ],
+            "default": "2"
+          },
+              {
+              "type": "select",
+              "id": "col_left",
+              "default": "4",
+              "options": [
+                {
+                "value": "3",
+                "label": "3/12 (25%)"
+                },
+                {
+                "value": "4",
+                "label": "4/12 (33.333333%)"
+                },
+                {
+                "value": "6",
+                "label": "6/12 (50%)"
+                }
+              
+              ],
+              "label": "Width col:"
+              }
+		]
+        }
+		
+		
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

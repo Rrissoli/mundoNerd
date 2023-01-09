@@ -1,0 +1,235 @@
+{%- liquid
+	layout none
+	assign collection = collections['frontpage']
+	assign limit = 10 
+	assign search_pr_type = search.terms
+    assign check = true 
+    assign on_sale_txt = 'products.product.on_sale' | t
+    assign save_js = 'products.product.save_js' | t: saved_amount:'saved_amount' -%}
+
+
+<header>
+  <div class="header layout5 no-prepend-box-sticky">    
+    {% include 'currency-picker' %}
+    <div class="header-main-wrap">
+      <div class="header-top">
+        <div class="container {% if section.settings.layout == 'full-width' %}{{section.settings.layout}} {% endif %}">
+          <div class="row">
+            <div class="header-nav-mobile col-md-4 col-4">
+              <a class="js-mobile-menu menu-bar mobile-navigation" href="javascript:void(0)">
+                <span class="icon">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </a>
+            </div>
+            <div class="header-logo col-lg-auto col-md-4 col-4">
+              {% if settings.logo != blank %}
+                  <a href="/" class="site-header__logo-image">
+                    {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                    <img                                          
+                       src="{{ settings.logo | img_url: image_size, scale: 2 }}"                      
+                       alt="{{ logo_alt | escape }}"
+                       style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                  <noscript>
+                    {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                    <img src="{{ settings.logo | img_url: image_size }}"
+                         srcset="{{ settings.logo | img_url: image_size }} 1x, {{ settings.logo | img_url: image_size, scale: 2 }} 2x"
+                         alt="{{ settings.logo.alt | default: shop.name }}"
+                         style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                  </noscript>
+                  </a>
+                {% else %}
+                  <a class="site-title" href="/" itemprop="url">{{ shop.name }}</a>
+                {% endif %}
+            </div>  
+            {% if section.settings.header_use_search_home %}
+            <div  class="aloSearch header-search col"> 
+              <div class="laber_mini_cart">
+                <div class="mini_cart_wrap laber_search">
+                  <form action="{{ routes.search_url }}" method="post" class="search_header mini_search_frm pr js_frm_search" role="search">
+                    <input type="hidden" name="type" value="product">
+                    <input type="hidden" name="options[unavailable_products]" value="last">
+                    <input type="hidden" name="options[prefix]" value="none">
+                    
+                    <div class="row">
+                      <div class="frm_search_cat col-auto">
+                        <select name="product_type">
+                          <option value="*">{{ 'general.search.all_cat' | t }}</option>
+                          {%- for product_type in shop.types -%}{%- if product_type == blank %}{% continue-%}{% endif -%}<option value="{{product_type}}"{% if search_pr_type == product_type %} selected="selected"{% endif %}>{{product_type}}</option>{%- endfor -%}
+                        </select>
+                      </div>
+                      <div class="frm_search_input col">
+                        <input class="search_header__input js_iput_search" autocomplete="off" type="text" name="q" placeholder="{{ 'general.search.placeholder' | t }}">
+                      </div>
+                      
+                      <div class="col-auto btn_search">
+                        <button class="search_header__submit js_btn_search{% if settings.ajax_search %} pe_none{% endif %}" type="submit">
+                          {{ 'general.search.btn' | t }}
+                        </button> 
+                      </div>
+                    </div>  
+                     
+                    {%comment%}<div class="ld_bar_search"></div>{%endcomment%}
+                  </form> 
+                  <div class="mini_cart_content fixcl-scroll widget">
+                    <div class="fixcl-scroll-content product_list_widget">
+                      <div class="skeleton_wrap skeleton_js d-none">
+                        <div class="loading_search">
+                          <div class="jloading">
+                          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="js_prs_search">
+                        <div class="row">
+                        {%- if collection != blank  -%}
+                        {%- for product in collection.products limit:limit -%}
+                        {%- render 'product_ajax_js',product:product,on_sale_txt:on_sale_txt,save_js:save_js -%}
+                        {%- endfor -%}
+
+                        {%- if collection.all_products_count > limit -%}
+
+                        <a href="/collections/all" class="btn fwsb detail_link">{{ 'general.search.view_all' | t }} <i class="lnr lnr-arrow-right"></i></a>
+
+                        {%- endif -%}
+                        {%- endif -%}
+                        </div> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  
+            {% endif %}
+            <div class="header-top-meta col-lg-auto col-md-4 col-4">
+              {%if section.settings.display_c_u_n%}
+              <div class="contac-right">
+                {{section.settings.header_c_u_n}}
+              </div>
+              {% endif %}
+              
+              <ul class="header-control display-mobile">  
+                {% if section.settings.header_use_search_home %}
+                <li class="">
+                  <a href="/search" class="header-search push_side header-icon" data-id="#search_pupop" title="{{'general.search.title' | t}}">
+                    <i class="lnr lnr-magnifier"></i>   
+                  </a>                        
+                </li>   
+                {% endif %}
+                {%if section.settings.header_use_account%}
+                <li class="signin item-list display-mobile">
+                  <a href="/account/login" data-id="#login_pupop" class="push_side header-icon" title="{{'customer.login.sign_in' | t}}" >
+                    <i class="lnr lnr-user"></i>
+                    <span>{{'customer.login.sign_in' | t}}</span>
+                  </a>
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_cart_home %}
+                <li class="box-minicart">
+                  {% include'header-cart'%}
+                </li>
+                {% endif %}
+
+              </ul>
+              
+            </div>  
+          </div>
+        </div>
+      </div>   
+      <div class="header-bottom">
+        <div class="container {% if section.settings.layout == 'full-width' %}{{section.settings.layout}} {% endif %}">
+          <div class="row">
+            {%- if section.settings.shop_vertical -%}
+            <div class="col-auto vertical_menu">
+               <h4 class="title_vertical_menu flex">
+                 <span class="icon-left"><i class="lnr lnr-menu"></i></span>
+                 <span class="title">{{section.settings.title_vertical}}</span>
+                 <span class="icon-right"><i class="lnr lnr-chevron-down"></i></span>
+              </h4>
+               <div class="list-vertical_menu">
+                 <ul class="lazy_vertical_menu lazyload" data-include="{{routes.search_url}}?view=vertical_menu">
+                   	<div class="loading_bg"></div>
+                 </ul>
+               </div>
+            </div>
+            {%- endif -%}
+            <div class="header-nav col"> 	
+              {%- render 'menu',se_blocks:se_blocks,tp_blocks:tp_blocks -%}
+            </div> 
+            <div class="header-top-meta col-lg-auto col-md-4 col-3">
+              <ul class="header-control">  
+                 {% comment %}
+                {% if section.settings.header_use_search_home %}
+                <li class="">
+                  <a href="/search" class="header-search push_side header-icon" data-id="#search_pupop" title="{{'general.search.title' | t}}">
+                    <i class="lnr lnr-magnifier"></i>   
+                  </a>                        
+                </li>   
+                {% endif %}
+				{% endcomment %}
+                {%if section.settings.header_use_account%}
+                <li class="signin item-list display-mobile">
+                  <a href="/account/login" data-id="#login_pupop" class="push_side header-icon" title="{{'customer.login.sign_in' | t}}" >
+                    <i class="lnr lnr-user"></i>
+                    <span>{{'customer.login.sign_in' | t}}</span>
+
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if section.settings.header_use_wishlist_home %}
+                <li class="display-mobile"> 
+                  <a href="javascript:void(0);" class="push_side header-icon" data-id="#wishlist_popup" title="{{'general.wishlist.title' | t}}">
+                    <i class="lnr lnr-heart"></i>
+                    <span class="header__counter" data-js-wishlist-count="0">0</span>
+                  </a>                        
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_compare_home %}
+                <li class="display-mobile">
+                  <a style="font-size: 21px;" href="javascript:void(0);" class="push_side header-icon" data-js-popup-button="compare-full" title="{{'general.compare.title' | t}}">
+                    <i class="lnr lnr-layers" aria-hidden="true"></i>
+                    <span class="header__counter" data-js-compare-count="0">0</span>
+                  </a>
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_cart_home %}
+                <li class="box-minicart">
+                  {% include'header-cart'%}
+                </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<style>
+  .header .header-bottom, 
+  .header .header-top{
+  	background-color: {{section.settings.background_header}};
+  }
+  .vertical_menu .icon-right,
+  .vertical_menu .icon-left,
+  .vertical_menu .title,
+  .header .header-icon,
+  .header .main-menu>li>a{
+    color: {{section.settings.color_menu_text}};
+  }
+  .header .header-icon i{
+    fill: {{section.settings.color_menu_text}};
+  }
+  .vertical_menu h4.title_vertical_menu{
+  	background-color: {{section.settings.bg_vertical}};
+  }
+  .vertical_menu .icon-right,
+  .vertical_menu .icon-left,
+  .vertical_menu .title{
+  	color: {{section.settings.cl_vertical}};
+  }
+</style> 

@@ -1,0 +1,454 @@
+{% liquid
+    assign id = section.id 
+    assign sett_equal = section.settings.use_eq_height
+    assign layout = section.settings.layout
+    assign collection = section.settings.collection
+ 	assign products = collections[collection].products 
+ 	assign mg_top =section.settings.mg_top |plus:0
+    assign mobile_mg_top =section.settings.mobile_mg_top |plus:0
+    assign mg_bottom =section.settings.mg_bottom |plus:0
+    assign mobile_mg_bottom =section.settings.mobile_mg_bottom |plus:0
+    
+ 	assign pd_top =section.settings.pd_top |plus:0
+    assign mobile_pd_top =section.settings.mobile_pd_top |plus:0
+    
+    assign pd_left =section.settings.pd_left |plus:0
+    assign mobile_pd_left =section.settings.mobile_pd_left |plus:0
+    
+    assign pd_bottom =section.settings.pd_bottom |plus:0
+    assign mobile_pd_bottom =section.settings.mobile_pd_bottom |plus:0
+    
+    assign pd_right =section.settings.pd_right |plus:0
+    assign mobile_pd_right =section.settings.mobile_pd_right |plus:0
+    
+    assign cl_bg =section.settings.cl_bg  
+    assign show_Collection =section.settings.show_Collection
+    assign row_num =section.settings.row_num
+    assign col_pr =section.settings.col_pr  |plus:0
+    assign max_count = col_pr | times: row_num
+    
+    if col_pr == 5
+    	assign col = 15
+    else
+    	assign col = 12 | divided_by: col_pr
+    endif
+    
+    
+    assign show_banner = section.settings.show_banner
+    assign b_image = section.settings.b_image
+    assign url = section.settings.link_img1
+    assign open_link = section.settings.open_link 
+    assign img_loca = section.settings.img_loca |plus:0
+    
+ -%} 
+{%if show_Collection %}
+{%- for i in (1..1) -%}  
+<section class="laber_collection_grid_{{id}}">
+  <div class=" container {%if layout == 'full-width' %}{{layout}}{%endif%}">
+		<div class="wrap_title ">
+          
+		  {% if section.settings.sub_title!= blank %}
+		  <span class="section-subtitle">{{section.settings.sub_title}}</span>
+		  {% endif %}
+          
+          {% if section.settings.title != blank %}
+		  <h3 class="section-title">{{section.settings.title}}</h3>  
+		  {% endif %}
+          
+          
+          {% if section.settings.content!= blank %}
+		  <div class="content">{{section.settings.content}}</div>
+		  {% endif %}
+          
+		</div>
+    <div class="row">
+      {% if show_banner %}  
+        {%- if b_image != blank -%}
+        <div class=" img_slider_block dek_img_slide col-xs-12 col-sm-12 col-md-12 col-lg-5 {% if img_loca == 2 %}order_1{%endif%}">
+          <a href="{%if url %}{{url}}{%else%}#{%endif%}" target="{{open_link}}">	
+          <div class="lazyload pr_lazy_img " data-bgset="{{ b_image | img_url: '1x1' }}" data-ratio="{{b_image.aspect_ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: b_image.aspect_ratio | times: 100}}%;"></div>
+          </a>		
+        </div>                    
+        {%- else -%}
+        <div class="img_slider_block col-xs-12 col-sm-12 col-md-5 col-lg-5 {% if img_loca == 2 %}order_1{%endif%}">
+          <div class="laber_bg_lz lazyload pr_lazy_img " data-bg="https://via.placeholder.com/702x905.png/f5f5f5/999?text=702x905 " style="padding-top:128.917%;"></div>
+        </div>
+        {%- endif -%}
+      {%- endif -%} 
+    <div class="products-arrivals col">
+    <div class="section-content">
+      {%- if collection  != blank -%} 
+              {% capture grid %}animated fadeIn col-xs-6 col-sm-6 col-md-4 col-lg-{{ col }}{% endcapture %}              
+              <div class="sorting-collections__products pr_center  row" data-limit="{{ section.settings.max_count }}" data-grid="{{ grid }}">                               
+                  
+                 {%- capture url_cat -%}{% if collection %}/collections/{{collections[collection].handle}}{% endif %}{%- endcapture -%}
+                {%- for product in products limit: max_count -%}
+                {% assign pr_hd = product.handle %}
+                  <div data-lazy-product-load class="productLazyload {{ grid }} lazyload" data-include="{{url_cat}}/products/{{pr_hd}}/?view=pr_lazy_load">                      
+
+                  </div>
+                {%- endfor -%}                    
+              </div>
+      {%- else -%}
+      		<div class="sorting-collections__products pr_center  row">
+      		{%- for i in (1..max_count ) -%}
+                <div class="grid__item col-xs-12 col-sm-6 col-md-4 col-lg-{{ col }} ">
+                  <div class="product-inner">
+                    <div class="product-image">
+                      	<a href="/admin/products" class="product__image-wrapper">
+                        	{% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                        </a>
+                    </div>
+                  </div>
+                  <div class="product-info">
+                    <div class="product__title"><a href="/admin/products">{{ 'homepage.onboarding.product_title' | t | capitalize }}</a></div>
+                    <div class="product__price">$19.99</div>
+                  </div>
+                </div>
+             {%- endfor -%}   
+      	</div>
+      {%- endif -%}
+    </div>
+      {%if section.settings.show_view_all %}
+      		<div class="bn_button viewall text-center"><a href="{{ collections[collection].url | default:'/admin/collections' }}">{{'collections.general.view_all' |t}} <i class="icon-arrow-right" aria-hidden="true"></i></a></div>
+      {%endif%}
+    </div>
+  </div>
+  </div>
+</section>
+
+{%- endfor -%}
+{% style%}
+	.laber_collection_grid_{{id}}{
+      {% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+      {% if mg_bottom !=0 %}margin-bottom:{{mg_bottom}}px;{%endif%} 
+      {% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+      {% if pd_right !=0 %}padding-right:{{pd_right}}px;{%endif%} 
+      {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%}	
+	  {% if pd_left !=0 %}padding-left:{{pd_left}}px;{%endif%} 
+      background-color:{{cl_bg}};
+	}
+	@media (max-width: 1366px) {
+      .laber_collection_grid_{{id}}{
+		padding-right:{{mobile_pd_right}}px; 
+		padding-left:{{mobile_pd_left}}px;
+      }
+    }
+    @media (max-width: 1024px) {
+      .laber_collection_grid_{{id}}{
+        margin-top:{{mobile_mg_top}}px;
+        margin-bottom:{{mobile_mg_bottom}}px;
+        padding-top:{{mobile_pd_top}}px;
+        padding-bottom:{{mobile_pd_bottom}}px; 
+      }
+    }
+{% endstyle%}
+{%endif%}
+{%- schema -%}
+  {
+    "name": "Products Collection grid",
+    "class": "collection_grid cms_section type_collection_grid product_section",
+    "settings": [
+		{
+        "type": "checkbox",
+        "id": "show_Collection",
+        "label":"Show Collection grid",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "New arrivals"
+      },
+      {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Sub Text"
+      },  
+	  {
+        "type": "textarea",
+        "id": "content",
+        "label": "Content",
+        "default": "Commodo sociosqu venenatis cras dolor sagittis integer luctus maecenas."
+      },  
+      {
+        "type": "header",
+        "content": "== General Settings"
+      },     
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },	
+	  {
+        "type": "select",
+        "id": "col_pr",
+        "label": "Product per row",
+        "info": "How many product you want to show per row (Layout design is grid)",
+        "default": "4",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          }
+        ]
+      },
+	  {
+        "type": "range",
+        "id": "row_num",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Row number",
+		"info": "Number of rows you want to display (Layout design is grid)",
+        "default": 2
+      },
+	  {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label":"Show View all button",
+        "default": false
+      },
+      {
+      "type": "header",
+      "content": "== == == == =="
+      },
+      {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label":"Show Banner",
+      "default": true
+      },
+	 {
+         "type": "image_picker",
+         "id": "b_image",
+         "label": "Image"/*,
+         "info": "702 x 923px .jpg recommended"*/
+	  },     
+      {
+        "type": "url",
+        "id": "link_img1",
+        "label": "Link image",
+        "info": "The whole image becomes clickable."
+      },
+      {
+        "type": "select",
+        "id": "open_link",
+        "options": [
+          {
+            "value": "_self",
+            "label": "Current window (_self)"
+          },
+         {
+            "value": "_blank",
+            "label": "New window (_blank)"
+          }
+        ],
+        "label": "Open link in",
+        "default": "_blank"
+      },
+		{
+        "type": "select",
+        "id": "img_loca",
+        "label": "image locationt",
+        "default": "1",
+        "options": [
+          {
+            "value": "1",
+            "label": "Left"
+          },
+          {
+            "value": "2",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "== Design Options"
+      },      
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "container",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "full-width",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+      },
+	  {
+        "type": "header",
+        "content": "== Margin",
+		"info":"Margin top, margin bottom. If you not use to blank"
+      },  
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== Padding",
+		"info":"Padding top, Padding bottom . If you not use to blank"
+      },	
+      {
+        "type": "range",
+        "id": "pd_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "range",
+        "id": "pd_right",
+        "label": "Padding right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },	
+      {
+        "type": "range",
+        "id": "pd_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+		{
+        "type": "range",
+        "id": "pd_left",
+        "label": "Padding left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== Setting mobile",
+		"info":"Padding and Margin"
+      },
+	 {
+        "type": "range",
+        "id": "mobile_mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "range",
+        "id": "mobile_pd_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      		{
+        "type": "range",
+        "id": "mobile_pd_right",
+        "label": "Padding right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_pd_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+		{
+        "type": "range",
+        "id": "mobile_pd_left",
+        "label": "Padding left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+      
+    ],
+    "presets": [
+      {
+        "name": "3.A Products Collection grid",
+        "category": "Collections"
+      }
+    ]
+  }
+{% endschema %}

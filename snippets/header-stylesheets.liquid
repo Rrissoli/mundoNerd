@@ -1,0 +1,150 @@
+{%- assign font_default = settings.font_default -%}
+{% if font_default %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
+{%endif%}
+
+{%comment%}
+      <link rel="preconnect" href=" {{ 'style.bootstrap.min.css' | asset_url}}" crossorigin>
+      <link rel="preload" as="style" href="{{ 'style.bootstrap.min.css' | asset_url}}">
+      {{ 'style.bootstrap.min.css' | asset_url | stylesheet_tag}}    
+	{%endcomment%}	
+
+  <link rel="preconnect" href=" {{ 'style.jquery-ui.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.jquery-ui.min.css' | asset_url}}">
+  {{ 'style.jquery-ui.min.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.fotorama.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.fotorama.min.css' | asset_url}}">
+  {{ 'style.fotorama.min.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.chosen.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.chosen.min.css' | asset_url}}">
+  {{ 'style.chosen.min.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.magnific-popup.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.magnific-popup.min.css' | asset_url}}">
+  {{ 'style.magnific-popup.min.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.pre_theme.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.pre_theme.css' | asset_url}}">
+  {{ 'style.pre_theme.css' | asset_url | stylesheet_tag}} 
+
+  <link rel="preconnect" href=" {{ 'style.line-awesome.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.line-awesome.min.css' | asset_url}}">
+  {{ 'style.line-awesome.min.css' | asset_url | stylesheet_tag}} 
+
+  <link rel="preconnect" href=" {{ 'dukamarket.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'dukamarket.css' | asset_url}}">
+  {{ 'dukamarket.css' | asset_url | stylesheet_tag}} 
+
+  <link rel="preconnect" href=" {{ 'style.tippy.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.tippy.min.css' | asset_url}}">
+  {{ 'style.tippy.min.css' | asset_url | stylesheet_tag}} 
+
+  <link rel="preconnect" href=" {{ 'style.font-awesome.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.font-awesome.min.css' | asset_url}}">
+  {{ 'style.font-awesome.min.css' | asset_url | stylesheet_tag}}
+
+  <link rel="preload" as="style" href="{{ 'style.linearicons-free.css' | asset_url}}">
+  {{ 'style.linearicons-free.css' | asset_url | stylesheet_tag}}
+
+  <link rel="preconnect" href=" {{ 'style.slick-theme.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.slick-theme.min.css' | asset_url}}">
+  {{ 'style.slick-theme.min.css' | asset_url | stylesheet_tag}}
+  <link rel="preconnect" href=" {{ 'style.slick.min.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.slick.min.css' | asset_url}}">
+  {{ 'style.slick.min.css' | asset_url | stylesheet_tag}}
+
+  <link rel="preconnect" href=" {{ 'animate.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'animate.css' | asset_url}}">
+  {{ 'animate.css' | asset_url | stylesheet_tag}}
+
+
+  <link rel="preconnect" href=" {{ 'style.product.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.product.css' | asset_url}}">
+  {{ 'style.product.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.collection.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.collection.css' | asset_url}}">
+  {{ 'style.collection.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.blog.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.blog.css' | asset_url}}">
+  {{ 'style.blog.css' | asset_url | stylesheet_tag}} 
+
+		{%-assign import_header = settings.select_header | plus: 0-%}
+        {%- case import_header   -%}  
+           {%-when 1-%}
+              <link rel="preconnect" href=" {{ 'style.header1.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'style.header1.css' | asset_url}}">
+              {{ 'style.header1.css' | asset_url | stylesheet_tag }} 
+          {%- when 2 -%}
+              <link rel="preconnect" href=" {{ 'style.header2.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'style.header2.css' | asset_url}}">
+              {{ 'style.header2.css' | asset_url | stylesheet_tag }} 
+           {%-when 3 -%}
+              <link rel="preconnect" href=" {{ 'style.header3.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'style.header3.css' | asset_url}}">
+              {{ 'style.header3.css' | asset_url | stylesheet_tag }}
+		
+			  <link rel="preconnect" href=" {{ 'vertical_menu.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'vertical_menu.css' | asset_url}}">
+              {{ 'vertical_menu.css' | asset_url | stylesheet_tag }} 	
+           {%-when 4 -%}
+              <link rel="preconnect" href=" {{ 'style.header4.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'style.header4.css' | asset_url}}">
+              {{ 'style.header4.css' | asset_url | stylesheet_tag }} 
+			  
+              <link rel="preconnect" href=" {{ 'vertical_menu.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'vertical_menu.css' | asset_url}}">
+              {{ 'vertical_menu.css' | asset_url | stylesheet_tag }} 
+          {%- when 5 -%}
+              <link rel="preconnect" href=" {{ 'style.header5.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'style.header5.css' | asset_url}}">
+              {{ 'style.header5.css' | asset_url | stylesheet_tag }} 
+
+			  <link rel="preconnect" href=" {{ 'vertical_menu.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'vertical_menu.css' | asset_url}}">
+              {{ 'vertical_menu.css' | asset_url | stylesheet_tag }} 	
+        {%- endcase -%}
+
+ 		{% assign import_footer= settings.select_footer | plus: 0%}
+        {% case import_footer %}     
+          {% when 1 %}    
+              <link rel="preconnect" href=" {{ 'style.footer.css' | asset_url}}" crossorigin>
+              <link rel="preload" as="style" href="{{ 'style.footer.css' | asset_url}}">
+              {{ 'style.footer.css' | asset_url | stylesheet_tag}} 
+          {% when 2 %}    
+                <link rel="preconnect" href=" {{ 'style.footer2.css' | asset_url}}" crossorigin>
+                <link rel="preload" as="style" href="{{ 'style.footer2.css' | asset_url}}">
+                {{ 'style.footer2.css' | asset_url | stylesheet_tag}} 
+          {% when 3 %}
+                <link rel="preconnect" href=" {{ 'style.footer3.css' | asset_url}}" crossorigin>
+                <link rel="preload" as="style" href="{{ 'style.footer3.css' | asset_url}}">
+                {{ 'style.footer3.css' | asset_url | stylesheet_tag}} 
+          {% when 4 %}
+                <link rel="preconnect" href=" {{ 'style.footer4.css' | asset_url}}" crossorigin>
+                <link rel="preload" as="style" href="{{ 'style.footer4.css' | asset_url}}">
+                {{ 'style.footer4.css' | asset_url | stylesheet_tag}} 
+          {% when 5 %}
+                <link rel="preconnect" href=" {{ 'style.footer5.css' | asset_url}}" crossorigin>
+                <link rel="preload" as="style" href="{{ 'style.footer5.css' | asset_url}}">
+                {{ 'style.footer5.css' | asset_url | stylesheet_tag}} 
+        {% endcase %}   
+	
+
+
+  <link rel="preconnect" href=" {{ 'style.section.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.section.css' | asset_url}}">
+  {{ 'style.section.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.popup.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.popup.css' | asset_url}}">
+  {{ 'style.popup.css' | asset_url | stylesheet_tag}} 
+  <link rel="preconnect" href=" {{ 'style.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.css' | asset_url}}">
+  {{ 'style.css' | asset_url | stylesheet_tag}}
+
+{%comment%} <link rel="preconnect" href=" {{ 'style.all.css' | asset_url}}" crossorigin>
+  <link rel="preload" as="style" href="{{ 'style.all.css' | asset_url}}">
+  {{ 'style.all.css' | asset_url | stylesheet_tag}} {%endcomment%}
+
+
+  
+ 
+  

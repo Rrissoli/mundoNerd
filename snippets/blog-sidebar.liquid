@@ -1,0 +1,167 @@
+<!-- /snippets/blog-sidebar.liquid -->
+<div id="js-stickySidebar" class="col-xs-12 col-sm-12 col-md-3 sidebar">
+  <aside class="js-sidebar-mobile-content sidebar-moible sidebar-{% if layout == 2 or layout ==5 %}left{% else %}right{% endif %} ps-container">
+    <div class="js-close-sidebar close-sidebar-btn hidden-lg hidden-md">
+      <svg width="14" height="14" viewBox="0 0 17 14">        
+        <path d="M9.207 8.5l6.646 6.646-0.707 0.707-6.646-6.646-6.646 6.646-0.707-0.707 6.646-6.646-6.647-6.646 0.707-0.707 6.647 6.646 6.646-6.646 0.707 0.707-6.646 6.646z" />
+      </svg>
+      <span>{{section.settings.title_close_sidebar}}</span>
+    </div>
+    {% if section.settings.search_use_chk == true %}
+    <div class="widget widget-search">
+      <form id="searchForm" method="get" class="searchform" action="/search" role="search">
+        <div class="search-block">
+          <div class="search-inner">
+            <input type="text" class="search-info" placeholder="{{section.settings.place_holder_search_sidebar}}" name="q" {% if search.performed %} value="{{ search.terms | escape | downcase }}"{% endif %}>
+            <input type="hidden" name="type" value="article" />
+            <a id="btn_submit_search" href="javascript:void(0)" class="search-button"><i class="fa fa-search" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if section.settings.blog_post_use == true %}
+    <div class="widget widget-text">
+      <h5 class="widgettitle">{{settings.blog_title_block}}</h5>
+      <div class="content">     	
+        <ul class="list-socials">
+          {% if settings.footer_social_twitter_enable %}
+          <li>
+            <a class="twitter" target="_blank" href="{{settings.footer_social_twitter_link}}" title="{{settings.footer_social_twitter_text}}"><i class="fa fa-twitter"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_facebook_enable %}
+          <li>
+            <a class="facebook" target="_blank" href="{{settings.footer_social_facebook_link}}" title="{{settings.footer_social_facebook_text}}"><i class="fa fa-facebook"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_google_enable %}
+          <li>
+            <a class="google" target="_blank" href="{{settings.footer_social_google_link}}" title="{{settings.footer_social_google_text}}"><i class="fa fa-google-plus"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_pinterest_enable %}
+          <li>
+            <a class="pinterest" target="_blank" href="{{settings.footer_social_pinterest_link}}" title="{{settings.footer_social_pinterest_text}}"><i class="fa fa-pinterest-p"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_instargram_enable %}
+          <li>
+            <a class="instagram" target="_blank" href="{{settings.footer_social_instargram_link}}" title="{{settings.footer_social_instargram_text}}"><i class="fa fa-instagram"></i></a>
+          </li>
+          {% endif %}
+
+          {% if settings.footer_social_tumblr_enable %}
+          <li>
+            <a class="tumblr" target="_blank" href="{{settings.social_tumblr_link}}" title="{{settings.footer_social_tumblr_text}}"><i class="fa fa-tumblr-square"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_snapchat_enable %}
+          <li>
+            <a class="tumblr" target="_blank" href="{{settings.social_snapchat_link}}" title="{{settings.footer_social_snapchat_text}}"><i class="fa fa-snapchat-ghost"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_youtube_enable %}
+          <li>
+            <a class="tumblr" target="_blank" href="{{settings.social_youtube_link}}" title="{{settings.footer_social_youtube_text}}"><i class="fa fa-youtube-square"></i></a>
+          </li>
+          {% endif %}
+          {% if settings.footer_social_vimeo_enable %}
+          <li>
+            <a class="tumblr" target="_blank" href="{{settings.social_vimeo_link}}" title="{{settings.footer_social_vimeo_text}}"><i class="fa fa-vimeo "></i></a>
+          </li>
+          {% endif %}
+        </ul>         
+      </div>
+    </div>
+    {% endif %}
+
+    {% if section.settings.category_use_chk == true %}
+    <div class="widget widget-blog-categories">
+      <h5 class="widgettitle">{{settings.title_category_sidebar}}</h5>
+      <ul class="blog-categories">
+        {% if linklists.blog-category.links.size > 0 %}
+        {% for link in linklists.blog-category.links %}
+        {% assign blog_t = link.object %}
+        {% assign count  = blogs[blog_t.handle].articles_count%}
+        <li {% if blog_t.handle == blog.handle %} class="active" {% endif %}><a href="{{blog_t.url}}"> {{blog_t.title}} </a>  <span class="count"> {% if count < 10 and count >= 0%} {{"0"}}{% endif %}{{count}} </span></li>      
+        {% endfor %} 
+        {% else %}
+        <p style="text-align: justify;">Please <b class="note">{{ 'create a link list' | link_to: '/admin/links' }} </b> that contains links to all the blogs you wish to Sidebar Blog on this page. The title of that link list must be <strong>Blog Category</strong>. If you want your collections to be listed alphabetically, reorder them alphabetically on your <b class="note"> {{ 'Navigation page' | link_to: '/admin/links' }}</b>.</p>
+        {% endif %} 
+
+
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if section.settings.latest_post_use_chk %}
+    <div class="widget widget-recent-post">
+      <h5 class="widgettitle">{{settings.title_latest_sidebar}}</h5>
+      <ul class="list-recent-posts blog-list">
+
+        {% for article in blogs[section.settings.blog].articles limit: section.settings.pagination_limit_blog_latest %}
+        <li class="post-item">
+          {% if article.image %}
+          <div class="post-format">
+            <a class="post-image" href="{{article.url}}" style="background-image:url('{{ article | img_url: 'large'}}');">
+              <span></span>
+            </a>
+          </div>                
+          {% endif %}
+          <div class="post-info">
+            <div class="main-info-post">
+              <ul class="meta-post">
+                <li class="time-post"><a href="javascript:void(0)">{{ article.created_at | date: "%b" }} {{ article.created_at | date: "%d" }} {{ article.created_at | date: "%Y" }}</a></li>
+              </ul>
+            </div> 
+            <div class="head">
+              <a href="{{article.url}}" class="post-title">{{ article.title | truncate:36}}</a>
+            </div> 
+          </div>            
+        </li>   
+        {% endfor%}   
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if section.settings.newsletter_use_chk %}
+    <div class="widget widget-recent-post">
+      <h5 class="widgettitle">{{section.settings.title_newsletter_sidebar}}</h5>
+      <h5 class="widget_sub_title">{{section.settings.subtitle_newsletter_sidebar}}</h5>
+      <form id="newsletterForm" method="post" class="newsletter-form-sidebar" accept-charset="UTF-8" action="/contact#newsletterForm" role="search">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="signup-newsletter-form  ">
+          <div class="content">
+            <input type="email" name="contact[email]" placeholder="{{section.settings.place_holder_newsletter_sidebar}}" value="" class=" input-text" required="required">
+            <div class="group_checkbox">
+              <input type="checkbox" name="chk_enable" id="chk_newsletter" required="required" value="" style="display:block;"/>
+              <label>{{section.settings.title_newsletter_checkbox}}</label>
+            </div>
+            <input type="submit" name="submit" class="btn-newsletter" value="{{section.settings.title_newsletter_button}}"/>            
+          </div>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+  </aside>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $("#btn_submit_search").on('click',function(e){
+       	$("#searchForm").submit();
+    })    
+    $(".js-mobile-sidebar").on('click',function(e){
+       $(".js-mobile-sidebar-panel").addClass('active');
+       $(".js-sidebar-mobile-content").addClass('active');
+    })   
+    $(".js-close-sidebar").on('click',function(){
+       $(".js-mobile-sidebar-panel").removeClass('active'); 
+       $(".js-sidebar-mobile-content").removeClass('active');
+    })
+  })  
+</script>

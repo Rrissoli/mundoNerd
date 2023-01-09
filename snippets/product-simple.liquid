@@ -1,0 +1,105 @@
+<!-- snippets/product-simple.liquid -->
+{% include 'product-res-variables' %}
+{%- assign show_options = 1 -%}
+{%- assign show_related_product = settings.product_info_show_related_product -%}
+{%- assign show_recently_view = settings.product_info_show_recently_view -%}
+{%- assign product_page_design = settings.product_page_design -%}
+{%- assign nb_thumb = settings.nb_thumb -%}
+{%- assign width_zoom = settings.width_zoom -%}
+{%- assign height_zoom = settings.height_zoom -%}
+{% assign build_variant = "all" %}
+
+{%- assign bg_product_page = settings.bg_product_page -%}
+{%- assign pad_top_product_page = settings.pad_top_product_page -%}
+{%- assign pad_bottom_product_page = settings.pad_bottom_product_page -%}
+{% assign br_style = settings.br_style | plus:0 %}
+
+<div class="main-content shop-page main-content-detail" 
+     style="background-color:{{bg_product_page}};
+            padding-top:{{pad_top_product_page}}px;
+            padding-bottom:{{pad_bottom_product_page}}px;">
+  <div class="container">    
+    
+      <div class="content-offset {{ product_page_design }}">
+        <div class="js_product_single  row" id="product-single" {% include 'product-get-attributes' %}>
+          
+          <div id="js-stickySidebar" class="details-thumb col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
+           <div class="js-sticky-sidebar" >
+              {% if product.images.size > 0 %}
+                <div class="cms-wrap-main-slider">
+                  <div class="wrap-main-slider">
+                    <div data-slide-main data-width-zoom="{{width_zoom}}" data-height-zoom="{{height_zoom}}"  class="slider-fors">                      
+                      {% for image in product.images %}                       
+                        <div id="main_img_{{image.id }}" data-image-id="{{ image.id }}"  class="full-item">
+                          {%- assign image = image.src -%}
+                          {%- if image -%}
+                          		<img {% if settings.product_info_enable_zoom %} data-style-zoom ="{{settings.type_zoom}}" class="main-image js-image-{{image.id }}" data-zoom-image="{{ image | img_url: '1920x' }}" {% endif %} src="{{ image | img_url: 'grande' }}" style="width:100%; height:auto"alt=""/>
+                          {%- endif -%}
+                        </div> 
+                      {% endfor %}
+                    </div>
+                    <div class="main_appendArrows"></div>
+                    <div class="zoomContainerAppendTo"></div>
+                    {% if settings.product_info_show_btn_fullscreen %}
+                    <div data-js-gallery class="open_gallery">
+                      <i class="icon-zoom-in"></i>
+                      {{'products.product.zoom' | t}}
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div data-fotorama data-allow-full-screen="native" style="width:1px;height:1px;">
+                  {% for image in product.images %}                       
+                    {%- assign image = image.src -%}
+              		{%- if image -%}<img src="{{ image | img_url: '1920x' }}" style="width:auto; height:auto" alt=""/>{%- endif -%}                    
+                  {% endfor %}
+                </div>
+                <div data-slide-nav class="slider-nav row" data-slidesToShow ="{{nb_thumb}}"  data-vertical ="{%- if product_page_design =='thumb_left' or product_page_design =='thumb_right' -%}true{%-else-%}false{%- endif -%}">                      
+                  {% for image in product.images %}                       
+                  <div id="thumb_img_{{image.id }}" data-thumb-id="{{ image.id }}" data-image="{{ image.src | img_url: 'grande' }}" data-z-image="{{ image.src | img_url: '1920x' }}" class="thumb_img">
+                    {%- assign image = image.src -%}
+                    {%- if image -%}<div class="lazyload pr_lazy_img" data-bgset="{{ image | img_url: '1x1' }}" data-ratio="{{image.aspect_ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;"></div>{%- endif -%}
+                  </div> 
+                  {% endfor %}
+                </div>
+            	
+				
+            {% else %}
+                <div data-slide-main class="slider-fors" >
+                  <div data-image-id="{{ product.images[0].id }}" class="thumb_img">                      
+                      {%- assign image = product.images[0].src -%}
+                      {%- if image -%}<div class="lazyload pr_lazy_img" data-bgset="{{ image | img_url: '1x1' }}" data-ratio="{{image.aspect_ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 75}}%;"></div>{%- endif -%}
+                  </div>                      
+                </div>
+            {% endif %}
+            </div>
+          </div>
+          
+          <div class="details-info col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <!-- sections/product-information.liquid -->
+             <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <meta itemprop="url" content="{{ url }}">
+            <meta itemprop="sku" content="{{ sku }}">
+            <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+            <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+            <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+             {%if br_style != 1%}  
+            	 {% include 'breadcrumb' %}  
+             {%endif%}  
+            {% section 'product-information'%}
+            </div>
+          </div>
+        
+        </div>        
+    </div>
+  </div>
+</div>
+{% if settings.use_product_tabs %}
+	{% section 'product-page'%}
+{% endif %} 
+{% if show_related_product %}
+	{% section 'related-product-carousel' %}
+{% endif %}
+{% if show_recently_view %}
+	{% section 'products-recently-viewed' %}
+{% endif %}

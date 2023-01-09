@@ -1,0 +1,172 @@
+<!--Footer-->
+  <div class="footer" style="background-color:{{section.settings.bg}};{% if section.settings.image != blank %} background-image:url('{{section.settings.image | img_url:"1920x682"}}'); background-position:center center; {% endif %}">  
+      <div class="main-footer">
+        <div class="container">
+        	<div class="row">
+          {%- for block in section.blocks -%}
+              	<div class="col-lg-{{block.settings.cl}} col-md-{{block.settings.cl_tb}} col-{{block.settings.cl_mb}}" {{ block.shopify_attributes }}>
+						<aside id="block_{{block.id}}" class="widget widget_text widget_mail">
+                         {%- if block.settings.title != blank -%}
+                          	<h3 class="widget-title{% if image != blank %} dn_md{% endif %}">
+                              <span class="txt_title">{{block.settings.title}}</span>
+                          </h3>{%- endif -%}
+                             <div class="textwidget widget_footer">
+                               {% if block.settings.sub_title %}
+                               <div class="text-email">
+                               	{{block.settings.sub_title}}
+                               </div>
+                               {% endif %}
+                                <div class="footer-mail">                                   	
+									{%- form 'customer', class:'newsletter-form-footer' -%}
+									<input type="hidden" name="contact[tags]" value="newsletter">
+									<div class="mc4wp-form-fields">
+									  <div class="signup-newsletter-form  {{class}}">
+										<div class="col">
+                                          <i class="lnr lnr-envelope"></i>
+                                          <input type="email" name="contact[email]" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"  value="{% if customer %}{{ customer.email }}{% endif %}" class="{{class_ip}} input-text" required="required"></div>
+										<div class="col-auto">
+                                          <button type="submit" class="submit-btn truncate{% if settings.checkbox_mail %} mail_agree pr{% endif %}">
+                                            <span> 
+                                              	{{ 'general.newsletter_form.submit' | t }} 
+                                              	
+                                            </span>
+                                            {% if block.settings.btn_icon %}
+                                             	 <i class="lnr lnr-arrow-right"> </i>
+                                              	{% endif %}
+                                          </button>
+                                        </div>
+									  </div>
+									  {%- if settings.checkbox_mail -%}{%- render 'conditions_mail',html:'p',margin:'mt__15',stt_link:settings.link_mail,sid:sid -%}{%- endif -%}
+									</div>
+									<div class="mc4wp-response">
+									  {%- if form.posted_successfully? -%}<div class="shopify-message"><i class="las la-check"></i>{{ 'general.newsletter_form.confirmation' | t }}</div>{%- elsif form.errors -%}<div class="shopify-error"><i class="las la-exclamation-triangle"></i>{{ form.errors | default_errors }}</div>{%- endif -%}
+									</div>
+									{%- endform -%}								
+                                </div>
+                             </div>
+                          	    
+                          
+                          </aside>
+              </div>
+              {%- endfor -%}
+        </div>
+        </div>
+      </div>
+      <div class="footer-note">
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-auto col-lg-auto left-content">
+              <div class="coppy-right">
+                <h3 class="content">{{section.settings.footer_copyright_text}}</h3>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-auto col-lg-auto right-content">
+              <div class="social-footer-wrap">
+                {% if section.settings.footer_use_social_link %}
+                <ul class="list-socials">
+                  {% if settings.footer_social_twitter_enable %}
+                  <li>
+                    <a class="twitter" target="_blank" href="{{settings.footer_social_twitter_link}}" title="{{settings.footer_social_twitter_text}}"><i class="fa fa-twitter"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_facebook_enable %}
+                  <li>
+                    <a class="facebook" target="_blank" href="{{settings.footer_social_facebook_link}}" title="{{settings.footer_social_facebook_text}}"><i class="fa fa-facebook"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_google_enable %}
+                  <li>
+                    <a class="google" target="_blank" href="{{settings.footer_social_google_link}}" title="{{settings.footer_social_google_text}}"><i class="fa fa-google-plus"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_pinterest_enable %}
+                  <li>
+                    <a class="pinterest" target="_blank" href="{{settings.footer_social_pinterest_link}}" title="{{settings.footer_social_pinterest_text}}"><i class="fa fa-pinterest-p"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_instargram_enable %}
+                  <li>
+                    <a class="instagram" target="_blank" href="{{settings.footer_social_instargram_link}}" title="{{settings.footer_social_instargram_text}}"><i class="fa fa-instagram"></i></a>
+                  </li>
+                  {% endif %}
+
+                  {% if settings.footer_social_tumblr_enable %}
+                  <li>
+                    <a class="tumblr" target="_blank" href="{{settings.social_tumblr_link}}" title="{{settings.footer_social_tumblr_text}}"><i class="fa fa-tumblr-square"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_snapchat_enable %}
+                  <li>
+                    <a class="tumblr" target="_blank" href="{{settings.social_snapchat_link}}" title="{{settings.footer_social_snapchat_text}}"><i class="fa fa-snapchat-ghost"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_youtube_enable %}
+                  <li>
+                    <a class="tumblr" target="_blank" href="{{settings.social_youtube_link}}" title="{{settings.footer_social_youtube_text}}"><i class="fa fa-youtube-square"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_social_vimeo_enable %}
+                  <li>
+                    <a class="tumblr" target="_blank" href="{{settings.social_vimeo_link}}" title="{{settings.footer_social_vimeo_text}}"><i class="fa fa-vimeo "></i></a>
+                  </li>
+                  {% endif %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+      	</div>
+      </div>
+  </div>
+<div class="apus-footer-mobile">    
+    <ul>
+      <li>
+        <a href="/collections/all">
+          <i class="lnr lnr-store"></i>                   
+          <span>{{'homepage.shop' | t}}</span>
+        </a>
+      </li>
+     
+        <li>
+          <a href="javascript:void(0);" class="push_side header-icon wishlist-icon" data-id="#wishlist_popup" title="{{'general.wishlist.title' | t}}">
+           <i class="lnr lnr-heart"></i>
+          	<span class="header__counter count" data-js-wishlist-count="0">0</span>
+             <span>{{'general.wishlist.title' | t}}</span>                                                       
+          </a>                        
+        </li>
+
+      <li>
+        <a class="footer-mini-cart mini-cart push_side header-icon" href="/cart" data-id="#js_cart_popup">
+          <i class="lnr lnr-cart"></i>                                                                                             
+          <span class="header__counter cart-count" data-js-cart-count="0"> 0 </span> 
+          <span>{{'cart.general.title' | t}}</span>
+        </a> 
+      </li>
+
+      <li>
+        <a href="/account">
+          <i class="lnr lnr-user"></i>
+		  <span>{{'customer.account.title' | t}}</span>
+        </a> 
+      </li>
+      <li>
+        <a class="footer-search-btn push_side" href="javascript:void(0)" data-id="#search_pupop">
+          <i class="lnr lnr-magnifier"></i>
+		  <span>{{'general.search.btn' | t}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+<!--/Footer-->
+{% style%}
+	.footer .main-footer{
+        padding-top:{{section.settings.pd_top}}px;
+		padding-bottom:{{section.settings.pd_bottom}}px;
+	}
+    @media (max-width: 767px) {
+      .footer .main-footer{
+          padding-top:{{section.settings.mobile_pd_top}}px;
+          padding-bottom:{{section.settings.mobile_pd_bottom}}px;
+      }
+    }
+{% endstyle%}

@@ -1,0 +1,99 @@
+<!-- Created by Andy 06/08/2017 -->
+{% section 'breadcrumb' %}
+<div class="main-content shop-page login-page">
+  <div class="container">
+    
+    <div class="login-register-form pr_center content-form row">
+      <div class="note form-success hide" id="ResetSuccess" style="display:none;">
+        {{ 'customer.recover_password.success' | t }}
+      </div>
+     
+      <div class="cms-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        {% form 'create_customer', class:'register' %}
+        {{ form.errors | default_errors }}
+        <div class="register-form">
+          <h4 class="main-title">{{ 'customer.register.title' | t }}</h4>
+          
+            <div class="label-text">
+              <label>{{'customer.register.first_name' | t}} <span>*</span></label>              
+              <input
+                class="required input-info {% if form.errors contains 'first_name' %} input--error{% endif %}"     
+                type="text"
+                name="customer[first_name]"
+                id="RegisterForm-FirstName"
+                {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+                autocomplete="given-name"
+                placeholder="{{ 'customer.register.first_name' | t }}"
+              >
+          </div>
+          <div class="label-text">
+          <label>{{'customer.register.last_name' |t}} <span>*</span></label>
+           <input
+              class="required input-info {% if form.errors contains 'last_name' %} input--error{% endif %}"    
+              type="text"
+              name="customer[last_name]"
+              id="RegisterForm-LastName"
+              {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+              autocomplete="family-name"
+              placeholder="{{ 'customer.register.last_name' | t }}"
+            >
+          </div>
+          <div class="label-text">
+            <label>{{'customer.register.email' | t}} <span>*</span></label>          
+           <input
+                   class="required email input-info {% if form.errors contains 'email' %} input--error{% endif %}"
+                   type="email"
+                   name="customer[email]"
+                   id="RegisterForm-email"
+                   {% if form.email %} value="{{ form.email }}"{% endif %}
+                   spellcheck="false"
+                   autocapitalize="off"
+                   autocomplete="email"
+                   aria-required="true"
+                   {% if form.errors contains 'email' %}
+                   aria-invalid="true"
+                   aria-describedby="RegisterForm-email-error"
+                   {% endif %}
+                   placeholder="{{ 'customer.register.email' | t }}"
+                   >
+          
+          </div>
+          
+            <div class="label-text">
+              <label>{{'customer.register.password' | t}} <span>*</span></label>              
+              <input 
+                     placeholder="{{ 'customer.register.password' | t }}"
+                     type="password" 
+                     name="customer[password]" 
+                     id="CreatePassword" 
+                     class="required password input-info{% if form.errors contains 'password' %} input--error{% endif %}"
+                     >
+            </div>
+            <div class="label-text">
+              <label>{{ 'customer.reset_password.password_confirm' | t }} <span>*</span></label>              
+              <input 
+                     placeholder="{{ 'customer.reset_password.password_confirm' | t }}"	
+                     type="password" 
+                     value="" 
+                     name="customer[password_confirmation]" 
+                     id="PasswordConfirmation" 
+                     class="required password_confirm input-info {% if form.errors contains 'password_confirmation' %} input--error{% endif %}"
+                     >
+            </div>
+          
+          <div class="group-button">            
+            <input type="submit" class="button submit" value="{{ 'customer.register.submit' | t }}"/>
+          </div>
+          <p class="or"><span>{{'customer.register.or' | t}}</span></p>
+          <div class="register_submit">
+            <a href="/account/login" >
+              {{ 'customer.login.sign_in' | t }}
+            </a>
+          </div>
+        </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+
+</div>

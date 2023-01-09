@@ -1,0 +1,225 @@
+{% liquid
+
+  assign sid = section.id 
+  assign sett_equal = section.settings.use_eq_height 
+  assign ck = section.settings.use_eq_height
+  
+  assign url = section.settings.button_link
+  assign bg_img = section.settings.bg_img
+%}
+   
+{%- for i in (1..1) -%}
+<section class="laber_se_{{sid}} ">
+  <div class="laber_countdown_banner">
+    <div class="countdown_banner">
+      {%- if bg_img != blank -%}
+      	<div class="pr_lazy_img main-img  laber_bg_lz lazyload"  data-bgset="{{ bg_img | img_url: '1x1' }}" data-wiis data-ratio="{{bg_img.aspect_ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: bg_img.aspect_ratio | times: 100}}%;"></div>
+      {% else %}
+      	<div class="pr_lazy_img laber_bg_lz lazyload" style="padding-top: 760px;" data-bg="https://placehold.it/1000x500.png/EEEEEE/EEEEEE?text=Banner+IMG"></div>
+      {% endif %}
+    </div>
+    <div class="container wrap-infor">    
+      {%- assign image = section.settings.image -%}
+      {%- assign url = section.settings.url -%}
+      {%comment%}
+      
+      <div class="wrap-banner-cd col-xs-12 col-sm-12 col-md-12 col-lg-6">
+        <div class="nt_promotion {{section.settings.txt_align}}">
+          
+          {%- capture img_html -%}
+            {%- if image != blank -%}
+              <div class="pr_lazy_img nt_bg_lz lazyload" data-bgset="{{ image | img_url: '1x1' }}" data-wiis data-ratio="{{image.aspect_ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;"></div>
+            {%- else -%}
+              <div class="pr_lazy_img nt_bg_lz lazyload" style="padding-top: 500px;" data-bg="https://via.placeholder.com/1000x500.png/E7F0F5/E7F0F5?text=Banner+IMG"></div>
+            {%- endif -%}
+          {%- endcapture -%}
+          
+          {%- if url != blank -%}
+          	<a href="{{url}}">{{img_html}}</a>
+          {%- else -%}
+         	{{- img_html -}}
+          {%- endif -%}
+
+        </div>
+      </div>
+      
+      {%endcomment%}
+        <div class="product_count_down">
+          <div class="content-countdown">
+              <div class="product-inner">
+                	{% if section.settings.title != blank or section.settings.sub_title!= blank %}
+                    <div class="wrap_title ">
+                      {% if section.settings.title2 != blank %}
+                      <h4 class="title2">{{section.settings.title2}}</h4>  
+                      {% endif %}
+                      {% if section.settings.title != blank %}
+                      <h3 class="title1">{{section.settings.title}}</h3>  
+                      {% endif %}
+                      {% if section.settings.sub_title!= blank %}
+                      <span class="subtitle">{{section.settings.sub_title}}</span>
+                      {% endif %}
+                    </div>
+                    {% endif %}                          
+                    {%- if section.settings.year_count_down != blank and section.settings.month_count_down != blank and section.settings.day_count_down != blank -%}
+                    <div class="cms-countdown" data-y="{{section.settings.year_count_down}}" data-m="{{section.settings.month_count_down}}" data-d="{{section.settings.day_count_down}}" data-h="00" data-i="00" data-s="00"></div>                    	
+                    {%- endif -%}
+                	
+                    {%- if url != blank -%}
+                    	<a class="button" href="{{url}}" onMouseOver="this.style.backgroundColor='{{section.settings.bg_cl_hover}}'; this.style.color='{{section.settings.cl_btn_hover}}'" onMouseOut="this.style.backgroundColor='{{section.settings.bg_cl}}'; this.style.color='{{section.settings.cl_btn}}'"  style="color:{{section.settings.cl_btn}}; background-color:{{section.settings.bg_cl}};">{{ section.settings.btn}} v</a>
+                    {%- else -%}
+                    	<a class="button" href="#" onMouseOver="this.style.backgroundColor='{{section.settings.bg_cl_hover}}'; this.style.color='{{section.settings.cl_btn_hover}}'" onMouseOut="this.style.backgroundColor='{{section.settings.bg_cl}}'; this.style.color='{{section.settings.cl_btn}}'"  style="color:{{section.settings.cl_btn}}; background-color:{{section.settings.bg_cl}};">{{ section.settings.btn}} <i class="lnr lnr-arrow-right"></i></a>
+                    {% endif %}      
+              </div>                   
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endfor -%}
+{% style%}
+	.laber_se_{{sid}}{
+		margin-top:{{section.settings.mg_top}}px ;
+		margin-right:{{section.settings.mg_right}}px ;
+		margin-bottom:{{section.settings.mg_bottom}}px;
+		margin-left:{{section.settings.mg_left}}px;
+	}
+{% endstyle%}
+
+{%- schema -%}
+  {
+    "name": "Bannner countdown",
+    "class": "cms_section type_product_countdown_banner",	
+    "settings": [
+      {
+        "type": "header",
+        "content": "== Product Settings"
+      },
+      {
+      "type": "image_picker",
+      "id": "bg_img",
+      "label": "Background image"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+      "type": "text",
+      "id": "year_count_down",
+      "label": "Year of countdown",
+      "default": "2021"
+      },
+      {
+      "type": "text",
+      "id": "month_count_down",
+      "label": "Month of countdown",
+      "default": "12"
+      },
+      {
+      "type": "text",
+      "id": "day_count_down",
+      "label": "Day of countdown",
+      "default": "30"
+      }, 
+      {
+        "type": "text",
+        "id": "btn",
+        "label": "Button Text",
+        "default": "Shop Now"
+      },
+      {
+        "type": "color",
+        "id": "cl_btn",
+        "label": "Button color ",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "cl_btn_hover",
+        "label": "Button color (hover)",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "bg_cl",
+        "label": "Button background color",
+		"default":"#1a73e8"
+      },
+      {
+        "type": "color",
+        "id": "bg_cl_hover",
+        "label": "Button background color (hover)",
+		"default":"#343e45"
+      }, 
+      {
+        "type": "header",
+        "content": "== General Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Special Offers"
+      },
+      {
+      "type": "text",
+      "id": "title2",
+      "label": "Heading2",
+      "default": "Hurry Up! 25% Off"
+      },
+      {
+        "type": "textarea",
+        "id": "sub_title",
+        "label": "Sub Text",
+		"default":"Class aptent taciti sociosqu ad litora torquent per conubia"
+      },           
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_right",
+        "label": "Margin right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_left",
+        "label": "Margin left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ],	
+    "presets": [
+      {
+        "name": "10.A Bannner countdown",
+        "category": "Products"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,422 @@
+{% assign handle_current = product.handle %}
+{% assign handle = product.collections[0].handle %}
+{% if handle =='' or handle == blank %}
+	{% assign handle = 'frontpage' %}
+{% endif %}	
+{% assign check_product = false %}
+{% for product in collections[handle].products%}              
+  {% if handle_current != product.handle %}
+    	{% assign check_product = true %}
+  {% endif %}
+{% endfor %}
+
+{%- assign show_label_in_stock = settings.product_collection_show_label_in_stock -%}
+{%- assign show_label_out_stock = settings.product_collection_show_label_out_stock -%}
+{%- assign show_label_sale = settings.product_collection_show_label_sale -%}
+{%- assign show_label_new =  settings.product_collection_show_label_new -%}
+{%- assign show_label_hot =  settings.product_collection_show_label_hot -%}
+{%- assign show_countdown = false | default: settings.product_collection_show_countdown -%}
+{%- assign show_images_navigation = true | default: settings.product_collection_show_images_navigation -%}
+{%- assign show_title = settings.product_collection_show_title -%}
+{%- assign show_sku = settings.product_collection_show_sku -%}
+{%- assign show_barcode =  settings.product_collection_show_barcode -%}
+{%- assign show_availability =  settings.product_collection_show_availability -%}
+{%- assign show_type = settings.product_collection_show_type -%}
+{%- assign show_vendor = settings.product_collection_show_vendor -%}
+{%- assign show_description = settings.product_collection_show_description -%}
+{%- assign show_price = settings.product_collection_show_price -%}
+{%- assign show_options = settings.product_collection_show_options -%}
+{%- assign show_custom_options =  settings.product_show_custom_options -%}
+{%- assign show_quantity = false | default: settings.product_collection_show_quantity -%}
+{%- assign show_button_add_to_cart = settings.product_collection_show_button_add_to_cart -%}
+{%- assign show_button_add_to_wishlist = settings.product_collection_show_button_add_to_wishlist -%}
+{%- assign show_button_add_to_compare =  settings.product_collection_show_button_add_to_compare -%}
+{%- assign show_button_quick_view = settings.product_collection_show_button_quick_view -%}
+{%- assign show_reviews = settings.product_collection_show_reviews -%}
+{%- assign hide_reviews_counter = settings.product_collection_hide_reviews_counter -%}
+{% assign enable_hover_image = settings.product_collection_enable_hover_image %}
+{% assign build_variant = "all" %}
+
+{% assign cl_bg = section.settings.cl_bg %}
+{% assign mg_top = section.settings.mg_top %}
+{% assign mg_bottom = section.settings.mg_bottom %}
+{% assign pd_top = section.settings.pad_top %}
+{% assign pd_bottom = section.settings.pad_bottom %}
+{% assign mobile_mg_top = section.settings.mobile_mg_top %}
+{% assign mobile_mg_bottom = section.settings.mobile_mg_bottom %}
+{% assign mobile_pd_top = section.settings.mobile_pd_top %}
+{% assign mobile_pd_bottom = section.settings.mobile_pd_bottom %}
+
+{% liquid
+    assign col_pr =section.settings.col_pr |plus:0
+    assign col_ipad_pro =section.settings.col_ipad_pro |plus:0
+    assign col_ipad =section.settings.col_ipad |plus:0
+    assign col_mobile =section.settings.col_mobile |plus:0
+    assign col_mobile_vertical =section.settings.col_mobile_vertical |plus:0
+    
+    if col_pr == 5
+    	assign col = 15
+    else
+    	assign col = 12 | divided_by: col_pr
+    endif
+    
+  assign autoplay =  section.settings.autoplay
+  assign arrows =  section.settings.arrows
+  assign dots =  section.settings.dots
+  assign infinite =  section.settings.infinite
+%}
+{% if check_product %}
+<section class="laber_collection_related">
+<div class="container {% if section.settings.layout == "full-width"%}{{section.settings.layout}}{% endif %}">    
+    <div class="products-arrivals">
+		<div class="wrap_title ">
+          
+		  {% if section.settings.sub_title!= blank %}
+		  <span class="section-subtitle">{{section.settings.sub_title}}</span>
+		  {% endif %}
+          
+          {% if section.settings.title != blank %}
+		  <h3 class="section-title">{{section.settings.title}}</h3>  
+		  {% endif %}
+          
+          
+          {% if section.settings.content!= blank %}
+		  <div class="content">{{section.settings.content}}</div>
+		  {% endif %}
+          
+		</div>
+      <div class="section-content grid-style">
+
+        <div class="js-slick-carousel laber-slick-carousel products-slider row" 
+             
+             data-slidestoshow="{{col_pr}}" 
+             data-slidestoscroll="{{col_pr}}" 
+
+             data-slidestoshowipadpro="{{col_ipad_pro}}" 
+             data-slidestoscrollipadpro="{{col_ipad_pro}}"
+
+             data-slidestoshowipad="{{col_ipad}}" 
+             data-slidestoscrollipad="{{col_ipad}}"
+
+             data-slidestoshowmobile="{{col_mobile}}" 
+             data-slidestoscrollmobile="{{col_mobile}}"
+
+             data-slidestoshowmobilevertical="{{col_mobile_vertical}}" 
+             data-slidestoscrollmobilevertical="{{col_mobile_vertical}}"
+                 
+              data-arrows="{{arrows}}" 
+              data-dots="{{dots}}" 
+              data-autoplay="{{autoplay}}"
+              data-infinite="{{infinite}}">
+          {% capture grid %}col-xs-6 col-sm-6 col-md-4 col-lg-{{ col }}{% endcapture %}          
+          {% for product_r in collections[handle].products limit: secction.settings.max_count %}              
+          {% if handle_current != product_r.handle %}   
+          		<div class="{{grid}}">
+          			{% include 'product_style' with product: product_r data-col:col_pr %}   
+                </div>      
+          {% endif %}
+          {% endfor %} 
+          
+        </div>
+        {%if dots %}
+        	<div class="laber_append_dots"></div>
+        {%endif%}
+      </div>
+    </div>
+</div>
+<section>
+{% style%}
+	.laber_collection_related{
+      {% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+      {% if mg_bottom !=0 %}margin-bottom:{{mg_bottom}}px;{%endif%} 
+      {% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+      {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%} 
+      background-color:{{cl_bg}};
+	}
+    @media (max-width: 767px) {
+      .laber_collection_related{
+        {% if mobile_mg_top !=0 %}margin-top:{{mobile_mg_top}}px;{%endif%} 
+        {% if mobile_mg_bottom !=0 %}margin-bottom:{{mobile_mg_bottom}}px;{%endif%} 
+        {% if mobile_pd_top !=0 %}padding-top:{{mobile_pd_top}}px;{%endif%} 
+        {% if mobile_pd_bottom !=0 %}padding-bottom:{{mobile_pd_bottom}}px;{%endif%} 
+      }
+    }
+{% endstyle%}  
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Related product carousel",
+	"class": "cms_section  product_section",
+    "settings": [
+        {
+          "type": "select",
+          "id": "layout",
+          "default": "container",
+          "options": [
+          {
+          "value": "container",
+          "label": "Container"
+          },
+          {
+          "value": "full-width",
+          "label": "Full Width"
+          }
+          ],
+          "label": "Layout"
+        },
+        {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Related Products"
+        },
+        {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Sub Text"
+        },  
+        {
+        "type": "textarea",
+        "id": "content",
+        "label": "Content",
+        "default": "Commodo sociosqu venenatis cras dolor sagittis integer luctus maecenas."
+        },  
+        
+        {
+            "type": "range",
+            "id": "max_count",
+            "min": 2,
+            "max": 50,
+            "step": 1,
+            "unit": "pds",
+            "label": "Max product",
+            "default": 6
+        },
+        {
+        "type": "select",
+        "id": "col_pr",
+        "label": "Product per row",
+        "info": "How many product you want to show per row (Layout design is grid)",
+        "default": "4",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          }
+        ]
+      },
+      {
+      "type": "select",
+      "id": "col_ipad_pro",
+      "label": "Columns (Ipad Pro)",
+      "info": "How many item you want to show per row",
+      "default": "4",
+      "options": [
+      {
+      "value": "2",
+      "label": "2"
+      },
+      {
+      "value": "3",
+      "label": "3"
+      },
+      {
+      "value": "4",
+      "label": "4"
+      }
+      ]
+      },
+	  {
+      "type": "select",
+      "id": "col_ipad",
+      "label": "Columns (Ipad)",
+      "info": "How many item you want to show per row",
+      "default": "2",
+      "options": [
+      {
+      "value": "2",
+      "label": "2"
+      },
+      {
+      "value": "3",
+      "label": "3"
+      },
+      {
+      "value": "4",
+      "label": "4"
+      }
+      ]
+      },	
+      {
+      "type": "select",
+      "id": "col_mobile",
+      "label": "Columns (Mobile horizontal screen)",
+      "default": "1",
+      "options": [
+      {
+      "value": "1",
+      "label": "1"
+      },
+      {
+      "value": "2",
+      "label": "2"
+      }
+      ]
+      },
+      {
+      "type": "select",
+      "id": "col_mobile_vertical",
+      "label": "Columns (Mobile Vertical screen)",
+      "default": "1",
+      "options": [
+      {
+      "value": "1",
+      "label": "1"
+      },
+      {
+      "value": "2",
+      "label": "2"
+      }
+      ]
+      },
+      {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+      },
+	  {	
+      "type": "checkbox",
+      "id": "arrows",
+      "label": "Arrows",
+      "default": true
+      },
+	  {	
+      "type": "checkbox",
+      "id": "dots",
+      "label": "Dots",
+      "default": true
+      },
+	  {	
+      "type": "checkbox",
+      "id": "infinite",
+      "label": "Infinite",
+      "default": false,
+	  "info":"Infinity loop. Duplicate last and first items to get loop illusion."	
+      },
+        {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+     	 },
+        {
+          "type": "range",
+          "id": "mg_top",
+          "label": "Margin Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mg_bottom",
+          "label": "Margin bottom",
+          "default": 100,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_top",
+          "label": "Padding Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "== Setting mobile",
+          "info":"Padding and Margin"
+        },
+       {
+          "type": "range",
+          "id": "mobile_mg_top",
+          "label": "Margin top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_mg_bottom",
+          "label": "Margin bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_top",
+          "label": "Padding top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        }
+  
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+	
+{% endstylesheet %}
+
+{% javascript %}
+
+{% endjavascript %}

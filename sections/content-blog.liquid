@@ -1,0 +1,325 @@
+
+
+{% assign layout = section.settings.layout_blog | plus:0 %}
+{% liquid
+	if section.settings.search_use_chk or section.settings.blog_post_use or section.settings.category_use_chk or section.settings.latest_post_use_chk or section.settings.newsletter_use_chk
+    	assign chk_sidebar = true
+    else
+    	assign chk_sidebar = false
+    endif 
+%}
+  <div class="main-content shop-page main-content-blog  {% if layout == 3 or layout ==6 %} right {% endif %}">
+    <div class="container">
+      {% if layout != 1 and layout !=4 %}
+      	<a href="javascript:void(0)" class="js-mobile-sidebar mobile-sidebar-btn"> <i class="fa fa-bars"></i> {{section.settings.title_show_sidebar}}</a>
+      	<div class="js-close-sidebar close-sidebar-btn close-sidebar-{% if layout == 2 or layout ==5 %}left{% else %}right{% endif %}"><i class="lnr lnr-cross"></i></div>
+      {% endif %}
+      
+      <div class="row">
+        {% paginate blog.articles by section.settings.pagination_limit_blog %}
+        <div class="col-xs-12 col-sm-12  {% if layout != 1 and layout != 4%}content-offset-left {% if chk_sidebar == false %} col-md-12 {% else %}col-md-9 {% endif %} {% if layout != 3 and layout !=6 %}content-offset-right {% endif %} {% else %} col-md-12 col-lg-12 {% endif %}">
+          <div class="row auto-clear blog-grid">
+            {% for article in blog.articles %}                  
+            	{% include 'blog-simple' %}                    
+            {% endfor %}                
+          </div>
+
+          {% if paginate.pages > 1 %}
+              <div class="row">   
+                <div class="pagination">
+                  <ul class="list-page">
+                    {% if paginate.previous.is_link %}
+                    <li><a href="{{ paginate.previous.url }}#primary" class="nav-button page-numbers"><span class="fa fa-angle-left "></span></a></li>
+                    {% endif %}
+
+                    {% assign i=1 %}
+                    {% for i in (1..paginate.pages) %}
+                    {% if paginate.current_page == i %}                        
+                    	<li><a href="#" class="page-number current">{{i}}</a></li>
+                    {% else %}
+                    	<li><a href="{{paginate.current_page.url}}?page={{i}}#primary" class="page-number">{{i}}</a></li>
+                    {%endif%}
+                    {% endfor %}
+
+                    {% if paginate.next.is_link %}
+                    <li><a href="{{ paginate.next.url }}#primary" class="nav-button page-numbers"><span class="fa fa-angle-right "></span></a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+          {% endif %}            
+        </div>  
+        {% endpaginate %} 
+        {% if layout != 1 and layout != 4%} 
+        	{% if chk_sidebar %}
+        		{% include 'blog-sidebar',layout:layout%}  
+        	{% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+ 
+{% style%}
+	#shopify-section-content-blog{
+        margin-bottom:{{section.settings.mg_bottom}}px;
+	}
+    @media (max-width: 767px) {
+      #shopify-section-content-blog{
+          margin-bottom:{{section.settings.mobile_mg_bottom}}px;
+      }
+    }
+{% endstyle%}
+{% schema %}
+  {
+    "name": "Blog",
+	"class": "content-blog",
+    "settings": [
+		{
+          "type": "header",
+          "content": "==General setting"
+        },
+		{
+          "type": "select",
+          "id": "layout_blog",
+          "label": "Select layout",
+          "options": [
+            {
+              "value": "1",
+              "label": "Grid layout without sidebar"
+            },
+            {
+              "value": "2",
+              "label": "Grid layout within left sidebar"
+            },
+            {
+              "value": "3",
+              "label": "Grid layout within right sidebar"
+            },
+            {
+              "value": "4",
+              "label": "List layout without sidebar"
+            },
+            {
+              "value": "5",
+              "label": "List layout within left sidebar"
+            },
+            {
+              "value": "6",
+              "label": "List layout within right sidebar"
+            }
+          ],
+          "default": "2"
+        },
+        {
+          "type": "select",
+          "id": "pagination_limit_blog",
+          "label": "Blog page: Number of blog post to display",
+          "options": [
+            {
+            "value": "8",
+            "label": "8"
+            },
+            {
+            "value": "6",
+            "label": "6"
+            },
+            {
+            "value": "5",
+            "label": "5"
+            },
+            {
+            "value": "4",
+            "label": "4"
+            },
+            {
+            "value": "3",
+            "label": "3"
+            }
+          ],
+          "default": "5"
+        },
+	    {
+          "type": "header",
+          "content": "==Sidebar setting"
+        },
+        {
+          "type": "text",
+          "id": "blog_title_block",
+          "label": "Title of follow me",
+          "default": "Follow me"
+        },
+
+        
+        {
+          "type": "header",
+          "content": "Search setting"
+        },
+        {
+          "type": "text",
+          "id": "place_holder_search_sidebar",
+          "label": "Placeholder of search input",
+          "default": "Enter keyword"
+        },
+        
+        {
+          "type": "header",
+          "content": "Category setting"
+        },
+        {
+          "type": "text",
+          "id": "title_category_sidebar",
+          "label": "Title of category",
+          "default": "Categories"
+        },
+        {
+          "type": "text",
+          "id": "pagination_limit_category",
+          "label": "Number of item on category",
+          "default": "6"
+        },
+        {
+          "type": "header",
+          "content": "Latest post setting"
+        },	   
+        {
+          "type": "text",
+          "id": "title_latest_sidebar",
+          "label": "Title of latest post",
+          "default": "Latest post"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Select blog"
+        },
+        {
+          "type": "select",
+          "id": "pagination_limit_blog_latest",
+          "label": "Latest blog: Number of blog to display",
+          "options": [
+            {
+              "value": "8",
+              "label": "8"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            }
+          ],
+          "default": "5"
+        },
+        {
+          "type": "text",
+          "id": "title_show_sidebar",
+          "label": "Title of show sidebar",
+          "default": "Show Sidebar",
+          "info":"Only appear on mobile and laptop device"
+        },
+		{
+          "type": "text",
+          "id": "title_close_sidebar",
+          "label": "Title of close butotn on sidebar",
+          "default": "Close",
+          "info":"Only appear on mobile and laptop device"
+        },
+        {
+          "type": "header",
+          "content": "Newsletter setting"
+        },
+        {
+          "type": "text",
+          "id": "title_newsletter_sidebar",
+          "label": "Title of newsletter",
+          "default": "Newsletter"
+        },
+        {
+          "type": "text",
+          "id": "subtitle_newsletter_sidebar",
+          "label": "Subtitle Of newsletter",
+          "default": "Subscribe to our newsletter and get our newest updates right on your inbox."
+        },
+        {
+          "type": "text",
+          "id": "place_holder_newsletter_sidebar",
+          "label": "Placeholder of newsletter",
+          "default": "Your email"
+        },
+        {
+          "type": "text",
+          "id": "title_newsletter_checkbox",
+          "label": "Title of checkbox",
+          "default": "I agree to the terms & conditions"
+        },
+        {
+          "type": "text",
+          "id": "title_newsletter_button",
+          "label": "Button",
+          "default": "Subscribe"
+        },
+        {
+          "type": "header",
+          "content": "Using setting"
+        },
+        {
+          "type": "checkbox",
+          "id": "search_use_chk",
+          "label": "Use search on sidebar",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "blog_post_use",
+          "label": "Use social on sidebar",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "category_use_chk",
+          "label": "Use category on sidebar",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "latest_post_use_chk",
+          "label": "Use latest post on sidebar",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "newsletter_use_chk",
+          "label": "Use newsletter on sidebar",
+          "default": true
+        },
+
+        {
+        "type": "range",
+        "id": "mg_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "margin bottom",
+        "unit": "px",
+        "default": 30
+        }
+
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

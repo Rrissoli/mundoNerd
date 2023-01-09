@@ -1,0 +1,452 @@
+{% liquid
+  assign id = section.id 
+  assign layout = section.settings.layout
+  assign collection = section.settings.collection 
+  assign se_blocks = section.blocks
+  assign se_size = se_blocks.size
+  assign style_layout =  section.settings.style_layout
+  assign num_p_qty =  section.settings.num_p_qty
+  
+%}
+  
+{%- for i in (1..1) -%}  
+{%- if section.settings.hidden %}{% break %}{% endif -%}
+<section class="laber_collection_list_{{id}} cat_size_{{se_size}}">
+  <div class="container {%if layout == 'full-width' %}{{layout}}{%endif%}" >   
+    {% if section.settings.title != blank or section.settings.sub_title!= blank %}
+		<div class="wrap_title ">
+		  {% if section.settings.title != blank %}
+		  <h3 class="section-title">{{section.settings.title}}</h3>  
+		  {% endif %}
+          {% if section.settings.sub_title!= blank %}
+		  <span class="section-subtitle">{{section.settings.sub_title}}</span>
+		  {% endif %}
+		</div>
+    {% endif %}
+    <div class="row">
+      
+		{%- case se_size -%}
+			{%- when 1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/100/f76b6a/fff/1880x820.png?text=1880x820',ratio_demo:'43.617' ,ccol:'col-12',for_i:1 -%}
+			{%- when 2 -%}	
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/60/56cfe1/fff/930x820.png?text=930x820',ratio_demo:'88.172',ccol:'col-md-6 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/60/a8dacc/fff/930x820.png?text=930x820',ratio_demo:'88.172',ccol:'col-md-6 col-12',for_i:2 -%}
+			{%- when 3 -%}	
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/56cfe1/fff/450x570.png?text=450x570',ratio_demo:'126.666',ccol:'col-md-4 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/450x570.png?text=450x570',ratio_demo:'126.666',ccol:'col-md-4 col-12',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f4a896/fff/450x570.png?text=450x570',ratio_demo:'126.666',ccol:'col-md-4 col-12',for_i:3 -%}
+		{%- when 4 -%}	
+			{% if style_layout == 'default' %}
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/56cfe1/fff/930x400.png?text=930x400',ratio_demo:'43.010',ccol:'col-md-6 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/930x400.png?text=930x400',ratio_demo:'43.010',ccol:'col-md-6 col-12',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f4a896/fff/930x400.png?text=930x400',ratio_demo:'43.010',ccol:'col-md-6 col-12',for_i:3 -%}
+				{%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/c8b09b/fff/930x400.png?text=930x400',ratio_demo:'43.010',ccol:'col-md-6 col-12',for_i:4 -%}
+			{%elsif style_layout == 'style1' %}
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/56cfe1/fff/930x820.png?text=930x820',ratio_demo:'88.172' ,ccol:'col-md-6 col-12',for_i:1 -%}
+				<div class="col-md-6 col-12 padding-0-10"><div class="row">
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/455x400.png?text=455x400',ratio_demo:'87.912',ccol:'col-md-6 col-6',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f4a896/fff/455x400.png?text=455x400',ratio_demo:'87.912',ccol:'col-md-6 col-6',for_i:3 -%}
+				{%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/c8b09b/fff/930x400.png?text=930x400',ratio_demo:'43.010',ccol:'col-12',for_i:4 -%}
+				</div></div>
+			{%else%}
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/56cfe1/fff/455x400.png?text=455x400',ratio_demo:'87.912',ccol:'col-md-3 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/455x400.png?text=455x400',ratio_demo:'87.912',ccol:'col-md-3 col-12',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f4a896/fff/455x400.png?text=455x400',ratio_demo:'87.912',ccol:'col-md-3 col-12',for_i:3 -%}
+				{%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/c8b09b/fff/455x400.png?text=455x400',ratio_demo:'87.912',ccol:'col-md-3 col-12',for_i:4 -%}
+			{%endif%}
+		{%- when 5 -%}	 
+				{% if style_layout == 'default' %}
+                  <div class="col-md-8 col-12 padding-0-15">
+                    <div class="row">
+                  {%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/56cfe1/fff/930x630.png?text=930x630',ratio_demo:'67.7419',ccol:'col-12',for_i:1 -%}
+                  {%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/450x300.png?text=450x300',ratio_demo:'66.6666',ccol:'col-6',for_i:2 -%}
+                  {%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f4a896/fff/450x300.png?text=450x300',ratio_demo:'66.6666'ccol:'col-md-6 col-12',for_i:3 -%}
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-12 padding-0-15"><div class="row">
+                  {%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/c8b09b/fff/450x300.png?text=450x300',ratio_demo:'66.6666',ccol:'col-12',for_i:4 -%}
+                  {%- render 'cat-grid-item',block:se_blocks[4],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f1f1f1/fff/450x630.png?text=450x630',ratio_demo:'138.88',ccol:'col-12',for_i:4 -%}
+                  </div>
+                  </div>
+      			{%else%}	
+      			 {%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/56cfe1/fff/645x946.png?text=645x946',ratio_demo:'100',ccol:'col-md-4 col-12',for_i:1 -%}
+      			  <div class="col-md-8 col-12 padding-0-15" {%if section.settings.c_pos %} style="order: 2;"{%endif%}>
+                    <div class="row">
+                      {%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/645x420.png?text=645x420',ratio_demo:'100',ccol:'col-md-7 col-12',for_i:2 -%}
+                      {%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f4a896/fff/450x420.png?text=450x420',ratio_demo:'100'ccol:'col-md-5 col-12',for_i:3 -%}
+                      {%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/c8b09b/fff/450x420.png?text=450x420',ratio_demo:'100',ccol:'col-md-5 col-12',for_i:4 -%}
+                      {%- render 'cat-grid-item',block:se_blocks[4],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/f1f1f1/fff/645x420.png?text=645x420',ratio_demo:'100',ccol:'col-md-7 col-12',for_i:4 -%}
+                    </div>
+                  </div>
+      			{%endif%}
+		{%- when 6 -%}
+				<div class="col-md-6 col-12 padding-0-10"><div class="row">
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/455x455.png?text=455x455',ratio_demo:'100',ccol:'col-md-6 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/455x455.png?text=455x455',ratio_demo:'100',ccol:'col-md-6 col-12',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/930x930.png?text=930x930',ratio_demo:'100',ccol:'col-12',for_i:3 -%}
+				</div></div>
+				<div class="col-md-6 col-12 padding-0-10"><div class="row">
+				{%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/930x930.png?text=930x930',ratio_demo:'100',ccol:'col-12',for_i:4 -%}
+				{%- render 'cat-grid-item',block:se_blocks[4],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/455x455.png?text=455x455',ratio_demo:'100',ccol:'col-md-6 col-12',for_i:5 -%}
+				{%- render 'cat-grid-item',block:se_blocks[5],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/455x455.png?text=455x455',ratio_demo:'100',ccol:'col-md-6 col-12',for_i:6 -%}
+				</div></div>
+		{%- when 7 -%}
+				<div class="col-md-6 col-12 padding-0-10"><div class="row">
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/337x217.png?text=337x217',ratio_demo:'64.391',ccol:'col-md-6 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/337x217.png?text=337x217',ratio_demo:'64.391',ccol:'col-md-6 col-12',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/695x447.png?text=695x447',ratio_demo:'67.83',ccol:'col-12',for_i:3 -%}
+				</div></div>
+				<div class="col-md-6 col-12 padding-0-10"><div class="row">
+				{%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/695x447.png?text=695x447',ratio_demo:'67.83',ccol:'col-12',for_i:4 -%}
+				{%- render 'cat-grid-item',block:se_blocks[4],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/337x217.png?text=337x217',ratio_demo:'64.391',ccol:'col-md-6 col-12',for_i:5 -%}
+				{%- render 'cat-grid-item',block:se_blocks[5],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/337x217.png?text=337x217',ratio_demo:'64.391',ccol:'col-md-6 col-12',for_i:6 -%}
+				</div></div>
+      			{%- render 'cat-grid-item',block:se_blocks[6],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/1410x447.png?text=1410x447',ratio_demo:'31.702',ccol:'col-12',for_i:7 -%}
+		{%- when 8 -%}
+				{%- render 'cat-grid-item',block:se_blocks[0],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:1 -%}
+				{%- render 'cat-grid-item',block:se_blocks[1],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:2 -%}
+				{%- render 'cat-grid-item',block:se_blocks[2],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:3 -%}
+				{%- render 'cat-grid-item',block:se_blocks[3],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:4 -%}
+				{%- render 'cat-grid-item',block:se_blocks[4],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:5 -%}
+				{%- render 'cat-grid-item',block:se_blocks[5],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:6 -%}
+				{%- render 'cat-grid-item',block:se_blocks[6],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:7 -%}
+				{%- render 'cat-grid-item',block:se_blocks[7],grid:grid,num_p_qty:num_p_qty, cimg:'https://placehold.jp/30/a8dacc/fff/400x400.png?text=400x400',ratio_demo:'100',ccol:'col-md-3 col-12',for_i:8 -%}	
+		{%- endcase -%}
+      
+    </div>
+  </div>
+</section>
+{% style%}
+	.laber_collection_list_{{id}}{
+		margin-top:{{section.settings.mg_top}}px;
+        margin-bottom:{{section.settings.mg_bottom}}px;
+        padding-top:{{section.settings.pd_top}}px;
+		padding-bottom:{{section.settings.pd_bottom}}px;
+		background-color: {{section.settings.cl_bg}};
+		padding-left:{{section.settings.pd_left}}px;
+        padding-right:{{section.settings.pd_right}}px;
+	}
+	@media (max-width: 1366px) {
+		.laber_collection_list_{{id}}{
+            padding-left:{{section.settings.mobile_pd_left}}px;
+            padding-right:{{section.settings.mobile_pd_right}}px;
+        }
+	}
+    @media (max-width: 767px) {
+      .laber_collection_list_{{id}}{
+          margin-top:{{section.settings.mobile_mg_top}}px;
+          margin-bottom:{{section.settings.mobile_mg_bottom}}px;
+          padding-top:{{section.settings.mobile_pd_top}}px;
+          padding-bottom:{{section.settings.mobile_pd_bottom}}px;
+      }
+    }
+{% endstyle%}
+{%- endfor -%}
+
+
+{%- schema -%}
+  {
+    "name": "Collection list",
+    "class": "collection_list cms_section type_collection_list zoom_img",
+    "max_blocks": 5,
+    "settings": [
+      {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "hidden",
+        "label": "Hidden Section?",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "type": "textarea",
+        "id": "sub_title",
+        "label": "Sub Text"
+      },
+      {
+        "type": "checkbox",
+        "id": "num_p_qty",
+        "label": "Show product quantity",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "== Design Image"
+      },
+      {
+        "type": "select",
+        "id": "style_layout",
+        "label": "Style Layout",
+        "info": "Only works with the amount Collection 4 and 5",
+        "default": "default",
+        "options": [         
+          {
+            "value": "default",
+            "label": "Default"
+          },
+          {
+            "value": "style1",
+            "label": "Style 1"
+          }
+        ]
+      },   
+      {
+      "type": "checkbox",
+      "id": "c_pos",
+      "label": "Change position",
+      "default": true,
+	  "info": "Only works with the amount Collection = 5 style 2"
+      },
+      {
+        "type": "header",
+        "content": "== Design Options"
+      },      
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "container",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "full-width",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+      },
+	  {
+        "type": "header",
+        "content": "== Margin",
+		"info":"Margin top, Margin bottom. If you not use to blank"
+      },
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 30,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 30,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== padding",
+		"info":"padding top, padding bottom. If you not use to blank"
+      },
+      {
+        "type": "range",
+        "id": "pd_left",
+        "label": "Padding Left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "pd_right",
+        "label": "Padding Right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== Setting mobile",
+		"info":"Padding and Margin"
+      },
+	 {
+        "type": "range",
+        "id": "mobile_mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "range",
+        "id": "mobile_pd_left",
+        "label": "Padding Left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_pd_right",
+        "label": "Padding Right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+	
+    ],
+    "blocks": [{
+    "type": "collection",
+    "name": "Collection",
+    "settings": [
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "Collection"
+      },
+      {
+         "type": "image_picker",
+         "id": "image",
+         "label": "Image",
+		 "info":"Dimension: 600px x 360px"
+       },
+        {
+        "type": "select",
+        "id": "style_content",
+        "label": "Style content",
+        "default": "default",
+        "options": [         
+        {
+        "value": "default",
+        "label": "Default"
+        },
+        {
+        "value": "style1",
+        "label": "Style 1"
+        },
+        {
+        "value": "style2",
+        "label": "Style 2"
+        }
+        ]
+        },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title block (optional)",
+        "info": "Leave empty to use 'collection title' title."
+      },
+      {
+      "type": "text",
+      "id": "see_more",
+      "label": "Buttons see more",
+      "default": "Go Shopping <i class=\"icon-arrow-right\"></i>",
+	  "info": "If you don't use it, leave this section blank."	 
+      },
+	  {
+        "type": "select",
+        "id": "h_position",
+        "label": "Horizontal Position",
+        "default": "left",
+        "options": [
+            {
+            "value": "left",
+            "label": "Left"
+            },
+            {
+            "value": "center",
+            "label": "Center"
+            },
+            {
+            "value": "right",
+            "label": "Right"
+            }
+          ]
+        },
+        {
+        "type": "select",
+        "id": "v_position",
+        "label": "Vertical Position",
+        "default": "top",
+        "options": [
+            {
+            "value": "top",
+            "label": "Top"
+            },
+            {
+            "value": "middle",
+            "label": "Middle"
+            },
+            {
+            "value": "bottom",
+            "label": "Bottom"
+            }
+          ]
+        },
+		{
+            "type": "select",
+            "id": "txt_align",
+            "label": "Text Align",
+            "default": "left",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ]
+          }
+      ]
+    }],
+    "presets": [
+      {
+        "name": "5.A Collection list",
+        "category": "Collections",
+        "blocks": [
+          { "type": "collection" },
+          { "type": "collection" },
+          { "type": "collection" }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,151 @@
+{% assign layout = settings.layout_collection | plus:0 %}
+{% assign grid_list = settings.grid_list |plus:0 %}
+{% assign pagination_limit = settings.pagination_limit |plus:0 %}
+{% paginate collection.products by pagination_limit %}
+	
+    {%- if laber_ck or current_tags.size > 0 -%}
+    <div class="collection-current-tags">
+      <div class="nub_products">{{ 'collections.general.results_with_count_html' | t:count:collection.products_count}}</div>
+      {%- if current_tags.size > 1 -%}
+      <a class="clear_filter_js" href="{{collection.url}}">{{ 'collections.general.clear_filter' | t}} <i class="icon-trash-2"></i> </a>{%- endif -%}
+      {%- if current_tags.size > 0 -%}
+      {%- for tag in current_tags -%}
+      {%- assign txt_tag = tag | replace: '-', ' ' | replace: '_', ' ' -%}
+      {{ txt_tag | link_to_remove_tag: tag | replace: 'title=', 'class="clear_filter dib bf_icons" aria-label=' }}
+      {%- endfor -%}
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+	{% if paginate.items >0%}
+      <div  class="js_products_arrivals products-arrivals {% if grid_list == 1%}grid-style{%else %}list-style{%endif%}"> 
+        <div class="ajax_load">
+          <div class="circle-loadding">	
+            <span></span>
+          </div>
+        </div>
+        <div id="collection-product" class="{% if settings.collection_fullwidth %}list-style-2-column {%endif%}js_products_holder products product-container pr_center row section-content">
+          {% for product in products %}              
+                {% include 'product-grid-item' %}              
+            {% endfor %} 
+
+        </div>
+        <div class="bot_page_collection">
+          {% if paginate.pages > 1 %}
+          	{%comment%}
+              {% assign val_1 = paginate.current_offset%}
+              {% assign val_2 = val_1 | plus: paginate.page_size %}
+              {% if val_2 > paginate.items %}
+                {% assign val_2 = paginate.items %}
+              {% endif %}
+              <span class="note products-result-count col align-left">{{'collections.general.showing' | t}} {% if paginate.items >0 %}{{val_1 | plus:1}}{% else %} {{val_1}} {% endif %}&ndash;{{val_2}} of {{paginate.items}} {{'collections.general.results' | t}}</span>
+            {%endcomment%}
+          <nav class="pagination js_paginate_ajax col-auto">      
+            {%comment%}{{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}{%endcomment%}
+            <ul class="page-numbers list-page">
+
+              {% if paginate.previous.is_link %}
+              <li> <a class="nav-button page-numbers page-previous" href="{{ paginate.previous.url }}#primary">
+                <i class="icon-chevrons-left" aria-hidden="true"></i> 
+                {%comment%}<span>{{'general.pagination.previous' | t}}</span>{%endcomment%}
+                </a></li>           
+              {% endif %}
+
+              {% assign i=1 %}
+              {% for i in (1..paginate.pages) %}
+              {% if paginate.current_page == i %}
+              <li><a href="javascript:void(0)" class="page-number current">{{i}}</a></li>
+              {% else %}
+              {% assign index = i | plus:0 %}
+              {% assign index = index | minus:1 %}
+              {% if paginate.parts[index].is_link == true %}
+              <li><a class="page-number" href="{{paginate.parts[index].url}}#primary">{{paginate.parts[index].title}}</a></li>
+              {% endif %}
+              {%endif%}
+              {% endfor %}
+
+              {% if paginate.next.is_link %}
+              <li> <a class="nav-button page-numbers page-next" href="{{ paginate.next.url }}#primary">
+                	{%comment%}<span>{{'general.pagination.next' | t}}</span> {%endcomment%}
+                	<i class="icon-chevrons-right" aria-hidden="true"></i></a></li>           
+              {% endif %}
+            </ul>
+          </nav>
+          {% endif %} 
+          <input type="hidden" id="productPerPage" value="{% assign number = section.settings.grid_select | plus: 0 %}{% if number > 2.4 %}{{ section.settings.grid_select }}{% else %}2.4{% endif %}"/>
+        	<input type="hidden" id="limitProductPage" value="{{pagination_limit}}"/>
+        </div> 
+      </div>     
+	{%else%}
+		<div class="shopify-info no-products"><i class="flash fa fa-exclamation-triangle" aria-hidden="true"></i>{{'collections.general.no_matches' | t}}</div>
+	{%endif%}
+{% endpaginate %}
+
+{%style%}
+  .main-content-grid{
+  	margin-bottom:{{section.settings.mg_bottom}}px;
+  }
+  @media (max-width: 1024px) {
+    .main-content-grid{
+    margin-bottom:{{section.settings.mobile_mg_bottom}}px;
+    }
+  }
+
+{%endstyle%}
+{% schema %}
+  {
+    "name": "Content",
+	"class": "product_section",
+    "settings": [
+		{
+          "type": "header",
+          "content": "GENERAL"
+        },
+		{
+          "type": "select",
+          "id": "grid_select",
+          "default": "4",
+          "options": [
+             {
+                "value": "3",
+                "label": "Shop grid 3 columns"
+             },
+             {
+                "value": "4",
+                "label": "Shop grid 4 columns"
+             },
+             {
+                "value": "2.4",
+                "label": "Shop grid 5 columns"
+             }
+          ],		  
+          "label": "Number of column:"
+        },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom (PC)",
+        "default": 30,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_mg_bottom",
+        "label": "Margin bottom (mobile)",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

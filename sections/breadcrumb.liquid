@@ -1,0 +1,128 @@
+{% include 'breadcrumb' %}
+{% liquid
+	if collection.image
+		assign bg_img = collection.image | img_url:"1920x"
+    else
+    	assign bg_img = section.settings.bg_breadcrumb_blog | img_url:"1920x"
+    endif
+%}
+{% style%}
+	.breadcrumbs{
+        {% if bg_img != blank %}
+        background-image: url('{{bg_img}}');
+        {% endif %}
+        margin-bottom:{{section.settings.mg_bottom}}px ;
+	}
+	.breadcrumbs .outline-breadcrum .wrap-breadcrum{
+		height:{{section.settings.ht}}px ;
+	}
+	.breadcrumbs .outline-breadcrum .wrap-breadcrum h1{
+		font-size:{{section.settings.fs_text}}px ;
+	}
+    @media (max-width: 1024px) {
+        .breadcrumbs{
+       	 	background: {{section.settings.mobile_bg}};
+        	margin-bottom:{{section.settings.mobile_mg_bottom}}px ;
+		}
+        .breadcrumbs .outline-breadcrum .wrap-breadcrum{
+        	height:{{section.settings.mobile_ht}}px ;
+        }
+		.breadcrumbs .outline-breadcrum .wrap-breadcrum h1{
+            font-size:{{section.settings.mobile_fs_text}}px ;
+        }	
+    }
+{% endstyle%}
+{% schema %}
+  {
+    "name": "Breadcrumb",
+    "class": "laber_section laber-breadcrumb",
+    "settings": [ 
+      {
+      "type": "header",
+      "content": "Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_breadcrumb_blog",
+        "label": "Background banner"
+      },
+      {
+      "type": "range",
+      "id": "fs_text",
+      "min": 20,
+      "max": 70,
+      "step": 0.5,
+      "label": "Font size",
+      "unit": "px",
+      "default": 50
+      },
+      {
+        "type": "range",
+        "id": "ht",
+        "label": "height",
+        "default": 600,
+        "min": 300,
+        "max": 1000,
+        "step": 10,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 100,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+      "type": "header",
+      "content": "Mobile settings"
+      },
+	  {
+      "type": "range",
+      "id": "mobile_fs_text",
+      "min": 20,
+      "max": 70,
+      "step": 0.5,
+      "label": "Font size",
+      "unit": "px",
+      "default": 24
+      },	
+      {
+      "type": "color",
+      "id": "mobile_bg",
+      "label": "Background color",
+      "default": "#f5f5f5"
+      },
+      {
+        "type": "range",
+        "id": "mobile_ht",
+        "label": "height",
+        "default": 100,
+        "min": 50,
+        "max": 300,
+        "step": 10,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_mg_bottom",
+        "label": "Margin bottom",
+        "default": 100,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+
+{% endjavascript %}

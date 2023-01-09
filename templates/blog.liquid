@@ -1,0 +1,18 @@
+{% section 'breadcrumb_blog' %}
+{%- layout 'content-blog' -%}
+{% section "content-blog"  %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "mainEntityOfPage": {"@type": "WebPage","@id": "{{ shop.secure_url }}{{ blog.url }}"},
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ shop.name }}",
+      "description": {{ shop.description | json }}
+    },
+    "url": "{{ shop.secure_url }}{{ blog.url }}",
+    "name": "{{ blog.title }}"
+  }
+</script>
+  

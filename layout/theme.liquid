@@ -1,0 +1,118 @@
+<!doctype html>
+<html class="no-js" lang="{{ shop.locale }}">
+<head>
+  <meta charset="utf-8">   
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no, user-scalable=no">
+  <meta name="theme-color" content="{{ settings.color_button }}">
+  <meta name="format-detection" content="telephone=no">
+  {%- if canonical_url != blank  -%}<link rel="canonical" href="{{ canonical_url }}">{%- endif -%}
+  <link rel="preconnect" href="//{{shop.domain}}" crossorigin>
+  <link rel="preconnect" href="//{{shop.permanent_domain}}" crossorigin>
+  <link rel="preconnect" href="//shopify.com" crossorigin>
+  {% capture seo_title %}
+    {{ page_title }}
+    {% if current_tags %}{%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}{% endif %}
+    {% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}
+    {% unless page_title contains shop.name %}&ndash; {{ shop.name }}{% endunless %}
+  {% endcapture %}
+  <title>{{ seo_title }}</title>
+  {%- if page_description %}<meta name="description" content="{{ page_description | escape }}">
+  {%- elsif collection.current_type or collection.current_vendor %}<meta name="description" content="{{ shop.description | default: shop.name | escape }}">{% endif -%}
+  {%- if settings.favicon != blank %}<link rel="shortcut icon" type="image/png" href="{{ settings.favicon | img_url: '32x' }}">{% endif -%}
+  {%- if settings.favicon_apple != blank %}<link rel="apple-touch-icon-precomposed" type="image/png" sizes="152x152" href="{{ settings.favicon_apple | img_url: '152x' }}">{% endif -%}
+  {% comment %}{% include 'social-meta-tags' %} {% endcomment %}
+  	
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  {% include 'header-stylesheets' %}
+  {% include 'header-scripts' %}  
+  <script>
+    var theme = { moneyFormat: {{ shop.money_format | json }},moneyFormatWithCurrency: {{ shop.money_with_currency_format | json }}}
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    const type_name = "{{request.page_type}}", t_cartCount = 1,t_shop_currency = "USD", t_moneyFormat = "\u003cspan class='money'\u003e${{amount}}\u003c\/span\u003e", t_cart_url = "\/cart", pr_re_url = "\/recommendations\/products"; 
+  
+  	$(window).load(function() {
+		$(".page-load").fadeOut("slow");;
+	});
+    
+  </script>  
+  {{ content_for_header }}
+</head>
+{%- assign admin_sp = request.design_mode -%}
+<body class="template-{{ template | split: '.' | first }} {% if template contains 'index' %} home {%else%} subpage {% endif %}" data-header="{{settings.select_header}}">
+{%comment%}
+    <div class="page-load laberloading">
+      <div class="jloading">	
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+{%endcomment%}
+  <div class="page-load circle-loadding"><span></span></div>
+  <div class="main">
+  {% include 'currencies' %}
+
+        {% assign import_header = settings.select_header | plus: 0%}
+        {% case import_header %}     
+          {% when 1 %}
+    		  {% section 'top-bar' %}
+              {% section 'header1' %}    		  
+          {% when 2 %}
+              {% section 'top-header' %}
+              {% section 'header2' %}      
+          {% when 3 %}
+  		      {% section 'top-header' %}
+              {% section 'header3' %}
+          {% when 4 %}
+  			  {% section 'top-header' %}
+              {% section 'header4' %}  
+          {% when 5 %}
+              {% section 'top-header' %}
+              {% section 'header5' %} 
+    		  {% section 'vertical_menu' %}
+        {% endcase %}   
+
+  
+  <div class="page-container" id="PageContainer">
+    <main id="MainContent">
+      {{ content_for_layout }}
+    </main>
+        {% assign import_footer= settings.select_footer | plus: 0%}
+        {% case import_footer %}     
+          {% when 1 %}    
+              {% section 'footer1' %}
+          {% when 2 %}    
+              {% section 'footer2' %}
+          {% when 3 %}
+              {% section 'footer3' %}
+          {% when 4 %}
+              {% section 'footer4' %}
+          {% when 5 %}
+              {% section 'footer5' %}
+        {% endcase %}   
+
+    
+  </div>  
+  
+    {% liquid 
+      assign type_name = request.page_type
+      
+  	  unless template == '404'
+  		  if  type_name=="product" or type_name == "index" or type_name == 'cart'
+          	section 'cross-sell-popup'  
+  		  endif 
+          if type_name == 'product' and settings.sticky_atc and product.available
+            section 'sticky_add_to_cart'
+          endif
+  		  if type_name != 'blog' and type_name !='article' and type_name !='page'
+          	section 'promotion-product-popup'  
+  		  endif
+           if type_name == "index"               
+              section 'promotion-newsletter-popup'
+          endif
+  		  include 'popups' 
+  	  endunless
+    %}   
+  </div>
+</body>
+</html>

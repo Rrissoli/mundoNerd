@@ -1,0 +1,226 @@
+<div class="content_tell_me">
+   {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+         {%- assign sblock = block.settings -%}
+         {%- case block.type -%}
+            {%- when 'logo' -%}
+                <div class="logo">
+                  {% if block.settings.logo != blank %}
+                  <a href="/" class="site-header__logo-image">
+                    {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                    <img                                          
+                         src="{{ block.settings.logo | img_url: image_size, scale: 2 }}"                      
+                         alt="{{ logo_alt | escape }}"
+                         style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                    <noscript>
+                      {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                      <img src="{{ block.settings.logo | img_url: image_size }}"
+                           srcset="{{ block.settings.logo | img_url: image_size }} 1x, {{ block.settings.logo | img_url: image_size, scale: 2 }} 2x"
+                           alt="{{ settings.logo.alt | default: shop.name }}"
+                           style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                    </noscript>
+                  </a>
+                  {% else %}
+                  <a class="site-title" href="/" itemprop="url">{{ shop.name }}</a>
+                  {% endif %}
+                  
+                  {% if block.settings.title != blank %}<h3 class="title" style="color:{{block.settings.title_cl}}">{{block.settings.title}}</h3>{%endif%}
+                  {% if block.settings.title != blank %}<div class="content">{{block.settings.content}}</div>{%endif%}
+                </div> 
+         {%- endcase -%}
+      {%- endfor -%}
+	<div class="div_instagram">  
+      <div class="row">
+    {%- for block in section.blocks -%}
+      {%- assign sblock = block.settings -%}
+        {%- case block.type -%}
+        {%- when 'instagram' -%}
+          {%- assign image = block.settings.img_instagram %}
+          {% assign ratio = image.aspect_ratio |default:1.0 %}
+          {% assign url = block.settings.url -%}
+  		  {% assign open_link = block.settings.open_link -%}
+          {% assign name_instagram = block.settings.name_instagram -%}     	
+              
+                <div class="item">
+                	{%- if url != blank -%}
+                      <a data-no-instant rel="nofollow" class="wrap_ins_img" href="{{url}}" target="{{open_link}}" title="name_instagram">
+                        <div data-image-effect class="pr_lazy_img main-img lazyload laber_bg_lz " data-id="{{image.id}}" data-bgset="{% if image != blank %}{{ image | img_url: '1x1' }}{% else %}https://via.placeholder.com/110x110.png/{% cycle 'a8dacc', '56cfe1', 'f99077','c8b09b','efe1ba','a5d0d9','a1a19f' %}/111?text=110x110{% endif %}" data-parent-fit="width" data-wiis data-ratio="{{ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: ratio | times: 100}}%;"></div>
+                        <i class=" icon-instagram"></i>
+                  	  </a>
+                  {%- else -%}
+                  		<div class="wrap_ins_img">
+                          <div data-image-effect class="pr_lazy_img main-img lazyload laber_bg_lz " data-id="{{image.id}}" data-bgset="{% if image != blank %}{{ image | img_url: '1x1' }}{% else %}https://via.placeholder.com/110x110.png/{% cycle 'a8dacc', '56cfe1', 'f99077','c8b09b','efe1ba','a5d0d9','a1a19f' %}/111?text=110x110{% endif %}" data-parent-fit="width" data-wiis data-ratio="{{ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: ratio | times: 100}}%;"></div>
+                  		</div>
+                  {%- endif -%}
+                </div>
+              
+  			
+      {%- endcase -%}
+    {%- endfor -%}
+  		</div>
+      </div>
+  
+      {%- for block in section.blocks -%}
+      {%- assign sblock = block.settings -%}
+        {%- case block.type -%}
+        {%- when 'contact' -%}
+  			{% assign type_social = block.settings.type_social | plus: 0 %}
+  			<div class="contact">
+              {% if block.settings.title != blank %}
+              <div class="title">{{block.settings.title}}</div>{%endif%}
+              {% if block.settings.p_number != blank %}<div class="p_number">{{block.settings.p_number}}</div>{%endif%}
+              {% if block.settings.address != blank %}<div class="address">{{block.settings.address}}</div>{%endif%}
+              {% if block.settings.s_email != blank %}<div class="s_email"><a href="mailto:{{block.settings.s_email}}">{{block.settings.s_email}}</a></div>{%endif%}
+              
+              {%if block.settings.header_use_social%}
+                {%- if type_social == 1 -%}
+                	{% include 'social_link' %}
+                {%- else -%}
+                	{% include 'social-sharing' %}
+                {%- endif -%}
+              {% endif %}
+  			</div>
+      {%- endcase -%}
+    {%- endfor -%}
+  
+  
+   {%- endif -%}
+</div>
+{%- schema -%}
+  {
+    "name": "Tell me (top header)",
+    "class": "tell_me",
+    "blocks": [
+      {
+        "type": "logo",
+        "name": "Logo",
+        "limit": 1,
+        "settings": [
+            {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo "	
+            },
+            {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Heading"
+          },
+          {
+            "type":"color",
+            "id":"title_cl",
+            "label":"Title color",
+			"default":"#c6452c"
+          },
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "Content",
+            "default": "Gosto is a premium template theme with advanced <br>admin module. It's extremelyeasy to use and fully <br>responsive and retina ready."
+          }
+        ]
+      },
+      {
+      "type": "instagram",
+      "name": "Instagram",
+      "limit": 6,
+      "settings": [
+          {
+          "type": "text",
+          "id": "name_instagram",
+          "label": "Name instagram",
+          "default": "Name instagram"
+          },
+          {
+            "type": "image_picker",
+            "id": "img_instagram",
+            "label": "instagram ",
+			"info":"image size 110x110px "	
+          },
+          {
+            "type": "url",
+			"id": "url",
+			"label": "Link (optional)"
+          },
+          {
+            "type": "select",
+            "id": "open_link",
+            "options": [
+              {
+                "value": "_self",
+                "label": "Current window (_self)"
+              },
+             {
+                "value": "_blank",
+                "label": "New window (_blank)"
+              }
+            ],
+            "label": "Open link in",
+            "default": "_self"
+          }
+        ]
+      },
+      {
+      "type": "contact",
+      "name": "Contact",
+      "limit": 1,
+      "settings": [
+          {
+          "type": "text",
+          "id": "title",
+          "label": "Shop name",
+          "default": "Looking for Gosto ?"
+          },
+          {
+          "type": "text",
+          "id": "p_number",
+          "label": "Phone number",
+          "default": "+1 (800) 123 456 789"
+          },
+          {
+            "type": "textarea",
+            "id": "address",
+            "label": "Address",
+            "default": "460 Peutestrabe, Hamburg, Germany."
+          },
+			{
+          "type": "text",
+          "id": "s_email",
+          "label": "Email",
+          "default": "Gosto@google.com"
+          },
+          {
+          "type": "checkbox",
+          "id": "header_use_social",
+          "label": "Display social on top bar",
+          "default": true,
+          "info":"Note: you can edit social at 'Theme settings' -> 'Social media'"
+          },
+          {
+          "type": "select",
+          "id": "type_social",
+          "label": "Show sharing Or link:",
+          "options": [
+          {
+          "value": "1",
+          "label": "Social link"
+          },
+          {
+          "value": "2",
+          "label": "Social sharing"
+          }
+          ],
+          "default": "2"
+          }
+        ]
+      }
+      
+    ],
+    "default": {
+      "blocks": [
+        { "type": "logo" },{ "type": "instagram" },{ "type": "instagram" },{ "type": "instagram" },{ "type": "instagram" },{ "type": "instagram" },{ "type": "instagram" },{ "type": "contact" }
+      ]
+    }
+  }
+{% endschema %}

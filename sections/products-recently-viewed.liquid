@@ -1,0 +1,454 @@
+{%- assign show_label_in_stock = settings.product_collection_show_label_in_stock -%}
+{%- assign show_label_out_stock = settings.product_collection_show_label_out_stock -%}
+{%- assign show_label_sale = settings.product_collection_show_label_sale -%}
+{%- assign show_label_new =  settings.product_collection_show_label_new -%}
+{%- assign show_label_hot =  settings.product_collection_show_label_hot -%}
+{%- assign show_countdown = false | default: settings.product_collection_show_countdown -%}
+{%- assign show_images_navigation = true | default: settings.product_collection_show_images_navigation -%}
+{%- assign show_title = settings.product_collection_show_title -%}
+{%- assign show_sku = settings.product_collection_show_sku -%}
+{%- assign show_barcode =  settings.product_collection_show_barcode -%}
+{%- assign show_availability =  settings.product_collection_show_availability -%}
+{%- assign show_type = settings.product_collection_show_type -%}
+{%- assign show_vendor = settings.product_collection_show_vendor -%}
+{%- assign show_description = settings.product_collection_show_description -%}
+{%- assign show_price = settings.product_collection_show_price -%}
+{%- assign show_options = settings.product_collection_show_options -%}
+{%- assign show_custom_options =  settings.product_show_custom_options -%}
+{%- assign show_quantity = false | default: settings.product_collection_show_quantity -%}
+{%- assign show_button_add_to_cart = settings.product_collection_show_button_add_to_cart -%}
+{%- assign show_button_add_to_wishlist = settings.product_collection_show_button_add_to_wishlist -%}
+{%- assign show_button_add_to_compare =  settings.product_collection_show_button_add_to_compare -%}
+{%- assign show_button_quick_view = settings.product_collection_show_button_quick_view -%}
+{%- assign show_reviews = settings.product_collection_show_reviews -%}
+{%- assign hide_reviews_counter = settings.product_collection_hide_reviews_counter -%}
+{% assign enable_hover_image = settings.product_collection_enable_hover_image %}
+{% assign build_variant = "all" %}
+{% assign limit = section.settings.max_count -%}   
+{% assign data-col = section.settings.size_of_columns %}
+  
+   {%- if search.performed and search.results_count > 0 -%}
+      {%- paginate search.results by limit -%}
+        {%- assign sortby = section.settings.sortby | plus:0 -%}
+        {%- case sortby -%}
+            {%- when 5 or 6 -%}
+               {%- assign results = search.results | sort: 'price' -%}
+            {%- when 7 or 8 -%}
+               {%- assign results = search.results | sort: 'published_at' -%}
+            {%- else -%}
+               {%- assign results = search.results -%}
+        {%- endcase -%}
+
+        {%- assign modu = sortby | modulo:2 -%}
+
+{% assign cl_bg = section.settings.cl_bg %}
+{% assign mg_top = section.settings.mg_top %}
+{% assign mg_bottom = section.settings.mg_bottom %}
+{% assign pd_top = section.settings.pad_top %}
+{% assign pd_bottom = section.settings.pad_bottom %}
+{% assign mobile_mg_top = section.settings.mobile_mg_top %}
+{% assign mobile_mg_bottom = section.settings.mobile_mg_bottom %}
+{% assign mobile_pd_top = section.settings.mobile_pd_top %}
+{% assign mobile_pd_bottom = section.settings.mobile_pd_bottom %}
+
+<section class="laber_collection_viewed">
+<div class="container {% if section.settings.layout == "full-width"%}{{section.settings.layout}}{% endif %}">
+      <div class="products-arrivals">
+		<div class="wrap_title ">
+          
+		  {% if section.settings.sub_title!= blank %}
+		  <span class="section-subtitle">{{section.settings.sub_title}}</span>
+		  {% endif %}
+          
+          {% if section.settings.title != blank %}
+		  <h3 class="section-title">{{section.settings.title}}</h3>  
+		  {% endif %}
+          
+          
+          {% if section.settings.content!= blank %}
+		  <div class="content">{{section.settings.content}}</div>
+		  {% endif %}
+          
+		</div>       
+        <div class="section-content grid-style row-15">
+    		<div class="js-recently-viewed-slider recently-viewed-slider" 
+                 data-number="{{data-col}}" 
+                 data-slick='{"slidesToShow": {{data-col}}, 
+                             "slidesToScroll": {{section.settings.size_to_scroll}}, 
+                             "infinite": {{section.settings.infinite}}, 
+                             "lazyLoad": "ondemand", 
+                             "autoplay": {{section.settings.autoplay}}, 
+                             "autoplaySpeed": {{section.settings.speed | times: 1000}}, 
+                             "arrows": {{section.settings.arrows}}, 
+                             "dots": {{section.settings.bullets}}}'>              
+                {%- if sortby == 1 -%}
+                    {%- assign array = search.terms | remove: 'id:' | split:' OR ' -%}    
+                    {%- for i in array -%}
+              			{%- assign pad-0-15 = 'padding-0-15' -%} 
+                        {%- assign j = i | plus:0 -%}
+                        {%- assign item = results | where: "id", j -%}
+                        {%- if item == blank %}{% continue %}{% endif -%}
+              			{% assign on_sale = false %}
+                        {% assign sale_text = 'products.product.on_sale' | t %}
+                        {% if item[0].compare_at_price > product.price %}
+                        	{% assign on_sale = true %}
+                        {% endif %}
+                        {% assign sold_out = true %}
+                        {% assign sold_out_text = 'products.product.sold_out' | t %}
+                        {% if item[0].available %}
+                        	{% assign sold_out = false %}
+                        {% endif %} 
+
+                        {%- include 'product_style',product:item[0],on_sale:on_sale,sold_out:sold_out,pad:pad-0-15   -%}
+
+                    {%- endfor -%}  
+                {%- elsif sortby == 2 -%}
+                  {%- assign array = search.terms | remove: 'id:' | split:' OR ' -%}     
+
+                    {%- for i in array reversed -%}
+              			{%- assign pad-0-15 = 'padding-0-15' -%} 
+                        {%- assign j = i | plus:0 -%}
+                        {%- assign item = results | where: "id", j -%}
+                        {%- if item == blank %}{% continue %}{% endif -%}
+              		    {% assign on_sale = false %}
+                        {% assign sale_text = 'products.product.on_sale' | t %}
+                        {% if item[0].compare_at_price > product.price %}
+                        	{% assign on_sale = true %}
+                        {% endif %}
+                        {% assign sold_out = true %}
+                        {% assign sold_out_text = 'products.product.sold_out' | t %}
+                        {% if item[0].available %}
+                        	{% assign sold_out = false %}
+                        {% endif %} 
+
+                        {%- include 'product_style',product:item[0],on_sale:on_sale,sold_out:sold_out,pad:pad-0-15 -%}
+
+                    {%- endfor -%}
+                {%- else -%}
+                  {%- if modu == 0 -%}                
+                      {%- for product_r in results -%}
+              			{%- assign pad-0-15 = 'padding-0-15' -%} 
+              			{% assign on_sale = false %}
+                        {% assign sale_text = 'products.product.on_sale' | t %}
+                        {% if product_r.compare_at_price > product.price %}
+                        	{% assign on_sale = true %}
+                        {% endif %}
+                        {% assign sold_out = true %}
+                        {% assign sold_out_text = 'products.product.sold_out' | t %}
+                        {% if product_r.available %}
+                        	{% assign sold_out = false %}
+                        {% endif %}
+      
+                        {%- include 'product_style',product:product_r,on_sale:on_sale,sold_out:sold_out,pad:pad-0-15 -%}
+              
+                      {%- endfor -%}                
+
+                  {%- else -%}                
+                      {%- for product_r in results reversed -%}
+              			{%- assign pad-0-15 = 'padding-0-15' -%} 
+              			{% assign on_sale = false %}
+                        {% assign sale_text = 'products.product.on_sale' | t %}
+                        {% if product_r.compare_at_price > product.price %}
+                        	{% assign on_sale = true %}
+                        {% endif %}
+                        {% assign sold_out = true %}
+                        {% assign sold_out_text = 'products.product.sold_out' | t %}
+                        {% if product_r.available %}
+                        	{% assign sold_out = false %}
+                        {% endif %} 
+              		
+                        {%- include 'product_style',product:product_r, on_sale:on_sale,sold_out:sold_out,pad:pad-0-15 -%}
+              	
+                      {%- endfor -%} 
+                  {%- endif -%}             
+                {%- endif -%}
+           </div>
+        </div>
+	</div>
+    </div>
+</section>
+        {%- endpaginate -%}
+   {%- else -%}
+    <div class="recently-product" id="js_recently_wrapper" data-section-type="product-recently" data-get='{{ routes.search_url }}' data-id="id:{{product.id|default:19041994}}" data-limit="{{limit}}" data-expands="-1">
+      <div class="loading_bg"></div>
+    </div>
+   {%- endif -%}
+{% style%}
+	.laber_collection_viewed{
+      {% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+      {% if mg_bottom !=0 %}margin-bottom:{{mg_bottom}}px;{%endif%} 
+      {% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+      {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%} 
+      background-color:{{cl_bg}};
+	}
+    @media (max-width: 767px) {
+      .laber_collection_viewed{
+        {% if mobile_mg_top !=0 %}margin-top:{{mobile_mg_top}}px;{%endif%} 
+        {% if mobile_mg_bottom !=0 %}margin-bottom:{{mobile_mg_bottom}}px;{%endif%} 
+        {% if mobile_pd_top !=0 %}padding-top:{{mobile_pd_top}}px;{%endif%} 
+        {% if mobile_pd_bottom !=0 %}padding-bottom:{{mobile_pd_bottom}}px;{%endif%} 
+      }
+    }
+{% endstyle%} 
+
+{%- schema -%}
+{
+  "name": "Products recently viewed",
+  "class": "cms_section  product_section product_recently_viewed",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "default": "container",
+      "options": [
+      {
+      "value": "container",
+      "label": "Container"
+      },
+      {
+      "value": "full-width",
+      "label": "Full Width"
+      }
+      ],
+      "label": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Recently viewed products"
+    },    
+        {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Sub Text"
+        },  
+        {
+        "type": "textarea",
+        "id": "content",
+        "label": "Content",
+        "default": "Commodo sociosqu venenatis cras dolor sagittis integer luctus maecenas."
+        },
+    {
+      "type": "select",
+      "id": "size_of_columns",
+      "label": "Size of the columns",
+      "default": "4",
+      "options": [
+        {
+        "value": "2",
+        "label": "2 items in the row (desktop)"
+        },
+        {
+        "value": "3",
+        "label": "3 items in the row (desktop)"
+        },
+        {
+        "value": "4",
+        "label": "4 items in the row (desktop)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "size_to_scroll",
+      "label": "Slide to scroll",
+      "default": "1",
+      "options": [
+        {
+        "value": "1",
+        "label": "Scroll 1 item"
+        },
+        {
+        "value": "2",
+        "label": "Scroll 2 items"
+        },
+        {
+        "value": "3",
+        "label": "Scroll 3 items"
+        },
+        {
+        "value": "4",
+        "label": "Scroll 4 items"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "max_count",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "unit": "pds",
+      "label": "Max product",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Autoplay speed (sec)",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "infinite",
+      "label": "Is infinite",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "arrows",
+      "label": "Arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "bullets",
+      "label": "Bullets",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "sortby",
+      "options": [
+        {
+        "value": "1",
+        "label": "Time Added, New To Old"
+        },
+        {
+        "value": "2",
+        "label": "Time Added, Old To New"
+        },
+        {
+        "value": "3",
+        "label": "Alphabetically, Z-A"
+        },
+        {
+        "value": "4",
+        "label": "Alphabetically, A-Z"
+        },
+        {
+        "value": "5",
+        "label": "Price, High To Low"
+        },
+        {
+        "value": "6",
+        "label": "Price, Low To High"
+        },
+        {
+        "value": "7",
+        "label": "Date published, New To Old"
+        },
+        {
+        "value": "8",
+        "label": "Date published, Old To New"
+        }
+      ],
+      "label": "Sort By",
+      "default": "3"
+    },
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+     	 },
+        {
+          "type": "range",
+          "id": "mg_top",
+          "label": "Margin Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mg_bottom",
+          "label": "Margin bottom",
+          "default": 100,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_top",
+          "label": "Padding Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "== Setting mobile",
+          "info":"Padding and Margin"
+        },
+       {
+          "type": "range",
+          "id": "mobile_mg_top",
+          "label": "Margin top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_mg_bottom",
+          "label": "Margin bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_top",
+          "label": "Padding top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        }
+
+      
+  ]
+}
+{% endschema %}

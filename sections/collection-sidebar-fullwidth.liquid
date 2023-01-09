@@ -1,0 +1,368 @@
+
+<div class="content-sidebar row">
+  <input type="hidden" value="{{collection.handle}}" name="currency-collection-handle" id="currency_collection_handle"/>
+  {% assign index = 0 %}
+  {%- for block in section.blocks -%}    
+    {%- case block.type -%}
+      {%- when 'collections' -%}
+          {% capture no_content_message %}{{ 'collections.sidebar.no_collections' | t }}{% endcapture %}
+          {%- capture navigation_content -%}
+              {%- assign menu = linklists[block.settings.menu] -%}
+              <div class="collectons_widget collections-menu" data-js-sidebar data-js-collections-menu>
+                <div data-all-product class="collections-menu__item" data-section-for-collection="{{ link.object.handle | default: link.handle }}">
+                  <div class="collections-menu__button">
+                    <label>                              
+                      <a href="/collections/all"  class="{% if collection.handle == 'all' %}active{% endif %} js_ajax_filter" >{{ 'collections.sidebar.all_product' |t }}</a>
+                    </label> 
+                    {% if block.settings.show_counter %}
+                    	<span class="ml-auto">{{ collections['all'].all_products_count }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+                {%- for link in menu.links -%} 
+                    {%- if link.type == 'collection_link' or link.type == 'collections_link' -%}               
+                      {%- if link.object.handle == collection.handle or link.handle == collection.handle -%}
+                        {%- assign is_current_collection = true -%}
+                      {%- else -%}
+                        {%- assign is_current_collection = false -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                    <div class="collections-menu__item" data-section-for-collection="{{ link.object.handle | default: link.handle }}">
+                      <div class="collections-menu__button">
+                        <label>                              
+                          <a href="{{ link.url }}"  class="{% if is_current_collection %}active{% endif %} js_ajax_filter" >{{ link.title }}</a>
+                        </label> 
+                        {% if block.settings.show_counter %}
+                        <span class="ml-auto">{{ link.object.all_products_count }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                	{%- assign has_content = true -%}                   
+                {%- endfor -%}
+              </div>
+  			{%- endcapture -%}
+      {%- when 'filters' -%}
+          {%- case block.settings.type -%}
+              {%- when 'tags' -%}
+                {% capture no_content_message %}{{ 'collections.sidebar.no_tags' | t }}{% endcapture %}
+                {%- assign input_name = 'filter_by_tag' -%}
+                {%- assign current_type_filters = filter_by_tags -%}
+                {%- assign all_items = collection.all_tags -%}
+              {%- when 'colors' -%}
+                {% capture no_content_message %}{{ 'collections.sidebar.no_colors' | t }}{% endcapture %}
+                {%- assign input_name = 'filter_by_color' -%}
+                {%- assign current_type_filters = filter_by_tags -%}
+                {%- assign all_items = collection.all_tags -%}
+              {%- when 'vendors' -%}
+                {% capture no_content_message %}{{ 'collections.sidebar.no_vendors' | t }}{% endcapture %}
+                {% capture input_name %}filter_by_vendor{% endcapture %}
+                {%- assign current_type_filters = filter_by_vendors -%}
+                {%- assign all_items = collection.all_vendors -%}
+              {%- when 'types' -%}
+                {% capture no_content_message %}{{ 'collections.sidebar.no_product_types' | t }}{% endcapture %}
+                {% capture input_name %}filter_by_type{% endcapture %}
+                {%- assign current_type_filters = filter_by_types -%}
+                {%- assign all_items = collection.all_types -%}
+          {%- endcase -%}
+          {%- if collection.current_vendor or collection.current_type -%}
+          		{%- continue -%}
+          {%- endif -%}
+          {%- assign all_items_handle = all_items | join: '___' | handleize | split: '___' -%}
+  
+          {%- capture navigation_content -%}
+         
+              {%- if block.settings.items contains '|' -%}
+                {%- assign filters = block.settings.items | split: '|' -%}
+              {%- else -%}
+                {%- assign filters = block.settings.items | split: ',' -%}
+              {%- endif -%}
+
+              {%- assign filter_index = filter_index | plus: 1 -%}
+              {% capture replace_attrs %} data-js-collection-replace="filter-{{ filter_index }}" data-js-collection-replace-only-full{% endcapture %}
+              <div class="collection-filters {% if block.settings.type == 'colors' %} color {% endif %} {% if block.settings.type == 'size' %} size {% endif %}" data-item="{{all_items}}"  data-filter="{{filters}}" data-current="{{current_tags}}" data-js-collection-filters{% if block.settings.type == 'colors' %} data-property="color"{% endif %}>
+                  {%- capture filters_html -%}
+                    {%- assign filters_count = 0 -%}
+                    {%- for filter in filters -%}
+                      {%- assign filter_handle = filter | handleize -%}
+                      {%- if all_items contains filter and collection.all_tags contains filter-%}                  		
+                            {%- assign current_filter_handle = filter | handleize -%}
+                            <div class="input-checkbox {% if block.settings.type == 'colors' %} input-checkbox--unbordered{% endif %}">
+                              <input type="checkbox" class="d-none" name="{{ input_name }}" value="{{ filter_handle }}"{% if current_type_filters contains current_filter_handle %} checked="checked"{% endif %}>
+
+                              {%- if block.settings.type != 'colors' -%}   
+                                {% if current_tags contains filter %}
+                                    {%- capture filter_html -%}
+                                    <span class="wrap-icon{% if block.settings.type == 'colors' %} rounded-circle {% else %} {% endif %}"{% if block.settings.type == 'colors' %} data-value="{% render 'product-get-options-strip-symbols' with value: filter %}"{% endif %} data-bg="none">
+                                      <i class="active {% if block.settings.type == 'colors' %} standard-color-arrow{% endif %}">
+                                        <span class="icon"></span>                                    
+                                      </i>
+                                    </span>
+                                    <span class="title_filter">
+                                        {{filter}}
+                                    </span>
+                                    {%- endcapture -%}
+                                    {{filter_html | link_to_remove_tag:filter | replace: 'title=', 'class="js_ajax_filter active" title=' }}
+                                {% else %}
+                                    {%- capture filter_html -%}
+                                    <span class="wrap-icon{% if block.settings.type == 'colors' %} rounded-circle {% else %} {% endif %}"{% if block.settings.type == 'colors' %} data-value="{% render 'product-get-options-strip-symbols' with value: filter %}"{% endif %} data-bg="none">
+                                      <i class="{% if block.settings.type == 'colors' %} standard-color-arrow{% endif %}">
+                                        <span class="icon"></span>
+                                      </i>
+                                    </span>
+                                    <span class="title_filter">
+                                        {{filter}}
+                                    </span>
+                                    {%- endcapture -%}
+                                    {{filter_html  | link_to_add_tag:filter | replace: 'title=', 'class="js_ajax_filter" title='}}
+                                {% endif%}
+                              {% else %}                            
+                                    {%- capture color_button -%}
+                                      <label {% if current_tags contains filter %} {% assign color_border = filter | downcase %} style="border-color:{% if color_border != "white" %}{{filter}}{% else %} #343e45 {% endif %}" {% endif %}>
+                                        <span class="{% if filter == 'White' %}laber_white{%endif%}{% if block.settings.type == 'colors' %} rounded-circle {% endif %} "{% if block.settings.type == 'colors' %} style="background-color:{{filter|strip  | downcase}}" {% endif %} >
+                                        </span>
+                                         <span class="lbl_color">{{filter}}</span>
+                                      </label>
+                                    {%- endcapture -%}
+                                    {% if current_tags contains filter %}                                
+                                        {{color_button | link_to_remove_tag:filter | replace: 'title=', 'class="js_ajax_filter active" title=' }}
+                                    {% else %}                                
+                                        {{color_button | link_to_add_tag:filter | replace: 'title=', 'class="js_ajax_filter" title='}}
+                                    {% endif%}
+                              {%- endif -%}
+                            </div>
+                            {%- assign has_content = true -%}                        
+                        {%- endif -%}
+                    {%- endfor -%}
+             {%- endcapture -%}
+             
+             {{ filters_html }}
+             
+          </div>
+      {%- endcapture -%}  
+      
+      {%- when 'filter_by_title' -%}
+          {%- capture navigation_content -%}
+          <div class="form-input-button form-input-button--type-01 collection-filter-by-title d-flex flex-column flex-lg-row mb-15" data-js-collection-filter-by-title>
+            <input type="search" class="mb-0 mr-lg-10" name="filter_by_title" placeholder="{{ block.settings.placeholder }}" value="{{ filter_by_title }}">
+            <button type="button" class="btn mt-10 mt-lg-0">{{ block.settings.button_text }}</button>
+          </div>
+          {%- endcapture -%}
+      		{%- assign has_content = true -%}
+      {%- when 'products' -%}
+          {% capture no_content_message %}{{ 'collections.sidebar.no_content' | t }}{% endcapture %}
+          {%- capture navigation_content -%}
+          {%- assign products = collections[block.settings.collection].products -%}
+          {%- assign limit = block.settings.max_count -%}
+          {%- if limit == 0 -%}
+          {%- assign limit = products.size -%}
+          {%- endif -%}
+          {%- if products.size > 0 -%}
+          <div class="collection-sidebar-offers">
+            {%- for product in products limit: limit -%}                
+                    {% include 'product-collection' %}                
+                {%- assign has_content = true -%}
+            {%- endfor -%}
+          </div>
+          {%- endif -%}
+      {%- endcapture -%}
+      {%- when 'custom_html' -%}
+          {% capture no_content_message %}{{ 'collections.sidebar.no_content' | t }}{% endcapture %}
+          {%- capture navigation_content -%}
+              {% capture custom_html %}
+              	{% include 'parse-page-html-content' with default_page: 'include-collections-sidebar' page_content: block.settings.page_content %}
+              {% endcapture %}
+              {%- if custom_html != blank -%}
+                  <div class="rte">
+                    {{ custom_html }}
+                  </div>
+                  {%- assign has_content = true -%}
+              {%- endif -%}
+          {%- endcapture -%}
+      {%- when 'promobox' -%}
+          {% capture no_content_message %}{{ 'collections.sidebar.no_content' | t }}{% endcapture %}
+          	{%- capture navigation_content -%}
+          		<div class="promobox_widget" data-js-sidebar>
+                  <div class="wrap_widget">
+                    {% assign image = block.settings.image_promobox %}
+                    {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+            		<img data-image-lazy width="230" height="auto" alt="{{product.title | escape}}" data-src="{{ img_url }}" data-sizes="auto" class="pr_lazy_img lazyload " src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="> 
+                  </div>
+  				</div>
+          		{%- assign has_content = true -%}
+          {%- endcapture -%}
+      {%- when 'subscription' -%}
+      		{% capture no_content_message %}{{ 'collections.sidebar.no_content' | t }}{% endcapture %}
+            {%- capture navigation_content -%}
+                {%- if block.settings.paragraph != blank -%}
+                		<p>{{ block.settings.paragraph }}</p>
+                {%- endif -%}
+                {%- if settings.subscription_method == 'shopify' -%}
+                        {% form 'customer', id: null, class: 'form-group--type-inline form-input-button form-input-button--type-02 d-flex flex-column flex-lg-row mb-15' %}
+                            {% render 'form-get-check-error-popup' %}
+                            <input type="hidden" name="contact[tags]" value="newsletter">
+                            <input type="email" name="contact[email]" class="mb-0 mr-lg-10{% if form.errors %} input--error{% endif %}" placeholder="{{ block.settings.placeholder }}" required="required">
+                            <input type="submit" class="btn mt-10 mt-lg-0" name="commit" value="{{ block.settings.button_text }}">
+                        {% endform %}
+                    {%- elsif settings.subscription_method == 'mailchimp' -%}
+                        <form action="{{ settings.subscription_mailchimp_form_action }}" method="post" class="form-group--type-inline form-input-button form-input-button--type-02 d-flex flex-column flex-lg-row mb-15" target="_blank">
+                          <input type="email" name="EMAIL" class="mb-0 mr-lg-10" placeholder="{{ block.settings.placeholder }}" required="required">
+                          <input type="submit" class="btn mt-10 mt-lg-0" value="{{ block.settings.button_text }}">
+                        </form>
+                {%- endif -%}
+                {%- assign has_content = true -%}
+      		{%- endcapture -%}
+      {%- endcase -%}
+  
+  
+      {%- if navigation_content -%}
+          {%- if block.settings.default_state == 'open' or block.settings.default_state == 'close' -%}
+              {% capture accordion_attr %} data-js-accordion="all"{% endcapture %}
+              {% capture accordion_button_attr %} data-js-accordion-button{% endcapture %}
+              {% capture accordion_content_attr %} data-js-accordion-content{% endcapture %}
+          {%- endif -%}
+          <div class="layer-navigation {% if block.type == "filters" %} layer-navigation__filter {% endif %}" data-js-collection-nav-section="{{ block.type }}"{{ accordion_attr }}>
+            {%- unless block.settings.default_state == 'without_title' -%}
+                    <div class="layer-navigation__head ">
+                      <h6>{{ block.settings.title | defalut: 'FILTER' }}</h6>
+                    </div>
+                {%- else -%}
+                <div></div>
+            {%- endunless -%}
+            <div class="layer-navigation__accordion "{{ accordion_content_attr }}>
+              <div class="layer-navigation__content">
+                {%- capture section_result_html -%}
+                    {%- if has_content -%}
+                        {{ navigation_content }}
+                    {%- else -%}
+                        <p>{{ no_content_message }}</p>
+                    {%- endif -%}
+                {%- endcapture -%}
+                {%- if replace_attrs -%}
+                    <div{{ replace_attrs }}>
+                      {{ section_result_html }}
+                    </div>
+                {%- else -%}
+                		{{ section_result_html }}
+                {%- endif -%}
+              </div>
+            </div>
+            
+          </div>
+          {%- assign navigation_content = null -%}
+          {%- assign has_content = null -%}
+          {%- assign replace_attrs = null -%}
+                   
+      {%- endif -%}
+  {%- endfor -%}
+  
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {   
+    if($("#currency_collection_handle").val() == "frontpage" && $(".js_products_holder .product-item").length == 0){  
+     
+        var url = "/collections/all";
+      	window.location.replace(url);	
+      
+      		
+    }
+  })
+</script>
+{% schema %}
+  {
+    "name": "Top filter",
+    "settings": [
+		 {
+            "type": "paragraph",
+            "content": "Layout and visibility settings are in Theme settings -> Collection page"
+        }		
+	],
+	"blocks": [
+
+        {
+            "type": "filters",
+            "name": "Filters",
+			"limit": 4,
+            "settings": [
+                {
+                    "type": "header",
+                    "content": "Section settings"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "FILTERS"
+                },
+                {
+                    "type": "select",
+                    "id": "default_state",
+                    "label": "Default state",
+                    "default": "open",
+                    "options": [
+                        {
+                            "value": "open",
+                            "label": "Show title"
+                        },                       
+                        {
+                            "value": "without_title",
+                            "label": "Without title"
+                        }
+                    ]
+                },               
+                {
+                    "type": "header",
+                    "content": "Content"
+                },
+                {
+                    "type": "select",
+                    "id": "type",
+                    "label": "Type of the filter",
+                    "default": "tags",
+                    "options": [
+                        {
+                            "value": "tags",
+                            "label": "Tags"
+                        },
+                        {
+                            "value": "colors",
+                            "label": "Colors"
+                        },
+                        {
+                            "value": "vendors",
+                            "label": "Vendors"
+                        },
+                        {
+                            "value": "types",
+                            "label": "Product types"
+                        }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "id": "items",
+                    "label": "Items",
+                    "info": "Separator is '|' or ','"
+                }
+            ]
+        }
+        
+    ],
+    "default": {
+      "blocks": [       
+        {
+          "type": "filters",
+          "settings": {
+
+          }
+        }
+      ]
+    }
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

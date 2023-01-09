@@ -1,0 +1,127 @@
+{% assign admin_sp = request.design_mode %}
+{% assign col_left = section.settings.col_left %}
+{% assign col_right = section.settings.col_right %}
+{% assign text_align_hl = section.settings.text_align_hl %}
+{% assign text_align_hr = section.settings.text_align_hr %}
+{% assign sticky_top_header = section.settings.sticky_top_header %}
+<header>
+  <div class="header layout1 {% if sticky_top_header %}header-sticky {%endif%}">    
+    {% include 'currency-picker' %}
+    <div class="header-main-wrap">
+      <div class="header-top">
+        <div class="container {% if section.settings.layout == 'full-width' %}{{section.settings.layout}} {% endif %}">
+          <div class="row">
+            
+            <div class="header-top-left col-12 col-md-5">
+               <div class="header-nav"> 	
+            	{%- render 'menu',se_blocks:se_blocks,tp_blocks:tp_blocks -%}
+            </div> 
+                    {% assign type_social = section.settings.type_social | plus: 0 %}
+                    {%if section.settings.header_use_social%}
+                      	
+                        {%- if type_social == 1 -%}
+                          {% include 'social_link' %}
+                        {%- else -%}
+                            {% include 'social-sharing' %}
+                        {%- endif -%}
+                    {% endif %}
+            </div>
+            <div class="header-nav-mobile col-4 col-md-5">
+              <a class="js-mobile-menu menu-bar mobile-navigation" href="javascript:void(0)">
+                <span class="icon">
+                  <i class="icon-align-left"></i>
+                </span>
+              </a>
+            </div>
+            <div class="header-logo col-md-2 col-4">
+              {% if settings.logo != blank %}
+                  <a href="/" class="site-header__logo-image">
+                    {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                    <img                                          
+                       src="{{ settings.logo | img_url: image_size, scale: 2 }}"                      
+                       alt="{{ logo_alt | escape }}"
+                       style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                  <noscript>
+                    {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                    <img src="{{ settings.logo | img_url: image_size }}"
+                         srcset="{{ settings.logo | img_url: image_size }} 1x, {{ settings.logo | img_url: image_size, scale: 2 }} 2x"
+                         alt="{{ settings.logo.alt | default: shop.name }}"
+                         style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                  </noscript>
+                  </a>
+                {% else %}
+                  <a class="site-title" href="/" itemprop="url">{{ shop.name }}</a>
+                {% endif %}
+            </div>  
+            
+            
+            <div class="header-top-meta col-4 col-md-5">
+              <ul class="header-control">  
+                {%if section.settings.header_use_account%}
+                  
+                  <li class="signin item-list display-mobile">
+                    <a href="/account/login" data-id="#login_pupop" class="push_side header-icon" title="{{'customer.login.log_in' | t}}" >
+						<i class="icon-unlock"></i>   
+                      {% unless customer %}
+                      	<span>{{'customer.login.log_in' | t}}</span>
+                      {% else %}
+                      	<span>{{'customer.login.account' | t}}</span>
+					  {% endunless %}	
+                    </a>
+                  </li>
+
+                  
+                 {% endif %}
+                
+                {% if section.settings.header_use_search_home %}
+                <li class="header_search">
+                  <a href="/search" class="header-search push_side header-icon" data-id="#search_pupop" title="{{'general.search.title' | t}}">
+                    <i class="icon-search"></i>   
+                  </a>                        
+                </li>   
+                {% endif %}
+                
+                {% if section.settings.header_use_wishlist_home %}
+                <li class="display-mobile"> 
+                  <a href="javascript:void(0);" class="push_side header-icon" data-id="#wishlist_popup" title="{{'general.wishlist.title' | t}}">
+                    <i class="icon-heart"></i>
+                    <span class="header__counter" data-js-wishlist-count="0">0</span>
+                  </a>                        
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_compare_home %}
+                <li class="display-mobile">
+                  <a href="javascript:void(0);" class="push_side header-icon" data-js-popup-button="compare-full" title="{{'general.compare.title' | t}}">
+                    <i class="icon-layers" aria-hidden="true"></i>
+                    <span class="header__counter" data-js-compare-count="0">0</span>
+                  </a>
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_cart_home %}
+                  <li class="box-minicart">
+                    {% include'header-cart'%}
+                  </li>
+                {% endif %}
+                
+               
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+  
+</header>
+  {%- if admin_sp -%}
+      {%- assign arr_sub = 'link,link2,banner,html,pr,cat' -%}
+      {%- for block in se_blocks %}
+      	<div {% if arr_sub contains block.type %}
+             {% assign id_data = block.id %} {{ block.shopify_attributes }}{% else %}{% assign id_data2 = block.id %}{% endif %}id="bkjs_{{id_data}}" data-id='{{id_data2}}'></div>{% endfor -%}
+  {%- endif -%}
+
+<style scoped>
+  .header .header-top{
+    background-color:{{section.settings.background_header}};
+  }
+</style> 

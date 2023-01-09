@@ -1,0 +1,149 @@
+{% assign import_header = settings.select_header | plus: 0%}
+{%- assign template = template.name | handle -%}
+{% assign wishlist_enable = true | default: settings.wishlist_enable %}
+{% assign compare_enable = true | default: settings.compare_enable %}
+{%- assign namespaces = 'wishlist,compare' | split: ',' -%}
+{%- for namespace in namespaces -%}
+    <template id="template-{{ namespace }}-ajax">        
+            {%- assign image_size = '100x' -%}
+            {%- assign show_title = show_title | default: true -%}
+            {%- assign show_variant = show_variant | default: true -%}
+            {%- assign show_price = show_price | default: true -%}
+            {%- assign show_button_remove = show_button_remove | default: true -%}
+            <div class="product-store-lists" data-js-product data-product-handle="{{ product.handle }}" data-product-variant-id="{{ id }}">
+                <div class="product-store-lists__image ">
+                    <a href="{{ url }}" class="d-block"><img  alt="{{ product.title }}"></a>
+                </div>
+                <div class="product-store-lists__content">                    
+                        <div class="product-store-lists__title">
+                            <h3><a href="{{ url }}">{{ title }}</a></h3>
+                        </div>    
+                        <div class="product-store-lists__price">
+                            {% render 'product-get-price' with price: price compare_at_price: compare_at_price %}
+                        </div>                        
+                 </div>
+                <span class="product-store-lists__remove btn-link js-store-lists-remove-{{ namespace }}" title="{{ 'products.product.remove' | t }}">
+              		<i class="icon-x"></i>
+              	</span>
+            </div>       
+    </template>
+{%- endfor -%}
+<div class="popup js-popup" tabindex="0">
+    <div class="mask-overlay"></div> 
+    
+      <div id="login_pupop" class="hero_canvas" data-include="/search/?view=login">
+        <div class="loading_bg"></div>
+      </div>
+    
+    {% include 'modal-quickview' %}  
+  	{% comment%}
+    {% include 'modal-compare' %}
+  	{% endcomment %}
+    {%- assign search_pr_type = search.terms | split:'product_type:' | last | url_encode -%}
+    <div id="search_pupop" class="hero_canvas" data-include="{{ routes.search_url }}?q={{search_pr_type}}&view=ajax-product">
+  	</div>
+    <div class="js_lz_slpr dn" data-include="/search/?q={{t_name}}&view=cr_s_pp"></div>
+    <div class="popup__bg" data-js-popup-bg></div>   	
+    {%- if wishlist_enable -%}
+        <div class="popup__body" data-js-popup-name="wishlist" data-popup-right data-js-popup-ajax>
+            {% include 'popup-wishlist' %}
+        </div>
+        <div class="popup__body" data-js-popup-name="wishlist-full" data-popup-center data-js-popup-ajax >
+            {% include 'popup-wishlist-full' %}
+        </div>
+    {%- endif -%}
+    {%- if compare_enable -%}
+        <div class="popup__body" data-js-popup-name="compare-full" data-popup-center>
+            {% include 'popup-compare-full' %}
+        </div>
+    {%- endif -%}    
+</div>
+<div id="js_cart_popup" class="hero_canvas">
+    <div class="mini_cart_header">
+      <div class="title">{{ 'cart.general.shopping_cart' | t }}
+      </div>
+      <i class="close_popup_ajax icon-x"></i>
+    </div>
+   {% if cart.item_count > 0 %}
+    <div class="js-cart-inner">
+      <h5 class="title">{{ 'cart.general.you_have' | t }} <span class="count-item">{{ cart.item_count }}</span> {{ 'cart.general.your_cart' | t }}</h5>
+      <ul class="list-item">
+        {% for item in cart.items%}
+        <li class="product-item" id="item-{{ item.id }}">
+          <a href="{{ item.product.url }}" class="thumb">
+            <img class="lazyload" data-src="{{ item | img_url: 'small' }}" width="80" alt="{{item.title}}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          </a>
+          <div class="info">
+            <a href="{{ item.product.url }}" class="product-name">{{ item.title }}</a>
+            <div class="product-item-qty">
+              <span class="number price">
+                <span >{{ item.price | money }}</span>
+              </span>
+              <span class="qty">{{'cart.label.quantity' | t}}: {% if item.quantity < 10 %}0{% endif %}{{ item.quantity }}</span>
+            </div>
+
+          </div>
+          <a class="js-remove-item remove" href="javascript:void(0);" data-id="{{ item.id }}" title="Remove this item">
+            <i class="icon-x"></i>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>      
+     </div>
+  	 <div class="cms-bottom-group">
+        <div class="subtotal">
+          <span class="text">{{ 'cart.label.total' | t }}</span>
+          <span class="js-total-price">{{ cart.total_price | money }}</span>
+        </div>
+        <div class="cms-group-button">
+          <a class="cms-btn cms-btn-cart" href="/cart">{{ 'cart.general.view' | t }}</a>
+          <a class="cms-btn cms-btn-check" href="/checkout">{{ 'cart.general.checkout' | t }}</a>
+        </div>
+		{% include 'free-shipping' %}
+      </div>
+    {% else %}    
+      <div class="js-cart-inner cart-empty">
+        <i class="icon-cart"></i>
+        <p>{{ 'cart.general.empty' | t }}</p>   
+        <a href="/collections/all">{{ 'cart.general.return_to_shop' | t }}</a>
+      </div> 
+    <div class="cms-bottom-group">
+      <div class="subtotal">
+        <span class="text">{{ 'cart.label.total' | t }}</span>
+        <span class="js-total-price">{{ cart.total_price | money }}</span>
+      </div>
+      <div class="cms-group-button">
+        <a class="cms-btn cms-btn-cart" href="/cart">{{ 'cart.general.view' | t }}</a>
+        <a class="cms-btn cms-btn-check" href="/checkout">{{ 'cart.general.checkout' | t }}</a>
+      </div>
+      {% include 'free-shipping' %}
+    </div>
+    {% endif %}  
+ 	
+</div>
+<div id="tell_me" class="hero_canvas">
+	<i class="close_popup_ajax icon-x"></i>
+  {%- section 'tell_me' -%}
+</div>
+<div class="js-menu-mobile-content box-menu-moible">
+  <div class="tab_mobile tabs">
+    <h3 class="tabtitle ml_menu active" data-tabid="mobile_menu"><span>{{ 'general.mobile_menu.menu' | t }}</span></h3>
+    {%if import_header == 3 or import_header == 4 or import_header == 5 %}
+    <h3 class="tabtitle ml_categories" data-tabid="mobile_categories"><span>{{ 'general.mobile_menu.categories' | t }}</span></h3>
+    {%endif%}
+    <div class="js-close-sidebar close-sidebar-btn"><i class="icon-x"></i></div>
+  </div>
+  <div class="menu-mobile-content wrapper_tabcontent">
+    <div id="mobile_menu" class="menu-mobile tabcontent active">
+		{%- section 'mobile_menu' -%}
+    </div>
+    {%if import_header == 3 or import_header == 4 or import_header == 5 %}
+    <div id="mobile_categories" class="menu-mobile tabcontent">
+		{%- section 'mobile_categories' -%}
+    </div>
+	{%endif%}
+  </div>
+</div>
+
+<div class="js-mobile_bkg_show mobile_bkg_show"></div>
+

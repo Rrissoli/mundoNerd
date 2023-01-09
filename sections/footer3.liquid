@@ -1,0 +1,230 @@
+{%- assign social_icons = false -%}
+{% assign se_blocks = section.blocks %}
+{% if
+  settings.social_twitter_link != blank
+  or settings.social_facebook_link != blank
+  or settings.social_pinterest_link != blank
+  or settings.social_instagram_link != blank
+  or settings.social_tumblr_link != blank
+  or settings.social_snapchat_link != blank
+  or settings.social_youtube_link != blank
+  or settings.social_vimeo_link != blank
+  or template.name == 'article'
+  or template.name == 'blog'
+%}
+  {%- assign social_icons = true -%}
+{% endif %}
+
+
+{% capture image_footer_size %}{{ section.settings.logo_footer_max_width | escape }}x{% endcapture %}
+{% render 'footer_3' %}
+<a class="back-to-top" href="#"></a>	
+
+
+
+{%- schema -%}
+  {
+    "name": "Footer style 3",
+    "class": "footer_top",
+    "max_blocks": 6,
+    "settings": [ 
+
+      {
+        "type": "header",
+        "content": "== Bottom footer"
+      },
+	  {
+        "type": "text",
+        "id": "footer_copyright_text",
+        "label": "Copyright",
+        "default": "© 2021, <a href=\"/\">flexon</a> . Made with passion by Bily. All right reserved."
+      },
+      {
+      "type": "checkbox",
+      "id": "footer_use_social_link",
+      "label": "Use social link",
+      "info": "How to find \"social media\" => Click on 'Theme settings' at the bottom of this panel.",
+      "default": true
+      },		  
+      {
+        "type": "header",
+        "content": "== Footer background"
+      },
+      {
+        "type": "color", 
+        "id": "bg",
+        "label": "Select background color",
+        "default": "#fff"
+      }, 
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Background image"
+      },
+      {
+        "type": "header",
+        "content": "== Padding",
+		"info": "Padding top, Padding bottom."
+      },
+		{
+        "type": "range",
+        "id": "pd_top",
+        "label": "padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "pd_bottom",
+        "label": "padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== Setting mobile"
+      },
+	  {
+        "type": "range",
+        "id": "mobile_pd_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_pd_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+	  	
+    ],
+    "blocks": [
+      
+	  {
+        "type": "mail",
+        "name": "Newsletter signup",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "btn_icon",
+            "label": "Button icon?",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Newsletter Signup"
+          },
+          {
+            "type": "text",
+            "id": "sub_title",
+            "label": "Sub Text",
+            "default": "Subscribe to our newsletter and get 10% off your first purchase"
+          },
+		  
+          {
+            "type": "header",
+            "content": "== Width settings"
+          },
+	       
+          {
+            "type": "select",
+            "id": "cl",
+            "label": "Container width",
+            "default": "4",
+            "options": [
+	          {
+	            "value": "12",
+	            "label": "100%"
+	          },
+            {
+              "value": "8",
+              "label": "66%"
+            },
+	          {
+	            "value": "6",
+	            "label": "50%"
+	          },
+	          {
+	            "value": "4",
+	            "label": "33%"
+	          },
+	          {
+	            "value": "3",
+	            "label": "25%"
+	          },
+	          {
+	            "value": "15",
+	            "label": "20%"
+	          },
+	          {
+	            "value": "2",
+	            "label": "16%"
+	          }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "cl_tb",
+            "label": "Container width tablet",
+            "default": "6",
+            "options": [
+	          {
+	            "value": "12",
+	            "label": "100%"
+	          },
+            {
+              "value": "8",
+              "label": "66%"
+            },
+	          {
+	            "value": "6",
+	            "label": "50%"
+	          },
+	          {
+	            "value": "4",
+	            "label": "33%"
+	          },
+	          {
+	            "value": "3",
+	            "label": "25%"
+	          }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "cl_mb",
+            "label": "Container width mobile",
+            "default": "12",
+            "options": [
+	          {
+	            "value": "12",
+	            "label": "100%"
+	          },
+	          {
+	            "value": "6",
+	            "label": "50%"
+	          }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

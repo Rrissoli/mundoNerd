@@ -1,0 +1,178 @@
+{% liquid
+  assign sid = section.id 
+%}
+   
+{%- for i in (1..1) -%}
+{%- if section.settings.hidden %}{% break %}{% endif -%}  
+<section style="margin:{{section.settings.mg_top}}px {{section.settings.mg_right}}px {{section.settings.mg_bottom}}px {{section.settings.mg_left}}px;">       
+  <div class="laber_se_{{sid}} {{section.settings.layout}}">    
+
+    <div class="section_content ">      
+      <div class="part container">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 first">
+            <div class="left">             
+              <div class="shape">
+              </div>
+              <div class="left-content">
+                {% assign banner1 = section.settings.small_banner %}
+                <div class="banner1 lazyload" {% if banner1 != blank %} data-bg="{{ banner1 | img_url: '300x300' }}" data-ratio="{{banner1.aspect_ratio}}" {% endif %}></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 second">
+            <div class="right">               
+              {% if section.settings.sub_title != blank %}                  
+                  <div class="section-subtitle">
+                    {{section.settings.sub_title | downcase}}
+                  </div>
+                  {% endif %} 
+              {% if section.settings.title != blank %}
+              	 {% assign somearray = section.settings.title | split: ' ' %}
+                <h3 class="section-title">                  
+                    {% for item in somearray %}
+                    	<span> {{item}} </span>
+                    {% endfor %}
+                </h3>
+              {% endif %} 
+              <span class="short_desc">{{section.settings.short_desc}}</span>
+              <p>{{section.settings.desc}}</p>                
+              <a class="button_part" href="{{section.settings.button_link_part}}"> {{section.settings.button_part}} </a>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+</section>
+{%- endfor -%}
+
+{%- schema -%}
+  {
+    "name": "About us (style 2)",
+    "class": "laber_section cms_section type_about_2",	
+    "settings": [
+	  {
+        "type": "header",
+        "content": "== Design Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "hidden",
+        "label": "Hidden Section?",
+        "default": false
+      },      
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "container",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "nt_full",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },     
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 100,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_right",
+        "label": "Margin right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_left",
+        "label": "Margin left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "==General setting"
+      },   
+      {
+        "type": "image_picker",
+        "id": "small_banner",
+        "label": "Right banner",
+        "info" : "Dimension: 690 x 830"
+      },
+      {
+        "type": "header",
+        "content": "==Content area setting"
+      },      		 
+       {
+        "type": "text",
+        "id": "title",
+        "label": "Title of section",
+        "default": "Natural skin care <br>professional"
+      },
+	  {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Subtitle of section",
+		"default": "About Eliah"
+      },	
+      {
+        "type": "text",
+        "id": "short_desc",
+        "label": "Short description",
+		"default": "Best treatment for curing stubborn whiteheads. Your skin loves it"
+      },	
+      {
+        "type": "text",
+        "id": "desc",
+        "label": "Description",
+		"default": "The top three occupations in the Beauty salons Industry Group are Hairdressers, hairstylists, & cosmetologists, Manicurists and pedicurists, Receptionists & information clerks, Supervisors of personal care and service workers, and Skincare specialists."
+      },     
+      {
+        "type": "text",
+        "id": "button_part",
+        "label": "Button",
+        "default": "Read more"
+      },
+      {
+        "type": "url",
+        "id": "button_link_part",
+        "label": "Button link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "5. About us (style 2)",
+        "category": "Introduce"
+      }
+    ]
+  }
+{% endschema %}

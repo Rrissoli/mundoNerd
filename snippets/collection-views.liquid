@@ -1,0 +1,44 @@
+{% comment %}
+  Toggle between collection.liquid and collection.list.liquid with the
+  ?view= parameter.
+{% endcomment %}
+{% assign grid_list = settings.grid_list |plus:0 %}
+<div class="control-button col-auto align-left">  
+  	<a href="javascript:void(0)" data-col="2" class="grid-button-two-column js_cat_view  " >
+      <span class="icon">
+      	<span>
+            <span></span><span></span>
+          </span>
+          <span>
+            <span></span><span></span>
+          </span>
+      </span>
+    </a>
+    <a href="javascript:void(0)" data-col="1" class="grid-button js_cat_view {%if grid_list == 1%}active{%endif%} " >
+      <span class="icon">
+      	<span>
+            <span></span><span></span><span></span>
+          </span>
+          <span>
+            <span></span><span></span><span></span>
+          </span>
+          <span>
+            <span></span><span></span><span></span>
+          </span>
+      </span>
+    </a>
+  	
+    <a href="javascript:void(0)" data-col="0" class="list-button js_cat_view {% if grid_list == 2 %}active {% endif %}">
+      <span class="icon">
+      	<span>
+          <span></span><span></span>
+        </span>
+        <span>
+          <span></span><span></span>
+        </span>
+        <span>
+          <span></span><span></span>
+        </span>
+      </span>
+    </a>
+</div>

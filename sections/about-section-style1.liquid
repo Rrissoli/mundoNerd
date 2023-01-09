@@ -1,0 +1,337 @@
+{% liquid
+  assign sid = section.id 
+%}
+   
+{%- for i in (1..1) -%}
+  
+<section class="laber_{{sid}}">       
+  <div class="container {% if section.settings.layout == "full-width"%}{{section.settings.layout}}{% endif %}">
+    
+    {%- if section.settings.hidden %}{% break %}{% endif -%}
+    <div class="section_content ">      
+      <div class="part" >
+        <div class="row {{section.settings.image_ratio}} {% if section.settings.use_eq_height %} equal_nt{% endif %}">
+          <div class="col-sm-12 col-md-12 col-lg-6 first">
+            <div class="left"> 
+              <div class="left-content">
+                {% assign banner2 = section.settings.large_banner %} 
+                <div class="images">
+                	<div class="lazyload pr_lazy_img nt_bg_lz"  data-bg="{% if banner2 != blank %}{{ banner2 | img_url: '690x690' }}{% else %}https://placehold.jp/50/f3f3f3/222/690x690.png?text=690x690"{% endif %} data-ratio="{{banner2.aspect_ratio}}" style="{% if banner2 != blank %}padding-top:{{ 1 | divided_by: banner2.aspect_ratio | times: 100}}%; {%else%}padding-top:100%; {%endif%}" ></div>
+                </div>
+                {% if section.settings.contact_info != blank %}
+                <div class="contact-info">
+                  {{section.settings.contact_info}}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 second">
+            <div class="right">               
+              {% if section.settings.sub_title != blank %}    
+              	{% assign somearray = section.settings.sub_title | split: ' ' %}
+                  <div class="section-subtitle">
+                    {% for item in somearray %}
+                    	<span> {{item}} </span>
+                    {% endfor %}
+                  </div>
+                  {% endif %} 
+              {% if section.settings.title != blank %}              	
+                <h3 class="section-title">   
+                  <span>
+                  {{section.settings.title}}                    
+                  </span>
+                </h3>
+              {% endif %}              
+              <p>{{section.settings.desc}}</p>   
+              
+              {% if section.settings.button_part != blank %}    
+              	<a class="button_part" href="{{section.settings.button_link_part}}"> {{section.settings.button_part}} </a>
+              {% endif %}
+              {% assign banner1 = section.settings.small_banner %}
+              <div class="images">
+                <div class="lazyload pr_lazy_img nt_bg_lz"  data-bg="{% if banner1 != blank %}{{ banner1 | img_url: '690x690' }}{% else %}https://placehold.jp/50/f3f3f3/222/690x690.png?text=690x690"{% endif %} data-ratio="{{banner1.aspect_ratio}}" style="{% if banner1 != blank %}padding-top:{{ 1 | divided_by: banner1.aspect_ratio | times: 100}}%;{%else%} padding-top:100%;{%endif%}"></div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+</section>
+{%- endfor -%}
+{% style%}
+{% assign mg_top = section.settings.mg_top %}
+{% assign mg_bottom = section.settings.mg_bottom %}
+{% assign pd_top = section.settings.pad_top %}
+{% assign pd_bottom = section.settings.pad_bottom %}
+{% assign mobile_mg_top = section.settings.mobile_mg_top %}
+{% assign mobile_mg_bottom = section.settings.mobile_mg_bottom %}
+{% assign mobile_pd_top = section.settings.mobile_pd_top %}
+{% assign mobile_pd_bottom = section.settings.mobile_pd_bottom %}
+
+	.laber_{{sid}}{
+      {% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+      {% if mg_bottom !=0 %}margin-bottom:{{mg_bottom}}px;{%endif%} 
+      {% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+      {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%} 
+	}
+    @media (max-width: 767px) {
+      .laber_{{sid}}{
+        {% if mobile_mg_top !=0 %}margin-top:{{mobile_mg_top}}px;{%endif%} 
+        {% if mobile_mg_bottom !=0 %}margin-bottom:{{mobile_mg_bottom}}px;{%endif%} 
+        {% if mobile_pd_top !=0 %}padding-top:{{mobile_pd_top}}px;{%endif%} 
+        {% if mobile_pd_bottom !=0 %}padding-bottom:{{mobile_pd_bottom}}px;{%endif%} 
+      }
+    }
+{% endstyle%} 
+{%- schema -%}
+  {
+    "name": "About us (style 1)",
+    "class": "laber_section cms_section type_about_1",	
+    "settings": [
+	  {
+        "type": "header",
+        "content": "== Design Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "hidden",
+        "label": "Hidden Section?",
+        "default": false
+      },      
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "container",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "full-width",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+        {
+          "type": "range",
+          "id": "mg_top",
+          "label": "Margin Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mg_bottom",
+          "label": "Margin bottom",
+          "default": 100,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_top",
+          "label": "Padding Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "== Setting mobile",
+          "info":"Padding and Margin"
+        },
+       {
+          "type": "range",
+          "id": "mobile_mg_top",
+          "label": "Margin top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_mg_bottom",
+          "label": "Margin bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_top",
+          "label": "Padding top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+      {
+        "type": "header",
+        "content": "==General setting"
+      },   
+      {
+        "type": "image_picker",
+        "id": "large_banner",
+        "label": "Left banner",
+        "info" : "Dimension: 690 x 690"
+      },
+      {
+        "type": "image_picker",
+        "id": "small_banner",
+        "label": "Right banner",
+        "info" : "Dimension: 690 x 690"
+      },
+      {
+        "type": "header",
+        "content": "== Design Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_eq_height",
+        "label": "Use equal height images?",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "label": "Aspect Ratio",
+        "default": "ratio3_2",
+        "info": "Aspect Ratio Custom will settings in General panel.",
+        "options": [
+          {
+            "group": "Landscape",
+            "value": "ratio2_1",
+            "label": "2:1"
+          },
+          {
+            "group": "Landscape",
+            "value": "ratio16_9",
+            "label": "16:9"
+          },
+          {
+            "group": "Landscape",
+            "value": "ratio8_5",
+            "label": "8:5"
+          },
+          {
+            "group": "Landscape",
+            "value": "ratio3_2",
+            "label": "3:2"
+          },
+          {
+            "group": "Landscape",
+            "value": "ratio4_3",
+            "label": "4:3"
+          },
+          {
+            "group": "Landscape",
+            "value": "ratio_nt",
+            "label": "Ratio ASOS"
+          },
+          {
+            "group": "Squared",
+            "value": "ratio1_1",
+            "label": "1:1"
+          },
+          {
+            "group": "Portrait",
+            "value": "ratio2_3",
+            "label": "2:3"
+          },
+          {
+            "group": "Portrait",
+            "value": "ratio1_2",
+            "label": "1:2"
+          },
+		   {
+            "group": "Custom",
+            "value": "ratio_custom_1",
+            "label": "Custom 1(128%)"
+          }
+        ]
+      },  
+      {
+        "type": "header",
+        "content": "==Content area setting"
+      },      		 
+       {
+        "type": "text",
+        "id": "title",
+        "label": "Title of section",
+        "default": "When You Look Good, You Feel Good"
+      },
+	  {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Subtitle of section",
+		"default": "About Eliah"
+      },	
+      
+      {
+        "type": "textarea",
+        "id": "desc",
+        "label": "Description",
+		"default": "The top three occupations in the Beauty salons Industry Group are Hairdressers, hairstylists, & cosmetologists, Manicurists and pedi-curists, Receptionists & information clerks, Supervisors of personal care and service workers, and Skincare specialists."
+      },     
+      {
+        "type": "text",
+        "id": "button_part",
+        "label": "Button",
+        "default": "Appointment"
+      },
+      {
+        "type": "url",
+        "id": "button_link_part",
+        "label": "Button link"
+      },
+      {
+        "type": "textarea",
+        "id": "contact_info",
+        "label": "Contact Info",
+		"default": "<h3>Let’s Talk</h3><p><i class=\"lnr lnr-phone\"></i><span>Phone: +391 (0)35 2568 4593</span><span>Email: <a href = \"mailto: hello@domain.com\">hello@domain.com</a></span></p><h3>Find Us</h3><p><i class=\"lnr lnr-map-marker\"></i><span>Address: 298 Riverwood Drive, Cottonwood, , United States</span></p><h3>Follow Me</h3><p class=\"social_network\"><a href=\"#\"><i class=\"fa fa-facebook\"></i></a><a href=\"#\"><i class=\"fa fa-instagram\"></i></a><a href=\"#\"><i class=\"fa fa-twitter\"></i></a><a href=\"#\"><i class=\"fa fa-dribbble\"></i></a><a href=\"#\"><i class=\"fa fa-play-circle\"></i></a></p>"
+      }
+    ],
+    "presets": [
+      {
+        "name": "4. About us (style 1)",
+        "category": "Introduce"
+      }
+    ]
+  }
+{% endschema %}

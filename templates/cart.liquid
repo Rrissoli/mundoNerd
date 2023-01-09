@@ -1,0 +1,133 @@
+{% comment %}
+  The contents of the cart.liquid template can be found in /sections/cart-template.liquid
+{% section 'cart-template' %}
+{% endcomment %}
+{% section 'breadcrumb' %}
+{% assign f_shipping = settings.free_shipping | times: 100  %}
+{% assign free_shipping_spend = f_shipping | minus: cart.total_price | at_least: 0 %}
+<div class="main-content shop-page shoppingcart-content">
+  <div class="container wrap-cart">    
+    {% if cart.item_count > 0 %} 
+        <div class="row infor">
+          <div class="col-lg-9 col-md-12 col-sm-12 left">
+            <div class="cart-content">
+              <form action="/cart" method="post" novalidate class="cart">
+              <table class="shopping-cart-content">
+                <tr class="title"> 
+                  <td class="delete-item"><div></div></td>
+                  <td class="product-name"><div>{{'cart.label.product'|t}}</div></td>
+                  <td class="price"><div>{{'cart.label.price'|t}}</div></td>
+                  <td class="quantity-item"><div>{{'cart.label.quantity'|t}}</div></td>	
+                  <td class="total"><div>{{'cart.label.total'|t}}</div></td>
+                  
+                </tr>
+                {% for item in cart.items %}
+                
+                <tr class="each-item" id="item-id-{{ item.id }}">     
+                  <td class="delete-item" data-title="Remove">
+                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
+                    	<i class="lnr lnr-trash"></i>
+                  	</a>
+                  </td>
+                  <td class="product-name" data-title="{{'cart.label.product'|t}}">
+                    <div class="wrap_item_cart">
+                      <a class="lazyload img" href="{{ item.url }}" title="{{ item.product.title }}">
+                      	<img class="lazyload" data-src="{{ item | img_url: 'grande' }}" width="100" alt="{{item.title}}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+                      </a>
+                      <div class="wrap_title_cart">
+                        <span>{{ item.product.collections[0].title }}</span>
+                        <a href="{{ item.url }}" title="{{ item.product.title }}" class="product-name">{{ item.product.title }}</a>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="price" data-title="{{'cart.label.price'|t}}">{{ item.price | money }}</td>
+                  <td class="quantity-item" data-title="{{'cart.label.quantity'|t}}">
+                    <div class="quantity-cart">
+                      <div class="group-quantity-button js-quantity">
+                        <a class="minus js_minus" href="#"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 9,18l 16,0 C 25.552,18, 26,17.552, 26,17C 26,16.448, 25.552,16, 25,16l-16,0 C 8.448,16, 8,16.448, 8,17 C 8,17.552, 8.448,18, 9,18z"></path></g></svg></a>
+                        <input id="updates_{{ item.id }}" data-min="1" data-max="{{item.product.variants.first.inventory_quantity}}" class="input-text qty js_qty" type="text" size="4" title="Qty" name="updates[]" value="{% if item.quantity < 10%}0{% endif %}{{ item.quantity }}">
+                        <a class="plus js_plus" href="#">
+                        	<svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ><g><path d="M 9,18L 16,18 l0,7 C 16,25.552, 16.448,26, 17,26S 18,25.552, 18,25L 18,18 l 7,0 C 25.552,18, 26,17.552, 26,17 C 26,16.448, 25.552,16, 25,16L 18,16 L 18,9 C 18,8.448, 17.552,8, 17,8S 16,8.448, 16,9L 16,16 L 9,16 C 8.448,16, 8,16.448, 8,17C 8,17.552, 8.448,18, 9,18z"></path></g></svg>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="total" data-title="{{'cart.label.total'|t}}">{{ item.line_price | money }}</td>
+                  
+                </tr>
+                {% endfor %}
+                <tr class="checkout-cart group-button">
+                  <td colspan="6" class="left">
+                    <div class="left">
+                      <a href="/" class="continue-shopping submit">
+                        <span class="icon_cart"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 4.292,15.708l 6,6c 0.39,0.39, 1.024,0.39, 1.414,0c 0.39-0.39, 0.39-1.024,0-1.414L 7.414,16L 22,16 c 4,0, 6,3.692, 6,7c0,0.552, 0.448,1, 1,1s 1-0.448, 1-1C 30,18.588, 28,14, 22,14L 7.414,14 l 4.292-4.292 c 0.39-0.39, 0.39-1.024,0-1.414c-0.39-0.39-1.024-0.39-1.414,0l-6,6C 3.902,14.684, 3.902,15.316, 4.292,15.708z"></path></g></svg></span>
+                        <span>{{'cart.general.continue_shopping' | t }}</span>
+                      </a>
+                    </div>
+                    <div class="right">
+                      <a href="javascript:void(0);" class="update clear-cart">
+                        <span class="icon_cart"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 26,2l-4,0 c0-1.104-0.896-2-2-2L 14,0 C 12.896,0, 12,0.896, 12,2L 8,2 C 6.896,2, 6,2.896, 6,4l 22,0 C 28,2.896, 27.104,2, 26,2zM 6,30c0,1.104, 0.896,2, 2,2l 18,0 c 1.104,0, 2-0.896, 2-2L 28,6 L 6,6 L 6,30 z M 8,8l 18,0 l0,22 L 8,30 L 8,8 zM 11,10C 10.448,10, 10,10.448, 10,11l0,16 C 10,27.552, 10.448,28, 11,28S 12,27.552, 12,27l0-16 C 12,10.448, 11.552,10, 11,10zM 17,10C 16.448,10, 16,10.448, 16,11l0,16 C 16,27.552, 16.448,28, 17,28S 18,27.552, 18,27l0-16 C 18,10.448, 17.552,10, 17,10zM 23,10C 22.448,10, 22,10.448, 22,11l0,16 c0,0.552, 0.448,1, 1,1s 1-0.448, 1-1l0-16 C 24,10.448, 23.552,10, 23,10z"></path></g></svg></span>
+                        <span>{{ 'cart.general.cancel' |t}}</span>
+                      </a>
+                      <button type="submit" class="submit update">
+                        <span class="icon_cart"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 27.020,22.82A0.182,0.182 1080 1 0 27.384,22.82A0.182,0.182 1080 1 0 27.020,22.82zM 23.002,26.966A0.362,0.362 1080 1 0 23.726,26.966A0.362,0.362 1080 1 0 23.002,26.966zM 17.586,29.1A0.544,0.544 1080 1 0 18.674,29.1A0.544,0.544 1080 1 0 17.586,29.1zM 11.756,28.814A0.724,0.724 1080 1 0 13.204,28.814A0.724,0.724 1080 1 0 11.756,28.814zM 6.584,26.16A0.906,0.906 1080 1 0 8.396,26.16A0.906,0.906 1080 1 0 6.584,26.16zM 3.002,21.648A1.088,1.088 1080 1 0 5.178,21.648A1.088,1.088 1080 1 0 3.002,21.648zM 1.658,16.108A1.268,1.268 1080 1 0 4.194,16.108A1.268,1.268 1080 1 0 1.658,16.108zM 2.764,10.604A1.45,1.45 1080 1 0 5.664,10.604A1.45,1.45 1080 1 0 2.764,10.604zM 6.082,6.166A1.632,1.632 1080 1 0 9.346,6.166A1.632,1.632 1080 1 0 6.082,6.166zM 10.954,3.624A1.812,1.812 1080 1 0 14.578,3.624A1.812,1.812 1080 1 0 10.954,3.624zM 16.426,3.466A1.994,1.994 1080 1 0 20.414,3.466A1.994,1.994 1080 1 0 16.426,3.466zM 21.436,5.72A2.174,2.174 1080 1 0 25.784,5.72A2.174,2.174 1080 1 0 21.436,5.72zM 24.996,9.954A2.356,2.356 1080 1 0 29.708,9.954A2.356,2.356 1080 1 0 24.996,9.954zM 26.412,15.438A2.538,2.538 1080 1 0 31.488,15.438A2.538,2.538 1080 1 0 26.412,15.438z"></path></g></svg></span>
+                        <span>{{ 'cart.general.update' | t }}</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              </form>
+              
+              {% include 'free-shipping' %}
+              
+            </div>
+            {%comment%}
+            <div class="grid__item large-up--one-half">
+              <label for="CartSpecialInstructions" class="label--block">{{ 'cart.general.note' | t }}</label>
+              <textarea name="note" id="CartSpecialInstructions" class="input--block cart__note">{{ cart.note }}</textarea>
+            </div>
+            {%endcomment%}
+            {%if settings.shipping_calculator =='Enabled'%}
+            {% include 'shipping-calculator' %}
+            {%endif%}
+			<div class="coupon">
+              <h4 class="coupon-title">{{'cart.general.info_coupon' | t}}</h4>
+              <form method="post" action="/contact">
+                <input type="email" name="contact[email]" placeholder="{{'cart.general.placeholder_coupon' | t}}"  value="{% if customer %}{{ customer.email }}{% endif %}" class="{{class_ip}} input-text" required="required">
+                <button type="submit" class="submit-btn"> {{'cart.general.button_coupon' | t}} </button>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-12 col-sm-12 right">
+            
+            <div class="content cart-total">
+              <h5 class="title">{{ 'cart.general.cart_total' | t }}</h5>
+              <div class="info-checkout">
+                <span class="text">{{'cart.general.subtotal' | t}} </span><span class="item subtotal">{{ cart.total_price | money }}</span>
+              </div>
+              <div class="info-checkout">
+                <span class="text">{{'cart.general.total' | t}} </span><span class="item total">{{ cart.total_price | money }}</span>
+              </div> 
+              <div class="info-checkout shipping_at_checkout {% if free_shipping_spend > 0 %}hidden{% endif %}">
+                <span class="text">{{'cart.general.shipping_at_checkout' | t}} </span><span class="item shipping">{{'cart.general.free' | t}}</span>
+              </div>
+              <div class="cart__shipping_note note text-right {% if free_shipping_spend <= 0 %}hidden{% endif %}" data-shipping-note="">{{ 'cart.general.shipping_note' | t }}</div>
+              <div class="group-button">
+                <a href="/checkout" class="button submit">{{ 'cart.general.checkout' | t }}</a>
+              </div>
+            </div>			
+          </div>
+        </div>
+    {% else %}	
+    <div class="row content-form">
+      <div class="container proceed-checkout">
+        <p class="main-title">{{ 'cart.general.empty' | t }}</p>
+        <div class="group-button">
+        	<a href="/" class="button submit">{{ 'cart.general.continue_shopping' | t }}</a>   
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>

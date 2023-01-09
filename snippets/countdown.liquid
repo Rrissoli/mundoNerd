@@ -1,0 +1,27 @@
+{%- assign tags = product.tags  -%}
+{%- assign show_countdown = settings.show_countdown  -%}
+{%- assign text_countdown = settings.text_countdown  -%}
+{%- assign show_text_countdown = settings.show_text_countdown  -%}
+{% if  show_countdown %}
+
+{%- for tag in tags  -%}
+	{% if tag contains "/" or tag contains ":" %}
+		{%- assign data_times = tag | split: ' '  -%}
+		{%- assign ymd = data_times[0] | split: '/'  -%}
+		{%- assign his = data_times[1] | split: ':'  -%}
+		<div class="page_product_countdown style_{{hor_posi}}">
+  		<div class="countdown-wrap">
+          {%if show_text_countdown %}
+            <div class="countdown-label ">
+              {{ block.settings.title | default:text_countdown  }}
+            </div>
+          {%endif%}
+          <div class="cms-countdown" data-y="{{ymd[0]}}" data-m="{{ymd[1]}}" data-d="{{ymd[2]}}"  data-h="{{his[0]}}"  data-i="{{his[1]}}" data-s="{{his[2]}}"></div>                    	            
+    	</div>
+        </div>  	
+  	{% endif %}
+{% endfor %}
+
+{%endif%}
+
+

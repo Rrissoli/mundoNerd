@@ -1,0 +1,52 @@
+{% assign br_style = settings.br_style | plus:0 %}
+{%if br_style == 1%}
+	{% section 'breadcrumb' %}
+{%endif%}
+<div itemscope itemtype="http://schema.org/Product">
+  <meta itemprop="name" content="{{ product.title }}">
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+  		
+      {% include 'product-simple' %}
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+      var cms_js = jQuery('#cms_js');      
+    // Init fotoraman    
+      $script([cms_js.data('fotorama')],"load_foto");
+      $script.ready('load_foto', function() {      
+          $("[data-js-gallery]").click(function () {                  
+            var fotorama = $('div[data-fotorama]')
+            .fotorama({allowfullscreen: true})
+            .data('fotorama');
+            fotorama.requestFullScreen();
+          });  
+          $('div[data-fotorama]').on('click', function (e, fotorama) {
+            if ($(e.target).hasClass("fotorama__stage__frame")) {
+              $('div[data-fotorama]').data('fotorama').cancelFullScreen();
+              $('div[data-slide-nav]').find(".slick-track").css("transform","none");
+            }
+          });
+      })
+ // click on tab of product detail page
+      $(document).on('click','.cms-tab a[data-toggle="pill"]',function(e){ 
+        e.preventDefault();
+        var tab_id = $(this).attr('href');
+        $(this).closest('ul').find("li").removeClass("active");
+        $(this).closest('li').addClass("active");
+        var class_st = $(tab_id).attr("class");
+        $("."+class_st).removeClass("active");
+        $(tab_id).addClass("active");
+      })   
+      
+      /* CLick slick arrow button */
+      $(document).on('click','div[data-slide-nav] .slick-arrow', function(){
+        if ($("div[data-slide-nav] .thumb_img.slick-active").length > 0){      
+          $("div[data-slide-nav] .thumb_img.slick-current").trigger('click');
+        }
+      })
+  })  
+  
+</script>
+{% section 'brand-list' %}
+{% section 'instagram-image-slider' %}

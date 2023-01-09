@@ -1,0 +1,396 @@
+{% liquid
+  assign sid = section.id 
+  assign sett_equal = section.settings.use_eq_height
+  assign col =  12 | divided_by: section.settings.col_pr 
+  assign col_tb = 12 | divided_by: section.settings.col_pr_tb  
+  assign col_mb = 12 | divided_by: section.settings.col_pr_mb 
+  assign ck = section.settings.use_eq_height
+%}
+   
+{%- for i in (1..1) -%}
+  {%- if section.settings.cp_code and request.page_type == 'index' %}<div class="dn tc mt__40 mb__40 cp_cd_js"><input type="text" class="dcp_cd_ip" value='<div class="inc_lz inc_ins_laz" data-include="/search/?section_id={{sid}}"><div class="loading_bg"></div></div>'><button class="dcp_cd_btn">Copy Shortcode</button></div>{% endif -%}
+  {%- if section.settings.hidden and request.page_type == 'index' %}{% break %}{% endif -%}
+
+  <section class="laber_{{sid}}" style="
+                  ">
+  <div class="container {% if section.settings.layout == "full-width"%}{{section.settings.layout}}{% endif %}">
+    <div class="{% if section.settings.title != blank %} wrap_title {% endif %}">
+      <h3 class="section-title"><span > {{section.settings.title}}</span></h3>        
+      <span class="section-subtitle">{{section.settings.sub_title}}</span>
+    </div> 
+    <div class="row">
+      	{%- for block in section.blocks -%}
+          {%- assign image = block.settings.image -%}
+      	  {%- assign url = block.settings.url -%}
+          <div class="text_column_with_img col-lg-{{col}} col-md-{{col_tb}} col-{{col_mb}}">
+              {%- if block.settings.enable_image -%}           
+            	<div class="images">
+                 {%- if image != blank %}{% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                      <div class="nt_bg_lz lazyload pr_lazy_img {{block.settings.img_align}}" data-bgset="{{ image | img_url: '1x1' }}" data-ratio="{{image.aspect_ratio}}" data-sizes="auto" data-parent-fit="cover" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%"></div>
+                 {%- else -%}
+                     <img class="lazyload" data-src="https://via.placeholder.com/570x630.png/a1a19f/ffffff?text=Image+{{forloop.index}}"/>
+                 {%- endif -%}
+                  <ul class="list-socials ">
+                  {% if block.settings.footer_social_facebook_enable %}
+                    <li>
+                   	 <a class="facebook" target="_blank" href="{{block.settings.footer_social_facebook_link}}" title="{{ block.settings.title | escape }}"><i class="fa fa-facebook"></i></a>
+                    </li>
+                  {% endif %}
+                  {% if block.settings.footer_social_twitter_enable %}
+                  <li>
+                  <a class="twitter" target="_blank" href="{{block.settings.footer_social_twitter_link}}" title="{{ block.settings.title | escape }}"><i class="fa fa-twitter"></i></a>
+                  </li>
+                  {% endif %}
+                  {% if block.settings.footer_social_instargram_enable %}
+                  <li>
+                  <a class="instagram" target="_blank" href="{{block.settings.footer_social_instargram_link}}" title="{{ block.settings.title | escape }}"><i class="fa fa-instagram"></i></a>
+                  </li>
+                  {% endif %}
+                    {% if block.settings.footer_social_dribbble_enable %}
+                    <li>
+                      <a class="dribbble" target="_blank" href="{{block.settings.footer_social_dribbble_link}}" title="{{ block.settings.title | escape }}"><i class="fa fa-dribbble"></i></a>
+                    </li>
+                    {% endif %}
+                  </ul>
+            	</div>
+              {%- endif -%}
+            
+              {% if block.settings.title != blank %}
+                <h3 class="h4">{{ block.settings.title | escape }}</h3>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <div class="rte-setting">{{ block.settings.text }}</div>
+              {% endif %}
+
+              	
+          </div>
+        {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endfor -%}
+{% style%}
+{% assign cl_bg = section.settings.cl_bg %}
+{% assign mg_top = section.settings.mg_top %}
+{% assign mg_bottom = section.settings.mg_bottom %}
+{% assign pd_top = section.settings.pad_top %}
+{% assign pd_bottom = section.settings.pad_bottom %}
+{% assign mobile_mg_top = section.settings.mobile_mg_top %}
+{% assign mobile_mg_bottom = section.settings.mobile_mg_bottom %}
+{% assign mobile_pd_top = section.settings.mobile_pd_top %}
+{% assign mobile_pd_bottom = section.settings.mobile_pd_bottom %}
+
+	.laber_{{sid}}{
+      {% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+      {% if mg_bottom !=0 %}margin-bottom:{{mg_bottom}}px;{%endif%} 
+      {% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+      {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%} 
+      background-color:{{cl_bg}};
+	}
+    @media (max-width: 767px) {
+      .laber_{{sid}}{
+        {% if mobile_mg_top !=0 %}margin-top:{{mobile_mg_top}}px;{%endif%} 
+        {% if mobile_mg_bottom !=0 %}margin-bottom:{{mobile_mg_bottom}}px;{%endif%} 
+        {% if mobile_pd_top !=0 %}padding-top:{{mobile_pd_top}}px;{%endif%} 
+        {% if mobile_pd_bottom !=0 %}padding-bottom:{{mobile_pd_bottom}}px;{%endif%} 
+      }
+    }
+{% endstyle%} 
+
+
+{%- schema -%}
+  {
+    "name": "Text Column With Image",
+    "class": "cms_section type_gallery",
+	"max_blocks": 30,
+    "settings": [
+      {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Text column with image"
+      },
+      {
+        "type": "textarea",
+        "id": "sub_title",
+        "label": "Sub Text"
+      },  
+	  {
+        "type": "header",
+        "content": "== General Settings"
+      },      
+      {
+        "type": "select",
+        "id": "col_pr",
+        "label": "Gallery columns (desktop)",
+        "info": "How many gallery you want to show per row",
+        "default": "3",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+	      {
+            "value": "6",
+            "label": "6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_pr_tb",
+        "label": "Gallery columns (tablet)",
+        "default": "3",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_pr_mb",
+        "label": "Gallery columns (mobile)",
+        "default": "2",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          }
+        ]
+      },
+            
+      {
+        "type": "header",
+        "content": "== Design Options"
+      },
+		{
+        "type": "select",
+        "id": "layout",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "full-width",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+     	 },
+        {
+          "type": "range",
+          "id": "mg_top",
+          "label": "Margin Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mg_bottom",
+          "label": "Margin bottom",
+          "default": 100,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_top",
+          "label": "Padding Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "== Setting mobile",
+          "info":"Padding and Margin"
+        },
+       {
+          "type": "range",
+          "id": "mobile_mg_top",
+          "label": "Margin top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_mg_bottom",
+          "label": "Margin bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_top",
+          "label": "Padding top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        }
+    ],
+	"blocks": [{
+    "type": "text_block",
+    "name": "Column",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_image",
+        "label": "Show image?",
+        "default": true
+      },
+      {
+         "type": "image_picker",
+         "id": "image",
+         "label": "Image"
+       },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Add a title or tagline"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.</p>"
+        },
+		{
+        "type": "header",
+        	"content": "== Social"
+      	},
+        {
+          "type": "checkbox",
+          "id": "footer_social_facebook_enable",
+          "label": "Show social media facebook",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "footer_social_facebook_link",
+          "label": "Your facebook",
+          "info": "https:\/\/facebook.com\/shopify"
+        },
+        {
+          "type": "checkbox",
+          "id": "footer_social_twitter_enable",
+          "label": "Show social media twitter",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "footer_social_twitter_link",
+          "label": "Your twitter",
+          "info": "https:\/\/twitter.com\/shopify"
+        },
+        {
+          "type": "checkbox",
+          "id": "footer_social_instargram_enable",
+          "label": "Show social media instargram",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "footer_social_instargram_link",
+          "label": "Your instargram",
+          "info": "http:\/\/instagram.com\/shopify"
+        },
+        {
+          "type": "checkbox",
+          "id": "footer_social_dribbble_enable",
+          "label": "Show social media dribbble",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "footer_social_dribbble_link",
+          "label": "Your dribbble",
+          "info": "http:\/\/dribbble.com\/shopify"
+        }
+
+
+
+      ]
+    }],
+    "presets": [
+      {
+        "name": "8. Text column with image 2",
+        "category": "Images",
+		"blocks": [
+          { "type": "text_block" },
+          { "type": "text_block" },
+          { "type": "text_block" }
+        ]
+      }
+    ]
+  }
+{% endschema %}

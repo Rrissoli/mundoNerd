@@ -1,0 +1,498 @@
+{%- assign show_label_in_stock = settings.product_collection_show_label_in_stock -%}
+{%- assign show_label_out_stock = settings.product_collection_show_label_out_stock -%}
+{%- assign show_label_sale = settings.product_collection_show_label_sale -%}
+{%- assign show_label_new =  settings.product_collection_show_label_new -%}
+{%- assign show_label_hot =  settings.product_collection_show_label_hot -%}
+{%- assign show_countdown = false | default: settings.product_collection_show_countdown -%}
+{%- assign show_images_navigation = true | default: settings.product_collection_show_images_navigation -%}
+{%- assign show_title = settings.product_collection_show_title -%}
+{%- assign show_sku = settings.product_collection_show_sku -%}
+{%- assign show_barcode =  settings.product_collection_show_barcode -%}
+{%- assign show_availability =  settings.product_collection_show_availability -%}
+{%- assign show_type = settings.product_collection_show_type -%}
+{%- assign show_vendor = settings.product_collection_show_vendor -%}
+{%- assign show_description = settings.product_collection_show_description -%}
+{%- assign show_price = settings.product_collection_show_price -%}
+{%- assign show_options = settings.product_collection_show_options -%}
+{%- assign show_custom_options =  settings.product_show_custom_options -%}
+{%- assign show_quantity = false | default: settings.product_collection_show_quantity -%}
+{%- assign show_button_add_to_cart = settings.product_collection_show_button_add_to_cart -%}
+{%- assign show_button_add_to_wishlist = settings.product_collection_show_button_add_to_wishlist -%}
+{%- assign show_button_add_to_compare =  settings.product_collection_show_button_add_to_compare -%}
+{%- assign show_button_quick_view = settings.product_collection_show_button_quick_view -%}
+{%- assign show_reviews = settings.product_collection_show_reviews -%}
+{%- assign hide_reviews_counter = settings.product_collection_hide_reviews_counter -%}
+{% assign enable_hover_image = settings.product_collection_enable_hover_image %}
+{% assign build_variant = "all" %}
+
+{% assign sid = section.id %}
+
+
+{% liquid
+    assign collection = section.settings.collection
+ 	assign products = collections[collection].products 
+    assign row_num =section.settings.row_num
+    assign col_pr =section.settings.col_pr  |plus:0
+    assign max_count = col_pr | times: row_num
+    
+    if col_pr == 5
+    	assign col = 15
+    else
+    	assign col = 12 | divided_by: col_pr
+    endif
+    
+    
+ -%}
+{%- for i in (1..1) -%}
+ 
+  <section class="laber_section_{{sid}} ">
+    <div class="container {% if section.settings.layout == "full-width"%}{{section.settings.layout}}{% endif %}">
+    <div class="products-arrivals">	
+    <div class="medizin_laypout">
+      <div class="row">
+      <div class="products_countdown  col-lg-4 col-md-12 col-sm-12">
+        <div class="section-content">
+      <div data-js-slick-countdown class="row" data-number="1" data-slick='{"slidesToShow": 1, "slidesToScroll": 1, "infinite": {{section.settings.infinite}}, "lazyLoad": "ondemand", "autoplay": {{section.settings.autoplay}}, "autoplaySpeed": {{section.settings.speed | times: 1000}}, "arrows": {{section.settings.arrows}}, "dots": {{section.settings.dots}}}' >
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}     
+              {%- case block.type -%}
+                  {%- when 'product' -%}
+                  {%- assign product = all_products[block.settings.product] %}
+                  {%- assign show_stock_bar = section.settings.show_stock_bar %}
+                  {%- assign total = block.settings.total %}
+                  {%- assign available = block.settings.available %}
+                  
+        		  {%- assign show_countdown = section.settings.show_countdown %}
+                  {%- assign cd_txt = section.settings.cd_txt %}
+                  {%- assign year_count_down =block.settings.year_count_down %}
+        		  {%- assign month_count_down =block.settings.month_count_down %}
+                  {%- assign day_count_down =block.settings.day_count_down %}
+                  
+                  {% assign ck_noPr = false -%}
+        		  {% if product != blank %}
+                        <div class="col-12">                                 
+                        	{% include 'product_style' with product: product show_countdown:show_countdown cd_txt:cd_txt year_count_down:year_count_down month_count_down:month_count_down day_count_down:day_count_down  show_stock_bar:show_stock_bar  total:total available:available  %}                
+        				</div>
+        	      {%- endif -%}
+              {%- endcase -%}
+            {%- endfor -%}
+          {%- else -%}
+          	<div class="shopify-info no-products"><i class="flash fa fa-exclamation-triangle" aria-hidden="true"></i>{{'collections.general.no_pro_count' | t}}</div>
+               
+          {%- endif -%}
+      </div>
+        </div>
+      </div>
+      <div class="products_collection col-lg-8 col-md-12 col-sm-12">
+        	<div class="wrap_title">
+              <h3 class="section-title"><span > {{section.settings.title}}</span></h3>        
+              <span class="section-subtitle">{{section.settings.sub_title}}</span>
+            </div> 
+            <div class="section-content">
+              {%- if collection  != blank -%} 
+                      {% capture grid %}animated fadeIn col-xs-6 col-sm-6 col-md-4 col-lg-{{ col }}{% endcapture %}              
+                      <div class="sorting-collections__products pr_center  row" data-limit="{{ section.settings.max_count }}" data-grid="{{ grid }}">                               
+
+                         {%- capture url_cat -%}{% if collection %}/collections/{{collections[collection].handle}}{% endif %}{%- endcapture -%}
+                        {%- for product in products limit: max_count -%}
+                        {% assign pr_hd = product.handle %}
+                          <div data-lazy-product-load class="{{ grid }} lazyload" data-include="{{url_cat}}/products/{{pr_hd}}/?view=pr_lazy_load">                      
+
+                          </div>
+                        {%- endfor -%}                    
+                      </div>
+              {%- else -%}
+                    <div class="sorting-collections__products pr_center  row">
+                    {%- for i in (1..max_count ) -%}
+                        <div class="grid__item col-xs-12 col-sm-6 col-md-4 col-lg-{{ col }} ">
+                          <div class="product-inner">
+                            <div class="product-image">
+                                <a href="/admin/products" class="product__image-wrapper">
+                                    {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                                    {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                                </a>
+                            </div>
+                          </div>
+                          <div class="product-info">
+                            <div class="product__title"><a href="/admin/products">{{ 'homepage.onboarding.product_title' | t | capitalize }}</a></div>
+                            <div class="product__price">$19.99</div>
+                          </div>
+                        </div>
+                     {%- endfor -%}   
+                </div>
+              {%- endif -%}
+            </div>
+      </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </section>
+
+{% assign cl_bg = section.settings.cl_bg %}
+{% assign mg_top = section.settings.mg_top %}
+{% assign mg_bottom = section.settings.mg_bottom %}
+{% assign pd_top = section.settings.pad_top %}
+{% assign pd_bottom = section.settings.pad_bottom %}
+{% assign mobile_mg_top = section.settings.mobile_mg_top %}
+{% assign mobile_mg_bottom = section.settings.mobile_mg_bottom %}
+{% assign mobile_pd_top = section.settings.mobile_pd_top %}
+{% assign mobile_pd_bottom = section.settings.mobile_pd_bottom %}
+{% assign status_bg = section.settings.status_bg %}
+{% assign sold_bg = section.settings.sold_bg %}
+{% assign color_border = section.settings.color_border %}
+
+
+
+{%- style -%}
+	.laber_section_{{sid}}{
+      {% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+      {% if mg_bottom !=0 %}margin-bottom:{{mg_bottom}}px;{%endif%} 
+      {% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+      {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%} 
+      background-color:{{cl_bg}};
+	}
+	{% if color_border %}
+	.laber_section_{{sid}} .products_countdown .section-content {
+		border-color:{{color_border}} !important;
+	}
+	{% endif %}
+	.laber_section_{{sid}} .loop-product-stock .status-bar{
+		background-color:{{status_bg}};
+	}
+	.laber_section_{{sid}} .loop-product-stock .status-bar .sold-bar{
+		background-color:{{sold_bg}};
+	}
+    @media (max-width: 767px) {
+      .laber_section_{{sid}}{
+        {% if mobile_mg_top !=0 %}margin-top:{{mobile_mg_top}}px;{%endif%} 
+        {% if mobile_mg_bottom !=0 %}margin-bottom:{{mobile_mg_bottom}}px;{%endif%} 
+        {% if mobile_pd_top !=0 %}padding-top:{{mobile_pd_top}}px;{%endif%} 
+        {% if mobile_pd_bottom !=0 %}padding-bottom:{{mobile_pd_bottom}}px;{%endif%} 
+      }
+    }
+{%- endstyle %}
+{%- endfor -%}
+
+
+
+
+
+
+{%- schema -%}
+  {
+    "name": "Products countdown",
+    "class": "cms_section type_countdown product_section products_collection_countdown type_carousel",
+	"max_blocks": 20,
+    "settings": [
+      {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Sale Off Products"
+      }, 
+      {
+        "type": "textarea",
+        "id": "sub_title",
+        "label": "Top view in this week"
+      },
+	  {
+      "type": "color",
+      "id": "color_border",
+      "label": "color border",
+      "default": "#fed700",
+      "info":"Border color for countdown products"
+      },	
+      {
+      "type": "checkbox",
+      "id": "show_stock_bar",
+      "label": "Show stock bar",
+      "default": true
+      },
+      {
+      "type": "color",
+      "id": "status_bg",
+      "label": "Background color 1",
+      "default": "#f5f5f5",
+      "info":"Background color status bar"
+      },
+      {
+      "type": "color",
+      "id": "sold_bg",
+      "label": "Background color 2",
+      "default": "#777777",
+      "info":"Background color sold bar"
+      },
+	  {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show Countdown",
+      "default": true
+      },	    
+      {
+        "type": "text",
+        "id": "cd_txt",
+        "label": "Countdown text",
+        "default": "Hurry Up! Special Offers end in:"
+      },
+		{
+        "type": "header",
+        "content": "== Setting products countdown"
+      },
+
+        {
+            "type": "checkbox",
+            "id": "autoplay",
+            "label": "Autoplay",
+            "default": false
+        },
+        {
+            "type": "range",
+            "id": "speed",
+            "min": 2,
+            "max": 10,
+            "step": 1,
+            "label": "Autoplay speed (sec)",
+            "default": 5
+        },
+        {
+            "type": "checkbox",
+            "id": "infinite",
+            "label": "Is infinite",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "arrows",
+            "label": "Arrows",
+            "default": true
+        },
+        {
+        "type": "checkbox",
+        "id": "dots",
+        "label": "dots",
+        "default": false
+        },  
+		{
+        "type": "header",
+          "content": "== Setting collection grid"
+        },
+        { 
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+        },	
+        {
+        "type": "select",
+        "id": "col_pr",
+        "label": "Product per row",
+        "info": "How many product you want to show per row (Layout design is grid)",
+        "default": "4",
+        "options": [
+            {
+            "value": "2",
+            "label": "2"
+            },
+            {
+            "value": "3",
+            "label": "3"
+            },
+            {
+            "value": "4",
+            "label": "4"
+            },
+            {
+            "value": "5",
+            "label": "5"
+            }
+          ]
+        },
+        {
+        "type": "range",
+        "id": "row_num",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Row number",
+        "info": "Number of rows you want to display (Layout design is grid)",
+        "default": 2
+        },
+      {
+        "type": "header",
+        "content": "== Design Options"
+      },   
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "container",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "full-width",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+      },
+        {
+          "type": "range",
+          "id": "mg_top",
+          "label": "Margin Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mg_bottom",
+          "label": "Margin bottom",
+          "default": 100,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_top",
+          "label": "Padding Top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "pad_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "== Setting mobile",
+          "info":"Padding and Margin"
+        },
+       {
+          "type": "range",
+          "id": "mobile_mg_top",
+          "label": "Margin top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_mg_bottom",
+          "label": "Margin bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_top",
+          "label": "Padding top",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "mobile_pd_bottom",
+          "label": "Padding bottom",
+          "default": 0,
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+        }
+    ],
+	"blocks": [
+      {
+        "type": "product",
+        "name": "Product",
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          },
+          {
+          "type": "header",
+          "content": "== countdown Time"
+          },
+          {
+          "type": "text",
+          "id": "year_count_down",
+          "label": "Year of countdown",
+          "default": "2022"
+          },
+          {
+          "type": "text",
+          "id": "month_count_down",
+          "label": "Month of countdown",
+          "default": "12"
+          },
+          {
+          "type": "text",
+          "id": "day_count_down",
+          "label": "Day of countdown",
+          "default": "30"
+          },
+          {
+            "type": "range",
+            "id": "total",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "label": "Total Stock:",
+            "unit": "qty",
+            "default": 100
+          },
+          {
+            "type": "range",
+            "id": "available",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "Available Stock:",
+            "unit": "qty",
+            "default": 15
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "8.A Products countdown",
+        "category": "Collections"		
+      }
+    ]
+  }
+{% endschema %}

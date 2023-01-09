@@ -1,0 +1,341 @@
+{% liquid
+  assign sid = section.id 
+  assign layout_des = section.settings.layout_des
+  assign collection = section.settings.collection %}
+   
+{%- for i in (1..1) -%}
+  
+<section style="padding:{{section.settings.mg_top}}px {{section.settings.mg_right}}px {{section.settings.mg_bottom}}px {{section.settings.mg_left}}px;">       
+  <div class="nt_se_{{sid}} {{section.settings.layout}}">
+    {% if section.settings.title != blank or section.settings.sub_title!= blank %}
+      <div class="wrap_title">
+        <div class="wrap_inner_title">
+          {% if section.settings.sub_title!= blank %}
+              <span class="section-subtitle">{{section.settings.sub_title}}</span>
+          {% endif %}
+          {% if section.settings.title != blank %}
+              <h3 class="section-title">{{section.settings.title}}</h3>  
+          {% endif %}
+        </div>
+      </div> 
+    {% endif %} 
+    <div class="cms-wrap-purchase">
+      {% assign banner1 = section.settings.banner1_img %}
+      {% assign banner2 = section.settings.banner2_img %}
+      <div class="cms-bg-first background-banner">
+
+      </div>
+      <div class="cms-bg-second background-banner {% if banner1 != blank %}lazyload{% endif %}" {% if banner1 != blank %} data-bg="{{ banner1 | img_url: '960x630' }}" data-ratio="{{banner1.aspect_ratio}}" {% endif %}>
+
+      </div>
+      <div class="cms-bg-third background-banner {% if banner2 != blank %}lazyload{% endif %}" {% if banner2 != blank %} data-bg="{{ banner2 | img_url: '960x630' }}" data-ratio="{{banner2.aspect_ratio}}" {% endif %}>
+
+      </div>
+      <div class="cms-bg-fourth background-banner " >
+
+      </div>
+      <div class="cms-content-section">
+        <div class="cms-cont container">
+          <div class="row">
+            <div class="cms-content col-lg-6 col-md-12 col-sm-12">
+              <div class="cms-wrap-inner">
+                {%- assign product = all_products[section.settings.product] -%}
+                {%- if product != blank -%}
+                  <h4>{{product.collections[0].title}}</h4>
+                  <h2>{{product.title}}</h2>
+                  <span class="price">{{product.variants[0].price | money}}</span>
+                  <p>{{product.description | strip_html | truncatewords:30}}</p>
+                  <a href="{{product.url}}">{{section.settings.button_label}}</a>
+                {%- else -%}
+                  <h4>Put it in Neutral</h4>
+                  <h2>Enlightened Beauty</h2>
+                  <span class="price">$125.00</span>
+                  <p>Enlightened Beauty offers tailored skincare solutions ranging from facials using diamond tip microdermabrasion and chemical peels to facial and body waxing.</p>
+                  <a href="/admin/products">More infor</a>
+                {% endif %}  
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cms-content col-lg-6 col-md-12 col-sm-12">
+              <div class="cms-wrap-inner">
+                <h2>{{section.settings.title_instruction}}</h2>
+                <ul>
+                  {%- if section.blocks.size > 0 -%}  
+                  	{% assign index = 0 %}
+                  	{%- for block in section.blocks -%}
+                  	  {% assign index = index | plus:1 %}
+                      <li class="{% if forloop.first %}open {% endif %}">
+                        <div class="cms-header-instruction">
+                          <h3>{{section.settings.lbl_step}} {{index}}</h3>
+                          <span class="up"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 11.218,20.2L 17,14.418l 5.782,5.782c 0.39,0.39, 1.024,0.39, 1.414,0c 0.39-0.39, 0.39-1.024,0-1.414 L 17.71,12.3C 17.514,12.104, 17.258,12.008, 17,12.008c-0.258,0-0.514,0.096-0.71,0.292L 9.804,18.786c-0.39,0.39-0.39,1.024,0,1.414 C 10.194,20.59, 10.828,20.59, 11.218,20.2z"></path></g></svg></span>
+                          <span class="down"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 22.782,13.8L 17,19.582L 11.218,13.8c-0.39-0.39-1.024-0.39-1.414,0c-0.39,0.39-0.39,1.024,0,1.414 l 6.486,6.486c 0.196,0.196, 0.454,0.294, 0.71,0.292c 0.258,0, 0.514-0.096, 0.71-0.292l 6.486-6.486c 0.39-0.39, 0.39-1.024,0-1.414 C 23.806,13.41, 23.172,13.41, 22.782,13.8z"></path></g></svg></span>
+                        </div>
+                        <span class="content">{{block.settings.description}}</span>
+                      </li>
+                  	{%- endfor -%} 
+                  {% else %}                  
+                    <li class="open">
+                      <div class="cms-header-instruction">
+                        <h3>Step 1</h3>
+                        <span class="up"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 11.218,20.2L 17,14.418l 5.782,5.782c 0.39,0.39, 1.024,0.39, 1.414,0c 0.39-0.39, 0.39-1.024,0-1.414 L 17.71,12.3C 17.514,12.104, 17.258,12.008, 17,12.008c-0.258,0-0.514,0.096-0.71,0.292L 9.804,18.786c-0.39,0.39-0.39,1.024,0,1.414 C 10.194,20.59, 10.828,20.59, 11.218,20.2z"></path></g></svg></span>
+                        <span class="down"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 22.782,13.8L 17,19.582L 11.218,13.8c-0.39-0.39-1.024-0.39-1.414,0c-0.39,0.39-0.39,1.024,0,1.414 l 6.486,6.486c 0.196,0.196, 0.454,0.294, 0.71,0.292c 0.258,0, 0.514-0.096, 0.71-0.292l 6.486-6.486c 0.39-0.39, 0.39-1.024,0-1.414 C 23.806,13.41, 23.172,13.41, 22.782,13.8z"></path></g></svg></span>
+                      </div>
+                      <span class="content">Gently cleanse the skin of romnans of make up and impurities with a cleansing or toning</span>
+                    </li>
+                    <li>
+                      <div class="cms-header-instruction">
+                        <h3>Step 2</h3>
+                        <span class="up"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 11.218,20.2L 17,14.418l 5.782,5.782c 0.39,0.39, 1.024,0.39, 1.414,0c 0.39-0.39, 0.39-1.024,0-1.414 L 17.71,12.3C 17.514,12.104, 17.258,12.008, 17,12.008c-0.258,0-0.514,0.096-0.71,0.292L 9.804,18.786c-0.39,0.39-0.39,1.024,0,1.414 C 10.194,20.59, 10.828,20.59, 11.218,20.2z"></path></g></svg></span>
+                        <span class="down"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 22.782,13.8L 17,19.582L 11.218,13.8c-0.39-0.39-1.024-0.39-1.414,0c-0.39,0.39-0.39,1.024,0,1.414 l 6.486,6.486c 0.196,0.196, 0.454,0.294, 0.71,0.292c 0.258,0, 0.514-0.096, 0.71-0.292l 6.486-6.486c 0.39-0.39, 0.39-1.024,0-1.414 C 23.806,13.41, 23.172,13.41, 22.782,13.8z"></path></g></svg></span>
+                      </div>
+                      <span class="content">Gently cleanse the skin of romnans of make up and impurities with a cleansing or toning</span>
+                    </li>
+                    <li>
+                      <div class="cms-header-instruction">
+                        <h3>Step 3</h3>
+                        <span class="up"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 11.218,20.2L 17,14.418l 5.782,5.782c 0.39,0.39, 1.024,0.39, 1.414,0c 0.39-0.39, 0.39-1.024,0-1.414 L 17.71,12.3C 17.514,12.104, 17.258,12.008, 17,12.008c-0.258,0-0.514,0.096-0.71,0.292L 9.804,18.786c-0.39,0.39-0.39,1.024,0,1.414 C 10.194,20.59, 10.828,20.59, 11.218,20.2z"></path></g></svg></span>
+                        <span class="down"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 22.782,13.8L 17,19.582L 11.218,13.8c-0.39-0.39-1.024-0.39-1.414,0c-0.39,0.39-0.39,1.024,0,1.414 l 6.486,6.486c 0.196,0.196, 0.454,0.294, 0.71,0.292c 0.258,0, 0.514-0.096, 0.71-0.292l 6.486-6.486c 0.39-0.39, 0.39-1.024,0-1.414 C 23.806,13.41, 23.172,13.41, 22.782,13.8z"></path></g></svg></span>
+                      </div>
+                      <span class="content">Gently cleanse the skin of romnans of make up and impurities with a cleansing or toning</span>
+                    </li>                      
+                  {% endif %}
+                                   
+                </ul>
+                <div class="cms-wrap-button">   
+                  <div class="cms-quantity-banner">
+                    <label>{{section.settings.lbl_quantity}}:</label>
+                    <div class="cms-quatity">
+                      <input type="text" class="input-text cms_qty" data-step="1" data-min="1" data-max="{%- if product != blank -%} {{product.variants.first.inventory_quantity}} {% else %}0 {% endif %}" name="quantity" value="{%- if product != blank -%}01{% else %}0 {% endif %}" size="4" pattern="[0-9]*" inputmode="numeric">
+                      <div class="qty"> 
+                        <span class="plus"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 9,18L 16,18 l0,7 C 16,25.552, 16.448,26, 17,26S 18,25.552, 18,25L 18,18 l 7,0 C 25.552,18, 26,17.552, 26,17 C 26,16.448, 25.552,16, 25,16L 18,16 L 18,9 C 18,8.448, 17.552,8, 17,8S 16,8.448, 16,9L 16,16 L 9,16 C 8.448,16, 8,16.448, 8,17C 8,17.552, 8.448,18, 9,18z"></path></g></svg> </span> 
+                        <span class="minus"><svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 9,18l 16,0 C 25.552,18, 26,17.552, 26,17C 26,16.448, 25.552,16, 25,16l-16,0 C 8.448,16, 8,16.448, 8,17 C 8,17.552, 8.448,18, 9,18z"></path></g></svg> </span>
+                      </div>
+                    </div>
+                  </div>
+                  <a  class="js_add_to_cart_button" data-pid="{%- if product != blank -%}  {{ product.variants.first.id }} {% endif %}" href="#" > {{section.settings.btn_purchase}} </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+	</div>
+    
+  </div>
+</section>
+{%- endfor -%}
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $( ".cms-content li" ).click(function() {
+      $( ".cms-content li" ).removeClass("open");
+      $( this ).toggleClass( "open" );      
+    });
+    
+    jQuery(document).on('click', '.type_banner_3 .minus, .type_banner_3 .plus', function (e) {
+      // Get values
+      var $qty = $(this).closest(".cms-quatity").find('.cms_qty'),
+          currentVal = parseFloat($qty.val()),
+          max = parseFloat($qty.data('max')),
+          min = parseFloat($qty.data('min')),
+          step = $qty.data('step');
+      
+      
+      // Format values
+      if (!currentVal || currentVal === '' || currentVal === 'NaN') currentVal = 0;
+      if (max === '' || max === 'NaN') max = '';
+      if (min === '' || min === 'NaN') min = 0;
+      if (step === 'any' || step === '' || step === undefined || parseFloat(step) === 'NaN') step = 1;
+      
+      // Change the value
+      if ($(this).is('.plus')) {
+        if (!max && ( max == currentVal || currentVal > max )) {
+          $qty.val(max);
+        } else {
+          $qty.val(currentVal + parseFloat(step));
+        }
+      } else {
+        if (!min && ( min == currentVal || currentVal < min )) {
+          $qty.val(min);
+        } else if (currentVal > 0) {
+          $qty.val(currentVal - parseFloat(step));
+        }
+      }
+      if( $qty.val() < 10 && $qty.val() > 0){
+        $qty.val("0"+$qty.val()); 
+      }
+      // Trigger change event
+      $qty.trigger('change');
+      e.preventDefault();
+    });
+  })  
+</script>
+{%- schema -%}
+  {
+    "name": "Banner (style 3)",
+    "class": "cms_section type_banner_3",	
+    "max_blocks": 4,
+    "settings": [
+	  {
+        "type": "header",
+        "content": "== General Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading of section"
+      },
+      {
+        "type": "textarea",
+        "id": "sub_title",
+        "label": "Sub Text of section"
+      },  
+	  {
+        "type": "header",
+        "content": "== Product settings"
+      },
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Choose product",
+        "info": "Choose product to change default data"
+      },	 
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Submit button",
+        "default": "More infor"
+      }, 
+      {
+        "type": "header",
+        "content": "== Banner 1 Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner1_img",
+        "label": "Banner",
+		"info":"Dimension: 960x630"
+      },	  
+      {
+        "type": "header",
+        "content": "== Banner 2 Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner2_img",
+        "label": "Banner",
+		"info":"Dimension: 960x630"
+      },	  
+	  {
+        "type": "header",
+        "content": "== User instructions"
+      },     
+	  {
+        "type": "text",
+        "id": "title_instruction",
+        "label": "Title of instruction",
+		"default":"User Instructions"
+      },
+	  {
+        "type": "text",
+        "id": "lbl_step",
+        "label": "Label of step",
+		"default":"Step"
+      },
+      {
+        "type": "text",
+        "id": "lbl_quantity",
+        "label": "Label of quantity",
+		"default":"Quantity"
+      },
+      {
+        "type": "text",
+        "id": "btn_purchase",
+        "label": "Button text",
+		"default":"Purchase"
+      },
+      {
+        "type": "header",
+        "content": "== Design Options"
+      },      
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "nt_full",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "nt_full",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },      
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 130,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_right",
+        "label": "Margin right",
+        "default": 0,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_left",
+        "label": "Margin left",
+        "default": 0,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      }
+    ],
+     "blocks": [
+      {
+        "type": "instruction",
+        "name": "Instruction",
+        "settings": [          
+          {
+             "type": "text",
+             "id": "description",
+             "label": "Description",
+             "default": "Gently cleanse the skin of romnans of make up and impurities with a cleansing or toning"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "10. Banner (style 3)",
+        "category": "Images",
+        "blocks": [{"type": "instruction"},{"type": "instruction"},{ "type": "instruction"}]		
+      }
+    ]
+  }
+{% endschema %}

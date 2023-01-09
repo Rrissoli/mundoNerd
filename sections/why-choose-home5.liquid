@@ -1,0 +1,179 @@
+{% liquid
+  assign sid = section.id 
+ %}
+   
+{%- for i in (1..1) -%}   
+    <section style="margin:{{section.settings.mg_top}}px {{section.settings.mg_right}}px {{section.settings.mg_bottom}}px {{section.settings.mg_left}}px; background-color:{{section.settings.cl_bg}}; {% if image != blank %} padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%; {% endif %}" {% if image != blank %} data-bg="{{ image | img_url: '1920x' }}" data-ratio="{{image.aspect_ratio}}" {% endif %}>    
+      <div class="nt_se_{{sid}}">
+            
+        <div class="cms-wrap-reason">
+          <div class="container"> 
+            <div class="row">
+              <div class="cms-left col-lg-8 col-md-12 col-sm-12">
+                <div class="cms-wrap-item">
+                  {% if section.settings.title != blank %}
+                  <div class="wrap_title ">          
+                    {% if section.settings.title != blank %}
+                    <h3 class="section-title">{{section.settings.title}}</h3>  
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                  {%- if section.blocks.size > 0 -%}
+                  <div class="row">
+                    {%- for block in section.blocks -%}
+                    <div class="cms-item col-lg-6 col-md-12 col-sm-12">
+                      <div class="cms-box">                
+                        <div class="cms-img">
+                          {%- if block.settings.image -%} 
+                          <img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{ block.settings.image | img_url:'70x70' }}" width="70" height="70" alt=""/>
+                          {% else %}
+                          <div class="nt_bg_lz lazyload pr_lazy_img" data-bg="https://via.placeholder.com/70x70.png/e1e1e1/fff?text=70x70" style="padding-top:100%;"></div>
+                          {%- endif -%}
+                        </div>
+                        <div class="cms-content">
+                          <h3 class="title">{{block.settings.title}}</h3>
+                          <p>{{block.settings.text}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    {%- endfor -%}
+                  </div>
+                  {%- endif -%}
+                </div>
+              </div>
+              <div class="cms-right col-lg-4 col-md-12 col-sm-12">
+                <div class="cms-banner">
+                  {%- if section.settings.banner -%} 
+                  	<img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{ section.settings.banner | img_url:'598x579' }}" style="width:auto; height:auto;" alt=""/>
+                  {% else %}
+                  	<div class="nt_bg_lz lazyload pr_lazy_img" data-bg="https://via.placeholder.com/598x579.png/e1e1e1/fff?text=598x579" style="padding-top:121.62%;"></div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+{%- endfor -%}
+
+
+{%- schema -%}
+  {
+    "name": "Why choose",
+    "class": "cms_section type_form_services why-choose",
+    "max_blocks": 6,
+    "settings": [
+	  {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Why Choose “Your Product”?"
+      },  
+      {
+        "type": "image_picker",
+        "id": "banner",
+        "label": "Banner image",
+        "info" :"Dimension: 598 x 579 (px)"
+      },
+	  {
+        "type": "header",
+        "content": "== Design Options"
+      },      
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 130,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_right",
+        "label": "Margin right",
+        "default": 0,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_left",
+        "label": "Margin left",
+        "default": 0,
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+      }      
+    ],
+	"blocks": [
+      {
+        "type": "reason",
+        "name": "Reason",
+        "settings": [          
+          {
+            "type": "header",
+            "content": "== Image settings"
+          },
+          {
+             "type": "image_picker",
+             "id": "image",
+             "label": "Image",
+			 "info" :"Dimension: 70 x 70 (px)"
+
+          },
+          {
+            "type": "header",
+            "content": "== Text settings"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "100% Organic"
+          },
+          {
+             "type": "textarea",
+             "id": "text",
+             "label": "Description",
+             "default": "We believe in skin that looks like skin and radiance that comes naturally."
+           }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "7. Why choose",
+        "category": "Introduce",
+        "blocks": [{"type": "reason"},{"type": "reason"},{ "type": "reason"},{ "type": "reason"}]		
+      }
+    ]
+  }
+{% endschema %}

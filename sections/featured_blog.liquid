@@ -1,0 +1,536 @@
+{%- liquid
+    assign limit = section.settings.limit
+    assign blog = blogs[section.settings.blog]
+    assign show_au = section.settings.show_au
+    assign show_dt = section.settings.show_dt
+    assign id = section.id 
+    
+    assign pd_top =section.settings.pd_top |plus:0
+    assign pd_bottom =section.settings.pd_bottom |plus:0
+    assign mg_top =section.settings.mg_top |plus:0	
+    assign mg_bottom =section.settings.mg_bottom |plus:0
+    
+    assign mobile_pd_top =section.settings.mobile_pd_top |plus:0
+    assign mobile_pd_bottom =section.settings.mobile_pd_bottom |plus:0
+    assign mobile_mg_top =section.settings.mobile_mg_top |plus:0	
+    assign mobile_mg_bottom =section.settings.mobile_mg_bottom |plus:0
+    
+    assign layout =section.settings.layout 
+    
+    
+    assign col_coll = section.settings.col_pr 
+    assign col_ipad =section.settings.col_ipad |plus:0
+    assign col_ipad_pro =section.settings.col_ipad_pro |plus:0
+    assign col_mobile_vertical =section.settings.col_mobile_vertical |plus:0
+    assign col_mobile =section.settings.col_mobile |plus:0
+
+    -%}
+{% assign autoplay = section.settings.use_slideshow_autoplay %}
+{% assign arrows = section.settings.nav_enable%}
+{% assign dots = section.settings.nav_dots %}
+{% assign infinite = section.settings.loop %}
+{% assign autoplay = section.settings.use_slideshow_autoplay %}
+{% paginate blog.articles by limit %}   
+
+{% liquid
+    if col_coll == 5
+    	assign col = 15
+    else
+    	assign col = 12 | divided_by: col_coll
+    endif
+%}
+<section class="laber_blog_style1_{{id}}">
+    <div class="container {%if layout == 'full-width' %}{{layout}}{%endif%}">
+      {% if section.settings.title != blank or section.settings.sub_title!= blank %}
+		<div class="wrap_title ">
+          
+		  {% if section.settings.sub_title!= blank %}
+		  <span class="section-subtitle">{{section.settings.sub_title}}</span>
+		  {% endif %}
+          
+          {% if section.settings.title != blank %}
+		  <h3 class="section-title">{{section.settings.title}}</h3>  
+		  {% endif %}
+          
+          
+          {% if section.settings.content!= blank %}
+		  <div class="content">{{section.settings.content}}</div>
+		  {% endif %}
+          
+		</div>
+      {% endif %}
+      {% capture grid %}col-xs-6 col-sm-6 col-md-4 col-lg-{{ col }}{% endcapture %}
+      <div class="js-slick-carousel laber-slick-carousel articles row" 
+         data-slidestoshow="{{col_coll}}" 
+         data-slidestoscroll="{{col_coll}}" 
+
+         data-slidestoshowipadpro="{{col_ipad_pro}}" 
+         data-slidestoscrollipadpro="{{col_ipad_pro}}"
+
+         data-slidestoshowipad="{{col_ipad}}" 
+         data-slidestoscrollipad="{{col_ipad}}"
+
+         data-slidestoshowmobile="{{col_mobile}}" 
+         data-slidestoscrollmobile="{{col_mobile}}"
+
+         data-slidestoshowmobilevertical="{{col_mobile_vertical}}" 
+         data-slidestoscrollmobilevertical="{{col_mobile_vertical}}"
+           
+             data-arrows="{{arrows}}" 
+             data-dots="{{dots}}" 
+             data-autoplay="{{autoplay}}"
+             data-infinite="{{infinite}}"
+             >  
+        {%- if blog != blank -%}
+            {%- for article in blog.articles -%}
+        		{%- assign art_url = article.url -%}
+                  <article class="post-item post_laber_loop {{grid}}">  
+                    <div class="item">
+                    <div class="image-blog">
+                    <a href="{{ article.url }}" title="{{ article.title }}">
+                      <div class="pr_lazy_img laber_bg_lz lazyload item__position" data-bgset="{{ article.image.src | img_url: '1x1' }}" data-ratio="{{article.image.aspect_ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;" ></div>
+                    </a>
+                    </div> 
+                    <div class="post-info">  
+                      <ul class="meta-post">
+                            {%comment%}<li class="author">{{'blogs.article.by_author' | t: author : ""}} <span><a href="#">{{article.author}}</a></span></li>  {%endcomment%} 
+                            <li class="blog"><span><a href="{{blog.url}}">{{blog.title}}</a></span></li>                 
+                      </ul>
+                      <div class="wrap-date">
+                          <div class="inner-date">
+                            <span class="author">{{'blogs.article.by_author' | t: author : ""}} <span><a href="#">{{article.author}}</a></span></span>   
+                            <span class="post_date">{{'blogs.article.post_date' | t}}</span>
+                            <span class="month">{{ article.created_at | date: "%B" }}</span>,
+                            <span class="day">{{ article.created_at | date: "%d" }}</span>
+                            <span class="year">{{ article.created_at | date: "%Y" }}</span>
+                        </div>
+                    </div>
+                      <div class="head head-article">
+                        <div class="title_blog">
+                          <h3>
+                            <a href="{{ article.url}}" class="post-title">{{ article.title }}</a>
+                          </h3>  
+                        </div>
+                      </div>
+                      <div class="main-info-post">
+                        <div>
+                          {% if article.excerpt.size > 0 %}
+                          	{{ article.excerpt | strip_html | truncatewords: 18}}         
+                          {% else %}
+                         	 <div class="des"><p>{{ article.content | strip_html | truncatewords: 18}}</p></div>
+                          {% endif %}   
+                        </div> 
+                        <a href="{{ article.url}}" class="read-more">{{'blogs.article.read_more' | t: read_more : ""}}</a>
+                      </div>
+                     </div>
+                    
+                  </article>	
+        	{%- endfor -%}
+          {%- else -%}
+             {%- for i in (1..5) -%}
+               <article class="post-item post_laber_loop {{grid}}">
+                 <div class="item">
+                   <div class="image-blog">
+                     {% assign no-img = "https://via.placeholder.com/360x240.png/efefef?text=450x280" %}
+                     <a href="/"><img class="lazyload" data-src="{{ no-img }}" alt="Best shopify theme"></a>
+                   </div> 
+                   <div class="post-info">      
+                     <div class="head head-article">
+                       <div class="title_blog">
+                         <h3>
+                           <a href="/" class="post-title">Best shopify theme</a>
+                         </h3>  
+                       </div>
+                       <div class="wrap-date">
+                         <div class="inner-date">
+                           <span class="month">2022</span>,
+                           <span class="day">05</span>
+                           <span class="year">Feb</span>
+                         </div>
+                         <ul class="meta-post">
+                           <li class="author">{{'blogs.article.by_author' | t: author : ""}} <span><a href="#">Lindsay Weinberg</a></span></li>   
+                           <li class="blog"><span><a href="#">New</a></span></li>                 
+                         </ul>
+                       </div>
+                     </div>
+                     <div class="main-info-post">
+                       <div>                       
+                         <div class="des">We work with passion and aim at excellence. Our team does not simply satisfy with the good Shopify features</div>                      
+                       </div>      
+                     </div>
+                   </div>
+                 </div>
+               </article>
+             {%- endfor -%}
+          {%- endif -%}
+      </div>  
+      {%if dots %}
+      	<div class="laber_append_dots"></div>
+      {%endif%}
+    </div>
+</section>
+ {% endpaginate %} 
+
+{% style%}
+	.laber_blog_style1_{{id}}{
+      	{% if mg_top !=0 %}margin-top:{{mg_top}}px;{%endif%} 
+		{% if mg_bottom !=0 %}margin-bottom: {{mg_bottom}}px ;{%endif%} 
+
+		{% if pd_top !=0 %}padding-top:{{pd_top}}px;{%endif%} 
+        {% if pd_bottom !=0 %}padding-bottom:{{pd_bottom}}px;{%endif%} 
+		background-color: {{section.settings.cl_bg}};
+
+	}
+
+    @media (max-width: 767px) {
+		.laber_blog_style1_{{id}}{
+          {% if mobile_mg_top !=0 %}margin-top:{{mobile_mg_top}}px;{%endif%} 
+          {% if mobile_mg_bottom !=0 %}margin-bottom: {{mobile_mg_bottom}}px ;{%endif%} 
+
+          {% if mobile_pd_top !=0 %}padding-top:{{mobile_pd_top}}px;{%endif%} 
+          {% if mobile_pd_bottom !=0 %}padding-bottom:{{mobile_pd_bottom}}px;{%endif%} 
+      	}
+    }
+{% endstyle%}
+
+{%- schema -%}
+  {
+    "name": "Blog posts",
+    "class": "laber_section blog-style1 type_carousel zoom_img",
+    "settings": [
+      {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Tips & tricks"
+      },
+      {
+        "type": "text",
+        "id": "sub_title",
+        "label": "Sub Text"
+      },   
+	  {
+        "type": "textarea",
+        "id": "content",
+        "label": "Content",
+        "default": "Commodo sociosqu venenatis cras dolor sagittis integer luctus maecenas."
+      },
+      {
+        "type": "header",
+        "content": "== General Settings"
+      },     
+      {
+        "id": "blog",
+        "type": "blog",
+        "label": "Blog"
+      },
+		{
+        "type": "select",
+        "id": "col_pr",
+        "label": "Articles columns (desktop)",
+        "info": "How many articles you want to show per row",
+        "default": "3",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+          "value": "5",
+          "label": "5"
+          }
+        ]
+      },
+      {
+      "type": "select",
+      "id": "col_ipad_pro",
+      "label": "Columns (Ipad Pro)",
+      "info": "How many item you want to show per row",
+      "default": "4",
+      "options": [
+      {
+      "value": "2",
+      "label": "2"
+      },
+      {
+      "value": "3",
+      "label": "3"
+      },
+      {
+      "value": "4",
+      "label": "4"
+      }
+      ]
+      },
+      {
+      "type": "select",
+      "id": "col_ipad",
+      "label": "Columns (Ipad)",
+      "info": "How many articles you want to show per row",
+      "default": "2",
+      "options": [
+      {
+      "value": "2",
+      "label": "2"
+      },
+      {
+      "value": "3",
+      "label": "3"
+      },
+      {
+      "value": "4",
+      "label": "4"
+      }
+      ]
+      },	
+      {
+      "type": "select",
+      "id": "col_mobile",
+      "label": "Columns (Mobile horizontal screen)",
+      "default": "1",
+      "options": [
+      {
+      "value": "1",
+      "label": "1"
+      },
+      {
+      "value": "2",
+      "label": "2"
+      }
+      ]
+      },
+      {
+      "type": "select",
+      "id": "col_mobile_vertical",
+      "label": "Columns (Mobile Vertical screen)",
+      "default": "1",
+      "options": [
+      {
+      "value": "1",
+      "label": "1"
+      },
+      {
+      "value": "2",
+      "label": "2"
+      }
+      ]
+      },
+      {
+        "type": "range",
+        "id": "limit",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "label": "Articles per page",
+        "info": "Number of articles per page",
+        "default": 3
+      },      
+      {
+        "type": "checkbox",
+        "id": "show_au",
+        "label": "Show author?",
+        "default": true
+      },
+	  {
+        "type": "checkbox",
+        "id": "show_cate",
+        "label": "Show blogs",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_dt",
+        "label": "Show date?",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "== Slider Settings",
+		"info":"Only working when layout design is 'Slider'"
+      },
+      {
+		"type": "checkbox",
+        "id": "loop",
+        "label": "Use Loop?",
+        "info": "Infinity loop. Duplicate last and first items to get loop illusion.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "use_slideshow_autoplay",
+        "label": "Use autoplay for slider",
+        "default": false
+      },        
+      {
+        "type": "checkbox",
+        "id": "pause_slide_hover",
+        "label": "Pause Autoplay On Hover?",
+        "info": "Auto-playing will pause when the user hovers over the carousel.",
+        "default": true
+      },        
+      {
+        "type": "header",
+        "content": "== Prev Next Button, Page Dot Settings"
+      },        
+      {
+        "type": "paragraph",
+        "content": "Prev Next Button:"
+      },
+      {
+        "type": "checkbox",
+        "id": "nav_enable",
+        "label": "Enable Prev Next Button?",
+        "info": "Creates and enables previous & next buttons.",
+        "default": true
+      },  
+      {
+        "type": "checkbox",
+        "id": "nav_dots",
+        "label": "Enable dots?",
+        "info": "The dot identifies the address for each item show.",
+        "default": false
+      }, 
+      {
+        "type": "header",
+        "content": "== Design Options"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "full-width",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#fff"
+      },
+	  {
+        "type": "header",
+        "content": "== Margin",
+		"info":"Margin top,  Padding bottom. If you not use to blank"
+      },
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== Padding",
+		"info":"Padding top, Padding bottom. If you not use to blank"
+      },	
+      {
+        "type": "range",
+        "id": "pd_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+
+      {
+        "type": "range",
+        "id": "pd_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "header",
+        "content": "== Setting mobile",
+		"info":"Padding and Margin"
+      },
+	 {
+        "type": "range",
+        "id": "mobile_mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+	  {
+        "type": "range",
+        "id": "mobile_pd_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mobile_pd_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+		
+		
+    ],
+    "presets": [
+      {
+        "name": "1. Blog posts",
+        "category": "Blog "
+      }
+    ]
+  }
+{% endschema %}

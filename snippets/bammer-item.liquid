@@ -1,0 +1,38 @@
+{%- liquid
+  assign collection = collections[block.settings.collection]
+  assign image = block.settings.image
+  assign home_t = 'homepage.onboarding.collection_title' | t  | append:' #' | append:for_i 
+  assign ratio = image.aspect_ratio 
+-%}
+<div class="laber_banner {{ccol}} {% if hide_padd %}padding-0{%endif%}" style="margin-bottom:{{ block.settings.mg_bottom }}px;">
+  <div class="cms-box">                
+    <div class="cms-img">
+      {%- if block.settings.image -%} 
+      	<div data-image-effect class="pr_lazy_img main-img lazyload laber_bg_lz " data-id="{{image.id}}" data-bgset="{{ image | img_url: '1x1' }}" data-parent-fit="width" data-wiis data-ratio="{{ratio}}" data-sizes="auto" style="padding-top:{{ 1 | divided_by: ratio | times: 100}}%;"></div>
+      {% else %}
+      	<div class="pr_lazy_img main-img lazyload laber_bg_lz {{block.settings.img_align}}" data-bgset="{{cimg}}" data-parent-fit="width"  data-sizes="auto" style="padding-top:{{ ratio_demo }}%;"></div>
+      {%- endif -%}
+    </div>
+    <div class="cms-content h_{{block.settings.h_position}} v_{{block.settings.v_position}} text_{{block.settings.txt_align}}">
+      <div class="content_banner {{block.settings.b_style}}">
+      <h3 class="title">
+        {% assign somearray = block.settings.title | split: ' ' %}                             
+        {% assign pos = block.settings.custom_mark %}
+        {% assign index_mark  = 0 %}
+        {% for item in somearray %}
+        {% assign index_mark  = index_mark | plus: 1 %} 
+        <span  class="{% if block.settings.first_mark and forloop.first %}first {% endif %}{% if pos contains index_mark %}marked{% endif %}{% if block.settings.last_mark and forloop.last %}last {% endif %}" > 
+          {{item}} 
+        </span>
+        {% endfor %}   
+      </h3>
+      <h4 class="title">{{block.settings.heading}}</h4>
+      <div class="banner_desc">{{block.settings.text}}</div>
+        {%- if  block.settings.b_title != blank -%}
+        <a id="b_{{block.id}}"  class="buttons" href="{{block.settings.btn_link}}" target="{{block.settings.open_link}}"
+           {{ block.shopify_attributes }}>{{block.settings.b_title}} {{block.settings.icon_button}}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

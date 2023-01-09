@@ -1,0 +1,172 @@
+{% liquid
+  assign sid = section.id %}
+   
+{%- for i in (1..1) -%}
+
+    {%- if section.settings.hidden %}{% break %}{% endif -%}
+    {%- assign image = section.settings.image -%}   
+    {% assign no-img = "https://placehold.it/1170x430.png/f26460/f26460?text=1170x430"%}
+    <section style="padding:{{section.settings.mg_top}}px {{section.settings.mg_right}}px {{section.settings.mg_bottom}}px {{section.settings.mg_left}}px;">
+      <div class="nt_se_{{sid}} {{section.settings.layout}}">
+        {% if section.settings.title != blank or section.settings.sub_title!= blank %}
+        <div class="wrap_title ">
+          {% if section.settings.sub_title!= blank %}
+          <span class="section-subtitle">{{section.settings.sub_title}}</span>
+          {% endif %}
+          {% if section.settings.title != blank %}
+          <h3 class="section-title">{{section.settings.title}}</h3>  
+          {% endif %}
+        </div>
+        {% endif %}
+        {% assign ratio = image.aspect_ratio |default:1.0 %}
+        {% assign pd_top = 1 | divided_by: ratio | times: 100 %}
+        <div class="cms-call-action">
+          <div class="cms-wrap lazyload" data-bgset="{% if image != blank %}{{ image | img_url: '1170x430' }}{% else %}{{ no-img}}{% endif %}" data-ratio="{{ratio}}" data-sizes="auto">
+            <div class="cms-outsite">
+              <div class="cms-inner">
+                <div class="content">
+                  <h2>{{section.settings.title_heading}}</h2>
+                  <a href="{{section.settings.button_link}}">{{section.settings.button_label}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </section>
+{%- endfor -%}
+
+
+{%- schema -%}
+  {
+    "name": "Call to action (style 2)",
+    "class": "cms_section type_call_to_action2",
+    "settings": [
+	  {
+        "type": "header",
+        "content": "== Design Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "hidden",
+        "label": "Hidden Section?",
+        "default": false
+      },      
+      {
+        "type": "select",
+        "id": "layout",
+        "default": "container",
+        "options": [
+         {
+            "value": "container",
+            "label": "Container"
+         },
+         {
+            "value": "nt_full",
+            "label": "Full Width"
+          }
+        ],
+        "label": "Layout"
+      },
+      
+      {
+        "type": "range",
+        "id": "mg_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_right",
+        "label": "Margin right",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "mg_left",
+        "label": "Margin left",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },  
+      {
+        "type": "header",
+        "content": "== Title Settings"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "type": "textarea",
+        "id": "sub_title",
+        "label": "Sub Text"
+      },  
+      {
+        "type": "header",
+        "content": "== Design background"
+      },
+	  {
+         "type": "image_picker",
+         "id": "image",
+         "label": "Background image",
+	     "info": "Dimension: 1314px x 503px"
+	  },	 
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background color",
+        "default": "#e1e1e1"
+      },
+	  {
+        "type": "header",
+        "content": "== Text Settings"
+      },      
+      {
+        "type": "text",
+        "id": "title_heading",
+        "label": "Heading",
+        "default": "New items are <br>released weekly."
+      },      
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label",
+        "default": "All new items"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      }    
+         
+    ],	
+    "presets": [
+      {
+        "name": "11. Call to action (style 2)",
+        "category": "Images"
+      }
+    ]
+  }
+{% endschema %}

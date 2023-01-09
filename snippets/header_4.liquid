@@ -1,0 +1,180 @@
+{%- liquid
+	layout none
+	assign collection = collections['frontpage']
+	assign limit = 5 
+	assign search_pr_type = search.terms
+    assign check = true 
+    assign on_sale_txt = 'products.product.on_sale' | t
+    assign save_js = 'products.product.save_js' | t: saved_amount:'saved_amount' -%}
+
+
+<header>
+  <div class="header layout4 {% if sticky_top_header %}header-sticky {%endif%} no-prepend-box-sticky"style="background:{{section.settings.background_header}};">    
+    <div class="header-main-wrap">
+      <div class="header-top">
+        <div class="container {% if section.settings.layout == 'full-width' %}{{section.settings.layout}} {% endif %}">
+          <div class="row">
+            <div class="col-md-12 col-lg-3 social-language"> 
+             	<ul class="menu-language parent-list">
+                    {% if section.settings.header_use_currency %}
+                    <li class="language item-list" >
+                      {% include 'currency-picker' %}
+                      <a href="javascript:void(0);" class="toggle-submenu">                
+                        <span class="lang-currency">USD</span><span class="icon"><i class="icon-chevron-down"></i></span>
+                      </a>  
+                      <ul class="{{shop.currency}} list-currencies currency-lists child-list">         
+                        {% assign codes = 'USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,ILS,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK' | split: ',' %}
+                        {% assign supported_codes = settings.supported_currencies | split: ' ' %}  
+                        {% assign currency_default = shop.currency %}
+                        {% for code in supported_codes %}
+                        {% if codes contains code %}
+                        {% case code %} 
+                        {% when 'USD' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%} ><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'EUR' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'GBP'  %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'CAD' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'VND' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'JPY' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'AUD' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% when 'CNY' %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% else %}
+                        <li data-value="{{ code }}" {% if currency_default == code %}class="active"{%endif%}><a href="javascript:void(0);" class="{{ code }}"><span class="code_currency">{{ code }}</span></a></li>
+                        {% endcase %} 
+                        {% endif %}
+                        {% endfor %} 
+                      </ul>      
+                    </li>
+                  	<li class="item-list language-shop">
+                      <a href="javascript:void(0);" class="toggle-submenu">     
+                        <span>English</span>    
+                        <span class="icon"><i class="icon-chevron-down"></i></span>
+                      </a>
+                    </li>
+                  <li>
+                    {% if section.settings.header_social_link %}
+                    	 {% include 'social_link' %}
+                    {%- endif -%}
+                  </li>
+                    {% endif %}
+                  </ul>
+            </div> 
+            <div class="header-nav-mobile col-md-4 col-4">
+              <a class="js-mobile-menu menu-bar mobile-navigation" href="#">
+                <span class="icon">
+                  <i class="icon-align-left"></i>
+                </span>
+              </a>
+            </div>
+            <div class="col-md-4 col-lg-6 col-4 header-menu-logo">
+              {% if settings.logo != blank %}
+              <a href="/" class="site-header__logo-image">
+                {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                <img src="{{ settings.logo | img_url: image_size, scale: 2 }}" alt="{{ logo_alt | escape }}"
+                  style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                <noscript>
+                  {% capture image_size %}{{ settings.logo_max_width | escape }}x{% endcapture %}
+                  <img src="{{ settings.logo | img_url: image_size }}"
+                    srcset="{{ settings.logo | img_url: image_size }} 1x, {{ settings.logo | img_url: image_size, scale: 2 }} 2x"
+                    alt="{{ settings.logo.alt | default: shop.name }}"
+                    style="max-width: {{ settings.logo_max_width }}px; width:auto; height:auto;">
+                </noscript>
+              </a>
+              {% else %}
+              <a class="site-title" href="/" itemprop="url">{{ shop.name }}</a>
+              {% endif %}
+              <div class="header-top-left"> 	
+            {%- render 'menu',se_blocks:se_blocks,tp_blocks:tp_blocks -%}
+            </div> 
+            </div> 
+            <div class="header-top-meta col-md-4 col-lg-3 col-4">
+              <ul class="header-control">  
+                {%if section.settings.header_use_account%}
+                  
+                  <li class="signin item-list display-mobile">
+                    <a href="/account/login" data-id="#login_pupop" class="push_side header-icon" title="{{'customer.login.log_in' | t}}" >
+						<i class="icon-unlock"></i>   
+                      {% unless customer %}
+                      	<span>{{'customer.login.log_in' | t}}</span>
+                      {% else %}
+                      	<span>{{'customer.login.account' | t}}</span>
+					  {% endunless %}	
+                    </a>
+                  </li>
+
+                  
+                 {% endif %}
+                
+                {% if section.settings.header_use_search_home %}
+                <li class="header_search">
+                  <a href="/search" class="header-search push_side header-icon" data-id="#search_pupop" title="{{'general.search.title' | t}}">
+                    <i class="icon-search"></i>   
+                  </a>                        
+                </li>   
+                {% endif %}
+                
+                {% if section.settings.header_use_wishlist_home %}
+                <li class="display-mobile"> 
+                  <a href="javascript:void(0);" class="push_side header-icon" data-id="#wishlist_popup" title="{{'general.wishlist.title' | t}}">
+                    <i class="icon-heart"></i>
+                    <span class="header__counter" data-js-wishlist-count="0">0</span>
+                  </a>                        
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_compare_home %}
+                <li class="display-mobile">
+                  <a href="javascript:void(0);" class="push_side header-icon" data-js-popup-button="compare-full" title="{{'general.compare.title' | t}}">
+                    <i class="icon-layers" aria-hidden="true"></i>
+                    <span class="header__counter" data-js-compare-count="0">0</span>
+                  </a>
+                </li>
+                {% endif %}
+                {% if section.settings.header_use_cart_home %}
+                  <li class="box-minicart">
+                    {% include'header-cart'%}
+                  </li>
+                {% endif %}
+                
+               
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+</header>
+<style>
+   
+  .header .header-top{
+  	background-color: {{section.settings.background_header}};
+  }
+  .header .header-bottom{
+  	background-color: {{section.settings.background_header_bottom}};
+  }
+  .vertical_menu .icon-right,
+  .vertical_menu .icon-left,
+  .vertical_menu .title,
+  .header .header-icon,
+  .header .main-menu>li>a{
+    color: {{section.settings.color_menu_text}};
+  }
+  .header .header-icon i{
+    fill: {{section.settings.color_menu_text}};
+  }
+  .vertical_menu h4.title_vertical_menu{
+  	background-color: {{section.settings.bg_vertical}};
+  }
+  .vertical_menu .icon-right,
+  .vertical_menu .icon-left,
+  .vertical_menu .title{
+  	color: {{section.settings.cl_vertical}};
+  }
+</style> 

@@ -1,0 +1,267 @@
+
+<div class="main-content shop-page contact-page" style="{% if section.settings.mg_bottom != 0 %}margin-bottom:{{section.settings.mg_bottom}}px; {%endif%}">
+  <div class="container">
+    <div class="row content-form ">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <div class="contact-form">
+          {% form 'contact', class:'form-contact', id:'contact-form' %}	
+              {% if form.posted_successfully? %}
+              <div class="successForm feedback">
+                {{ 'contact.form.post_success' | t }}
+              </div>
+              {% endif %}
+              {% if form.errors %}
+              <div class="errorForm feedback">                
+                <p>Your contact form has {{ form.errors | size | pluralize: "an error", "a few errors" }}. To submit your form, make the following changes and try again:</p>
+                {% for field in form.errors %}
+                <p>The {{ field | capitalize | replace: 'Body', 'Message' }} field {{ form.errors.messages[field] }}.</p>
+                {% endfor %}
+              </div>
+              {% endif %}
+              <h4 class="main-title">{{settings.right_title_block}}</h4>
+              
+              {% assign name_attr = 'contact.form.name' | t | handle %}
+              <input placeholder="{{'contact.form.name' | t}} " class="input-info" id="name" required name="contact[{{ name_attr }}]"  type="text" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.first_name }}{% endif %}"/>                            
+                         
+              <input placeholder="{{ 'contact.form.email' | t }}" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required name="contact[email]" class="input-info" id="email" type="text"/>
+                                      
+              <textarea placeholder="{{'contact.form.message' | t}}" rows="8" class="input-info input-note" name="contact[body]" required id="message">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+              <div class="group-button">                
+                <button class="button submit" type="submit">{{'contact.form.submit'|t}}</button>
+              </div>
+          {% endform %}
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="information-form">
+          <h4 class=" main-title">{{section.settings.left_title_block}}</h4>
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">            
+              <ul class="list-info">
+                <li>
+                  <div class="icon">
+                    {% if section.settings.item1_icon_contact != blank %}
+                    	<i class="fa {{section.settings.item1_icon_contact}}" aria-hidden="true"></i>
+                    {% else %}
+                    	<svg width="30" height="30" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M 15.212,16.424c 2.874,0, 5.212-2.338, 5.212-5.212C 20.424,8.338, 18.086,6, 15.212,6S 10,8.338, 10,11.212 C 10,14.086, 12.338,16.424, 15.212,16.424z M 15.212,8c 1.77,0, 3.212,1.44, 3.212,3.212s-1.44,3.212-3.212,3.212S 12,12.982, 12,11.212 S 13.44,8, 15.212,8zM 14.484,31.458c 0.168,0.186, 0.33,0.306, 0.486,0.39c 0.002,0.002, 0.006,0.002, 0.008,0.004 c 0.108,0.056, 0.214,0.098, 0.314,0.098c 0.1,0, 0.206-0.042, 0.314-0.098c 0.002-0.002, 0.006-0.002, 0.008-0.004 c 0.156-0.084, 0.318-0.204, 0.486-0.39c0,0, 9.296-10.11, 10.23-18.87c 0.056-0.452, 0.094-0.91, 0.094-1.376 C 26.424,5.020, 21.404,0, 15.212,0S 4,5.020, 4,11.212c0,0.474, 0.038,0.936, 0.096,1.394C 5.054,21.362, 14.484,31.458, 14.484,31.458z M 15.212,2 c 5.080,0, 9.212,4.132, 9.212,9.212c0,0.338-0.024,0.698-0.082,1.164c-0.716,6.712-7.018,14.588-9.048,16.984 c-2.082-2.4-8.474-10.256-9.214-17C 6.026,11.918, 6,11.554, 6,11.212C 6,6.132, 10.132,2, 15.212,2z"></path></g></svg>                    
+                    {% endif %}
+                  </div>
+                  <div class="info">
+                    <h5 class="subtitle">{{section.settings.item1_title_contact}} </h5>
+                    <p class="des">{{section.settings.desc1_item1_title_contact}}</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="icon">
+                    {% if section.settings.item2_icon_contact != blank %}
+                    	<i class="fa {{section.settings.item2_icon_contact}}" aria-hidden="true"></i>
+                    {% else %}
+                    	<svg width="30" height="30" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g><path d="M 30,20L 30,16 c0-9.192-7.042-14-14-14C 9.212,2, 2,6.906, 2,16l0,4 c-1.104,0-2,0.896-2,2l0,4 c0,1.104, 0.896,2, 2,2 c0,1.104, 0.896,2, 2,2s 2-0.896, 2-2l0-8 c0-1.104-0.896-2-2-2L 4,16 c0-7.878, 6.038-12, 12-12c 5.78,0, 12,3.754, 12,12l0,2 c-1.104,0-2,0.896-2,2l0,8 c0,1.104, 0.896,2, 2,2s 2-0.896, 2-2c 1.104,0, 2-0.896, 2-2l0-4 C 32,20.896, 31.104,20, 30,20z"></path></g></svg>
+                    {% endif %}
+                  </div>
+                  <div class="info">
+                    <h5 class="subtitle">{{section.settings.item2_title_contact}}</h5>
+                    <p class="des">{{section.settings.desc1_item2_title_contact}}</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="icon">
+                    {% if section.settings.item3_icon_contact != blank %}
+                    	<i class="fa {{section.settings.item3_icon_contact}}" aria-hidden="true"></i>
+                    {% else %}
+                    	<svg style="margin-top: -8px;" width="30" height="30" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g><path d="M 30,8L 2,8 C 0.896,8,0,8.896,0,10l0,20 c0,1.104, 0.896,2, 2,2l 28,0 c 1.104,0, 2-0.896, 2-2L 32,10 C 32,8.896, 31.104,8, 30,8z M 11.36,22.054l 4.644,3.156l 4.616-3.178L 28.586,30L 3.414,30 L 11.36,22.054z M 2,28.586L 2,15.69 l 7.676,5.218L 2,28.586z M 22.294,20.88 L 30,15.576l0,13.010 L 22.294,20.88z M 30,10l0,3.236 l-0.042-0.060l-13.962,9.614L 2,13.274L 2,10 L 30,10 z"></path></g></svg>
+                    {% endif %}
+                  </div>
+                  <div class="info">
+                    <h5 class="subtitle">{{section.settings.item3_title_contact}}</h5>
+                    <p class="des">{{section.settings.desc1_item3_title_contact}}</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="icon">
+                    {% if section.settings.item4_icon_contact != blank %}
+                    	<i class="fa {{section.settings.item4_icon_contact}}" aria-hidden="true"></i>
+                    {% else %}
+                    	<svg width="30" height="30" viewBox="0 0 32.784000396728516 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g><path d="M 17.066,2.134c-3.822,0-7.644,1.458-10.56,4.374c-5.832,5.832-5.832,15.288,0,21.118 C 9.424,30.542, 13.244,32, 17.066,32s 7.644-1.458, 10.56-4.374c 5.832-5.832, 5.832-15.288,0-21.118C 24.71,3.592, 20.888,2.134, 17.066,2.134z M 26.212,26.212C 23.77,28.654, 20.522,30, 17.066,30c-3.454,0-6.702-1.346-9.146-3.788c-2.442-2.442-3.788-5.69-3.788-9.146 s 1.346-6.702, 3.788-9.146c 2.442-2.442, 5.69-3.788, 9.146-3.788c 3.454,0, 6.702,1.346, 9.146,3.788S 30,13.612, 30,17.066 S 28.654,23.77, 26.212,26.212zM 23,16L 18,16 L 18,8.986 c0-0.552-0.448-1-1-1S 16,8.434, 16,8.986l0,8.008 c0,0,0,0.002,0,0.002L 16,17 C 16,17.552, 16.448,18, 17,18l 6,0 C 23.552,18, 24,17.552, 24,17C 24,16.448, 23.552,16, 23,16z"></path></g></svg>
+                    {% endif %}
+                    
+                  </div>
+                  <div class="info">
+                    <h5 class="subtitle">{{section.settings.item4_title_contact}}</h5>
+                    <p class="des">{{section.settings.desc1_item4_title_contact}}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row content-form ">
+      	<!-- Map Element -->
+          {% if section.settings.use_contact_map %}
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="map">              
+                {{ section.settings.map_iframe }}              
+              </div>
+            </div>
+          {% endif %}
+        <!-- End Map Element -->
+    </div>
+    
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Contact",
+    "settings": [
+		{
+          "type": "header",
+          "content": "== Left Block Setting"
+        },
+        {
+          "type": "text",
+          "id": "left_title_block",
+          "label": "Title of left block",
+          "default": "Contact info"
+        },
+        {
+          "type": "text",
+          "id": "item1_title_contact",
+          "label": "Title of item 1",
+          "default": "Address"
+        },
+        {
+          "type": "text",
+          "id": "item1_icon_contact",
+          "label": "Icon of item 1",          
+          "info": "Guide=> step 1: Go this link \"http:\/\/fontawesome.io\/icons\/\"  step 2: select a icon. step 3: copy class of icon"
+        },
+        {
+          "type": "text",
+          "id": "desc1_item1_title_contact",
+          "label": "Description of item 1",
+          "default": "2168 S Archer Ave, Chicago, IL 60616, US"
+        },
+        {
+          "type": "text",
+          "id": "item2_title_contact",
+          "label": "Title of item 2",
+          "default": "Phone"
+        },
+        {
+          "type": "text",
+          "id": "item2_icon_contact",
+          "label": "Icon of item 2",         
+          "info": "Guide=> step 1: Go this link \"http:\/\/fontawesome.io\/icons\/\"  step 2: select a icon. step 3: copy class of icon"
+        },
+        {
+          "type": "text",
+          "id": "desc1_item2_title_contact",
+          "label": "Description of item 2",
+          "default": "+1 312-808-1999     |     +1 233-688-8999"
+        },
+        {
+          "type": "text",
+          "id": "item3_title_contact",
+          "label": "Title of item 3",
+          "default": "Email"
+        },
+        {
+          "type": "text",
+          "id": "item3_icon_contact",
+          "label": "Icon of item 3",         
+          "info": "Guide=> step 1: Go this link \"http:\/\/fontawesome.io\/icons\/\"  step 2: select a icon. step 3: copy class of icon"
+        },
+        {
+          "type": "text",
+          "id": "desc1_item3_title_contact",
+          "label": "Description of item 3",
+          "default": "Beatycosmetics@gmail.com"
+        },
+        {
+          "type": "text",
+          "id": "item4_title_contact",
+          "label": "Title of item 4",
+          "default": "Opentime"
+        },
+        {
+          "type": "text",
+          "id": "item4_icon_contact",
+          "label": "Icon of item 4",          
+          "info": "Guide=> step 1: Go this link \"http:\/\/fontawesome.io\/icons\/\"  step 2: select a icon. step 3: copy class of icon"
+        },
+        {
+          "type": "text",
+          "id": "desc1_item4_title_contact",
+          "label": "Description of item 4",
+          "default": "Sun-Sat: 8.00am - 9.00.pm"
+        },
+        {
+          "type": "header",
+          "content": "== Right Block Setting"
+        },
+        {
+          "type": "text",
+          "id": "right_title_block",
+          "label": "Title of right block",
+          "default": "Get in touch"
+        },
+        {
+          "type": "paragraph",
+          "content": "Note 1 => TO EDIT TITLE: Your Name. Step 1: Go to admin and then click 'Online Store'. Step 2: Click button '...' . Step 3: Click 'Edit Language'. Step 4: Click 'Tab Contact'. Step 5: Find 'First Name'"
+        },
+        {
+          "type": "paragraph",
+          "content": "Note 2 => TO EDIT TITLE: Email Address. Step 1: Go to admin and then click 'Online Store'. Step 2: Click button '...' . Step 3: Click 'Edit Language'. Step 4: Click 'Tab Contact'. Step 5: Find 'Email'"
+        },
+        {
+          "type": "paragraph",
+          "content": "Note 3 =>  TO EDIT TITLE: Phone Number. Step 1: Go to admin and then click 'Online Store'. Step 2: Click button '...' . Step 3: Click 'Edit Language'. Step 4: Click 'Tab Contact'. Step 5: Find 'Phone Number'"
+        },
+        {
+          "type": "paragraph",
+          "content": "Note 4 => TO EDIT TITLE: Your Message. Step 1: Go to admin and then click 'Online Store'. Step 2: Click button '...' . Step 3: Click 'Edit Language'. Step 4: Click 'Tab Contact'. Step 5: Find 'Your Message'"
+        },
+        {
+          "type": "paragraph",
+          "content": "------- Map -------"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_contact_map",
+          "label": "Show Google Map",
+		  "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "map_iframe",
+          "label": "Link Googlemap",
+          "default": "<iframe width=\"2000\" height=\"400\" style=\"border:0\" src=\"https:\/\/www.google.com\/maps\/embed\/v1\/search?q=1200+Beverly+Street,+Mountain+View,+CA,+United+States&key=AIzaSyCeVrTUW_JTL2UKUT0-85wiwusOJZ48yMM\" allowfullscreen=\"\"><\/iframe>",
+          "info": "* Edit width = 2000px ; height = 400px"
+        },
+        {
+          "type": "paragraph",
+          "content": "* GUIDE TO EMBED GOOGLE MAP. Step 1: go to this link https:\/\/developers.google.com\/maps\/documentation\/embed\/start . Step 2: fill your address, press Enter and make following their instruction. Step 3: copy iframe code to above text area."
+        },
+		{
+        "type": "range",
+        "id": "mg_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+
+	]	
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

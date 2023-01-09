@@ -1,0 +1,268 @@
+{%- liquid
+  assign ccol = 'col-lg-1x col-md-2x col-3x' | replace: '1x', section.settings.col | replace: '2x', section.settings.col_md | replace: '3x', section.settings.col_mb 
+  assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+
+-%}
+
+<div class="main-content shop-page list-collections-template">
+  <div class="container">   
+      
+      <div class="container container_cat {% if section.settings.hoverz %}cat_hover {% endif %}">
+        {%- if section.settings.display_type == 'all' -%}
+
+          <div class="nt_cats_holder row equal_nt">
+          {%- case section.settings.sort -%}
+            {%- when 'products_high' or 'products_low' -%}
+              {%- assign collections = collections | sort: 'all_products_count' -%}
+            {%- when 'date' or 'date_reversed' -%}
+              {%- assign collections = collections | sort: 'published_at' -%}
+          {%- endcase -%}
+          {%- if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' -%}
+            {%- for collection in collections -%}
+            	{% assign image = collection.image |default:collection.products[0].featured_image -%}
+                <div class="cat_grid_item__content {{ccol}}">
+                  <a href="{{ collection.url | default:'/admin/collections' }}" class="cat_grid_item__link">
+                    {%- if image != blank -%}
+                      <img class="lazyload" width="600" height="auto" data-src="{{ image | img_url: '600x' }}" data-ratio="{{image.aspect_ratio}}" alt="" />
+                    {%- else -%}
+                    	<img class="lazyload"width="600" height="auto"  data-src="{{cimg}}" alt="" />
+                    {%- endif -%}
+                  </a>
+                  <div class="cat_grid_item__wrapper">
+                    <div class="cat_grid_item__title">{{ collection.title | default:home_t }}</div>
+                    {% if collection != blank %}
+                    <div class="cat_grid_item__count ">{{collection.all_products_count}} {% if collection.all_products_count > 1 %} {{'homepage.section.items' | t}} {% else %}{{'homepage.section.item' | t}} {% endif %}</div>
+                    {% endif %}
+                  </div>
+                </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for collection in collections reversed -%}
+                {% assign image = collection.image |default:collection.products[0].featured_image -%}
+                <div class="cat_grid_item__content {{ccol}}">
+                  <a href="{{ collection.url | default:'/admin/collections' }}" class="cat_grid_item__link">
+                    {%- if image != blank -%}
+                      <img class="lazyload" width="600" height="auto" data-src="{{ image | img_url: '600x' }}" data-ratio="{{image.aspect_ratio}}" alt="" />
+                    {%- else -%}
+                    	<img class="lazyload"width="600" height="auto"  data-src="{{cimg}}" alt="" />
+                    {%- endif -%}
+                  </a>
+                  <div class="cat_grid_item__wrapper">
+                    <div class="cat_grid_item__title">{{ collection.title | default:home_t }}</div>
+                    {% if collection != blank %}
+                    	<div class="cat_grid_item__count ">{{collection.all_products_count}} {% if collection.all_products_count > 1 %} {{'homepage.section.items' | t}} {% else %}{{'homepage.section.item' | t}} {% endif %}</div>
+                    {% endif %}
+                  </div>
+                </div>
+            {%- endfor -%}
+          {%- endif -%}
+          </div>
+
+        {%- elsif section.blocks.size > 0 -%}
+
+          <div class="nt_cats_holder row fl_center equal_nt hoverz_{{section.settings.hoverz}}{% if sett_equal %} {{section.settings.image_ratio}}{% else %} ratio1_1{% endif %} cat_space_{{section.settings.cat_space}} cat_design_{{section.settings.cat_design}}">
+             {%- for block in section.blocks -%}
+               {%- liquid
+                assign collection = collections[block.settings.collection]
+                assign image = block.settings.image | default:collection.image
+                assign home_t = 'homepage.onboarding.collection_title' | t  | append:' #' | append:for_i 
+
+
+                case index 
+                  when 1 
+                       assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+                  when 2
+                       assign cimg = 'https://via.placeholder.com/600x760.png/af5f5f5/111?text=600x760'
+                  when 3
+                       assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+                  when 4
+                       assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+                  when 5
+                       assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+                  when 6
+                       assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+                  else 
+                       assign cimg = 'https://via.placeholder.com/600x760.png/f5f5f5/111?text=600x760'
+                endcase
+              -%}
+
+              <div id="bk_{{block.id}}" class="cat_grid_item cat_space_item {{ccol}}" {{ block.shopify_attributes }}>
+                <div class="cat_grid_item__content">
+                  <a href="{{ collection.url | default:'/admin/collections' }}" class="cat_grid_item__link">
+                    {%- if image != blank -%}
+                      <img class="lazyload" width="600" height="auto" data-src="{{ image | img_url: '600x' }}" data-ratio="{{image.aspect_ratio}}" alt="" />
+                    {%- else -%}
+                      <img class="lazyload"width="600" height="auto"  data-src="{{cimg}}" alt="" />
+                    {%- endif -%}
+                  </a>
+                  <div class="cat_grid_item__wrapper">
+                    <div class="cat_grid_item__title">{{ block.settings.title | default:collection.title | default:home_t }}</div>
+                    {% if collection != blank %}
+                      <div class="cat_grid_item__count ">{{collection.all_products_count}} {% if collection.all_products_count > 1 %} {{'homepage.section.items' | t}} {% else %}{{'homepage.section.item' | t}} {% endif %}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+             {%- endfor -%}
+          </div>
+
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+<style>.bglz{background-color: #f5f5f5}</style>
+
+{%- schema -%}
+{
+  "name": "Collections list page",
+  "settings": [
+      {
+        "type": "header",
+        "content": "== General Settings"
+      },    
+      {
+        "type": "checkbox",
+        "id": "hoverz",
+        "label": "Enable zoom image on hover?",
+        "default": true
+      },
+      {
+        "type": "paragraph",
+        "content": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections."
+      },
+      {
+        "type": "radio",
+        "id": "display_type",
+        "label": "Select collections to show",
+        "default": "all",
+        "options": [
+          {
+            "value": "all",
+            "label": "All"
+          },
+          {
+            "value": "selected",
+            "label": "Selected"
+          }
+      	]
+      },
+      {
+        "type": "select",
+        "id": "sort",
+        "label": "Sort collections by:",
+        "info": "Sorting only applies when 'All' is selected",
+        "default": "alphabetical",
+		"options": [
+            {
+            "value": "products_high",
+            "label": "Product count, high to low"
+            },
+            {
+            "value": "products_low",
+            "label": "Product count, low to high"
+            },
+            {
+            "value": "alphabetical",
+            "label": "Alphabetically, A-Z"
+            },
+            {
+            "value": "alphabetical_reversed",
+            "label": "Alphabetically, Z-A"
+            },
+            {
+            "value": "date",
+            "label": "Date, old to new"
+            },
+            {
+            "value": "date_reversed",
+            "label": "Date, new to old"
+            }
+		]
+      },
+      {
+        "type": "select",
+        "id": "col",
+        "label": "Collections columns",
+        "info": "How many Collections you want to show per row",
+        "default": "3",
+        "options": [
+          {
+          "value": "6",
+          "label": "2"
+          },
+          {
+          "value": "4",
+          "label": "3"
+          },
+          {
+          "value": "3",
+          "label": "4"
+          },
+          {
+          "value": "15",
+          "label": "5"
+          },
+          {
+          "value": "2",
+          "label": "6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_md",
+        "label": "Collections columns Tablet",
+        "default": "3",
+        "options": [
+            {
+            "value": "6",
+            "label": "2"
+            },
+            {
+            "value": "4",
+            "label": "3"
+            },
+            {
+            "value": "3",
+            "label": "4"
+            }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_mb",
+        "label": "Collections columns Mobile",
+        "default": "6",
+          "options": [
+          {
+          "value": "12",
+          "label": "1"
+          },
+          {
+          "value": "6",
+          "label": "2"
+          }
+        ]
+      }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+         {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          }
+      ]
+    }
+  ]
+}
+{% endschema %}
